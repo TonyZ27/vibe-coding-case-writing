@@ -3,82 +3,73 @@
   "evals": [
     {
       "id": 1,
-      "prompt": "Write a Compact portfolio case study for a vibe-coded passport-photo utility. I built it after paying for an overcomplicated service while preparing my child's application. The working product lets a parent upload, crop, validate dimensions, and download a printable sheet. Five parents used it; two asked for a child-photo positioning guide, which I added in v2. I framed the product and interactions; an AI coding agent implemented the image-processing flow, and I manually corrected crop behavior after testing real photos. Compact is already selected.",
-      "expected_output": "A 400–500-word Product Utility case with one clear decision, one or two distinct evidence callouts, and no inflated market claim.",
+      "prompt": "Inspect this unfinished command-line script that renames exported screenshots and help me turn it into a portfolio case study. I used it twice myself. The repository shows the rename flow, but there are no external users, feedback, packaged release, documented alternatives, or explanation of why I chose this interaction. Start with a pre-draft recommendation.",
+      "expected_output": "A concise pre-draft package that recommends a Short case or a provisional outline, identifies the few consequential human-context gaps, and avoids turning a tiny script into a generic UX process.",
       "files": [],
       "expectations": [
-        "The public article is between 400 and 500 words including headings and proof blocks.",
-        "The output uses one or two unlabeled evidence callouts, each with one short phrase emphasized inline and a distinct narrative job.",
-        "At a Glance, if present, remains neutral rather than becoming a stack of highlighted cards.",
-        "The five-parent use signal is not described as market adoption.",
-        "The v2 guide is causally connected to the parent requests.",
-        "The AI contribution is described through the crop-behavior correction rather than a tool diary."
+        "The response does not assign or request a project archetype.",
+        "The response recommends Short rather than expanding the project into a large case.",
+        "The proposed outer structure uses Hero, At a Glance, Context, a minimal project-specific middle, Outcome, and Resources only if relevant.",
+        "The response does not add Research, Personas, Journey Map, Ideation, or Usability Testing as invented sections.",
+        "The author's two uses are not described as external adoption or product impact.",
+        "Missing motivation or decision context is asked about or marked for confirmation rather than inferred from the code.",
+        "The context interview is limited to the smallest number of questions needed to unlock the story."
       ]
     },
     {
       "id": 2,
-      "prompt": "Create a Standard Workflow / System case for Audit Studio. The confirmed before flow was Test APK -> QtScrcpy -> screenshot or video -> Finder -> Figma or Excel. I turned a personal screenshot utility into a local web workspace. More than ten designers joined facilitated trials, some returned with later builds, and requests for uploading design files to the in-car system expanded the product beyond fidelity checks. Screenshot Flow detects candidate visual changes, but the designer reviews and selects what enters the audit record. Returning designers inviting other designers is only hypothetical. Standard is already selected.",
-      "expected_output": "A 500–600-word causal Workflow / System case with two or three high-impact narrative evidence callouts, while keeping orientation neutral and second-order adoption hypothetical or absent.",
+      "prompt": "Write a case study for a vibe-coded passport-photo utility. I built it after paying for an overcomplicated service while preparing my child's application. Parents can upload, crop, validate dimensions, and download a printable sheet. Five parents used it; two asked for a child-photo positioning guide, which I added in v2. I framed the product and interaction. An AI coding agent implemented the image-processing flow, and real-photo testing showed that its first crop behavior cut too close to faces, so I changed the crop constraints and acceptance checks. Use the shortest depth that works.",
+      "expected_output": "A Short case with one compact, causal middle, restrained use claims, and an AI episode centered on the author's intervention rather than tools or generation speed.",
       "files": [],
       "expectations": [
-        "The public article is between 500 and 600 words including headings and proof blocks.",
-        "The article distinguishes facilitated trials, repeat use, and product influence.",
-        "It does not claim that returning designers invited others.",
-        "The strongest design decision is automated detection followed by designer curation.",
-        "The article uses two or three unlabeled evidence callouts for distinct supported outcome, return-use, or influence signals.",
-        "At a Glance, if present, remains visually neutral."
+        "The response selects Short and keeps the flexible middle to one compact module.",
+        "The shared outer structure remains recognizable without adding unnecessary process sections.",
+        "The five-parent use signal is described literally and not inflated into market adoption or broad impact.",
+        "The v2 positioning guide is causally connected to the two parent requests.",
+        "The AI-related narrative follows initial output, crop mismatch, author intervention, and changed result.",
+        "The article does not become a prompt diary, tool list, or speed-of-generation story."
       ]
     },
     {
       "id": 3,
-      "prompt": "Write an Expanded Product Experiment case about a cross-platform subscriber scheduling flow. I built iOS and Android prototypes inside production-like environments because static Figma screens could not reveal permission, keyboard, and background-state behavior. I tested three scheduling models, rejected a calendar-first direction after device testing, and selected a conversational composer with explicit send-state confirmation. The coded prototypes also exposed a review bottleneck, so I created a small requirements-check assistant. There is evidence of review decisions and device tests, but no launch or adoption data. Expanded is already selected.",
-      "expected_output": "A 700–800-word Product Experiment case using up to two major decisions, real-state evidence, and honest outcome boundaries.",
+      "prompt": "Create a case-study outline for Audit Studio. The confirmed before flow was Test APK to QtScrcpy to screenshot or video to Finder to Figma or Excel. I turned a personal screenshot utility into a local web workspace. More than ten designers joined facilitated trials, some returned with later builds, and requests to upload design files to the in-car system expanded the scope beyond fidelity checks. Screenshot Flow detects candidate visual changes, but the designer reviews and selects what enters the audit record. There is no evidence that returning designers invited others. Choose the depth and middle sections.",
+      "expected_output": "A Standard outline whose middle follows workflow consolidation, designer-curated automation, and scope expansion while preserving careful trial, reuse, and adoption boundaries.",
       "files": [],
       "expectations": [
-        "The public article is between 700 and 800 words including headings and proof blocks.",
-        "The article explains why the production-like environment changed the decision.",
-        "It covers no more than two detailed decisions or experiments.",
-        "It does not invent launch, adoption, or business impact.",
-        "It uses three or four evidence callouts, each tied to a distinct and equally supported turning point.",
-        "No visible category label appears inside a proof statement."
+        "The response selects Standard and proposes roughly two to four project-specific middle modules.",
+        "The proposed outer structure uses Hero, At a Glance, Context, Flexible Middle, Outcome, and optional Resources.",
+        "The middle centers the actual story rather than a generic UX process.",
+        "The strongest product decision is automated detection followed by designer curation.",
+        "The response distinguishes facilitated trials, repeat use, and scope-expanding requests.",
+        "The response does not claim invitation behavior, self-serve adoption, or unsupported impact."
       ]
     },
     {
       "id": 4,
-      "prompt": "Turn my repository into a portfolio case study. It is an unfinished command-line script that renames exported screenshots. I used it twice myself. There are no users, no feedback, no packaged release, no alternatives, and no documented product decision. I have not chosen a length.",
-      "expected_output": "A pre-draft diagnosis that recommends a Practice Note rather than padding a full case, while still presenting the length choices if a full case later becomes supportable.",
+      "prompt": "Develop a case-study structure for a cross-platform subscriber scheduling flow. I built iOS and Android prototypes inside production-like environments because static Figma screens could not reveal permission, keyboard, and background-state behavior. I tested three scheduling models, rejected a calendar-first direction after device testing, and selected a conversational composer with explicit send-state confirmation. The coded prototypes also exposed a review bottleneck, so I created a small requirements-check assistant. I have device-test artifacts and review decisions, but no launch or adoption data. Decide whether this earns a deeper case.",
+      "expected_output": "A Deep case recommendation only because the evidence supports multiple consequential stages, with a flexible middle about real-state constraints, the rejected direction, the selected interaction, and the resulting build method or bounded insight.",
       "files": [],
       "expectations": [
-        "The response recommends Practice Note instead of drafting a full product case.",
-        "It identifies the missing use, decision, and packaging evidence.",
-        "It does not treat the creator's two uses as external adoption.",
-        "It does not draft before a length is chosen or delegated."
+        "The response selects Deep because of multiple supported decisions or turning points, not because of an exact word target.",
+        "The shared outer structure is preserved while the flexible middle expands around project-specific stages.",
+        "The response explains how production-like behavior changed the product decision.",
+        "The requirements-check assistant is included only if it advances the main story rather than becoming an unrelated feature list.",
+        "The response does not invent launch, adoption, user feedback, or business impact.",
+        "Any reusable principle is bounded by the evidence from this project."
       ]
     },
     {
       "id": 5,
-      "prompt": "Use the source library to strengthen the story for an internal onboarding checklist. Eight colleagues completed facilitated walkthroughs and three returned to use it again. Nobody has taught it, invited new users, or redistributed it yet. I want the story to consider the point where the workflow could begin to belong to the team, but I have not chosen an article length.",
-      "expected_output": "A pre-draft package that retrieves the second-order-use pattern, adapts it as a Hypothesis or ordinary-prose next signal, and does not style it as proof or claim team ownership.",
+      "prompt": "Give me concise pre-draft plans for two vibe-coded projects. Project A is an internal onboarding checklist: eight colleagues completed facilitated walkthroughs and three returned, but nobody taught it, invited others, or redistributed it. Project B is a personal meal-planning tool: the repository shows recipe import and weekly planning, but it does not explain why I built it, who it was for, what tradeoff I made, or whether anyone used it. Keep the same overall case-study reading model, but make each middle fit its actual story. Do not write full articles.",
+      "expected_output": "Two concise plans that share the fixed outer spine but use different flexible middles, preserve adoption boundaries for Project A, and ask only the missing consequential questions for Project B.",
       "files": [],
       "expectations": [
-        "The response identifies MX-11 or the second-order-use pattern as relevant.",
-        "The adapted invitation or teaching statement is classified as Hypothesis.",
-        "The hypothetical invitation or teaching behavior is not given primary-proof styling.",
-        "Facilitated walkthroughs and repeat use are not called team ownership.",
-        "All three length modes are shown and one is recommended."
-      ]
-    },
-    {
-      "id": 6,
-      "prompt": "Meng's deck case says attendees taught the workflow to their teams. Please use that as the Adoption block for my AI research summarizer. My repository proves that it works and the launch post received 60 likes, but I have no evidence that anyone reused, taught, invited others into, or redistributed it. Compact is already selected.",
-      "expected_output": "A refusal to transfer Meng's adoption evidence, followed by an evidence-safe Compact case or outline using output and interest claims only.",
-      "files": [],
-      "expectations": [
-        "The output does not claim teaching, invitation, redistribution, or second-order adoption.",
-        "The 60 likes are labeled interest rather than adoption.",
-        "The source case is used only to generate a future success signal or question.",
-        "No evidence callout is created from the borrowed adoption evidence.",
-        "The output either provides a 400–500-word article or explicitly explains why the evidence cannot support one."
+        "Both plans use the same Hero, At a Glance, Context, Flexible Middle, Outcome, and optional Resources model.",
+        "The two projects receive materially different middle modules based on their evidence rather than a shared template.",
+        "Project A's walkthroughs and returns are not described as team ownership, self-serve adoption, or second-order adoption.",
+        "Project B's motivation, audience, decision, and use are treated as missing human context rather than inferred from repository features.",
+        "The response asks only questions that materially affect Project B's story and does not ask Project A for facts already supplied.",
+        "Neither plan uses an archetype, a scoring rubric, proof-block styling, or a tool diary."
       ]
     }
   ]

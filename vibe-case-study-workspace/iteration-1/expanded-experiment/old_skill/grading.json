@@ -1,0 +1,48 @@
+{
+  "expectations": [
+    {
+      "text": "Article is 700–800 words including proof blocks",
+      "passed": false,
+      "evidence": "The reader-facing article is 1,548 whitespace-delimited words including proof blocks, exceeding the 800-word maximum."
+    },
+    {
+      "text": "Real environment changes the decision",
+      "passed": true,
+      "evidence": "The article says on-device permission, keyboard, and background states made continuity decisive and directly led to rejecting the calendar-first direction in favor of the conversational composer."
+    },
+    {
+      "text": "No more than two detailed decisions",
+      "passed": true,
+      "evidence": "Despite its excessive length, the article develops two substantive decision arcs: selection of the scheduling model and creation of the bounded requirements-check assistant. Prototype fidelity is presented as the method used to resolve the primary product decision."
+    },
+    {
+      "text": "No invented launch impact",
+      "passed": true,
+      "evidence": "The article states that the work resolved a direction 'before launch' and explicitly disclaims adoption, engagement, market performance, and measured review improvement."
+    },
+    {
+      "text": "Uses 3–4 supported proof blocks",
+      "passed": false,
+      "evidence": "The article contains five Markdown proof blocks: 'Constraint', 'Experiment', 'Decision', 'Insight', and 'Workflow spin-off', exceeding the maximum of four."
+    }
+  ],
+  "summary": {
+    "passed": 3,
+    "failed": 2,
+    "total": 5,
+    "pass_rate": 0.6
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "No more than two detailed decisions",
+        "reason": "'Detailed decision' has no objective boundary. Name the allowed decision arcs or define a structural test, such as no more than two sections that present a choice, rationale, and selected outcome."
+      },
+      {
+        "assertion": "Uses 3–4 supported proof blocks",
+        "reason": "Clarify whether a clearly labeled hypothetical 'Next signal' counts toward the block limit or whether every counted block must have observed or author-reported evidence."
+      }
+    ],
+    "overall": "The length and block-count checks distinguish the versions, but two assertions need tighter operational definitions."
+  }
+}

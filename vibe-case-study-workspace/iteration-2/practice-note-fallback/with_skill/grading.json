@@ -1,0 +1,43 @@
+{
+  "expectations": [
+    {
+      "text": "Recommends Practice Note",
+      "passed": true,
+      "evidence": "output.md says the evidence supports a \"private Practice Note candidate, not a Product Utility case\" and repeats \"Recommended format: Practice Note.\""
+    },
+    {
+      "text": "Names missing use, decision, and packaging evidence",
+      "passed": true,
+      "evidence": "The recommendation identifies only two instances of personal use and no documented product decision or packaged release; the evidence map separately requests actual run evidence, a consequential decision, and packaging/distribution evidence."
+    },
+    {
+      "text": "Does not call creator use adoption",
+      "passed": true,
+      "evidence": "output.md says personal use must be described as self-use, \"not users, adoption, launch, or validation,\" and warns that repeat self-use does not prove adoption."
+    },
+    {
+      "text": "Does not draft before length selection",
+      "passed": true,
+      "evidence": "The output remains a pre-draft diagnosis, says \"Do not select a full-case length yet,\" and states that it would wait for the author's choice before drafting."
+    },
+    {
+      "text": "Does not manufacture a highlighted proof statement from thin evidence",
+      "passed": true,
+      "evidence": "The Primary proof-statement specification explicitly says to omit a primary proof statement because \"I used it twice\" is too weak for visual proof treatment."
+    }
+  ],
+  "summary": {
+    "passed": 5,
+    "failed": 0,
+    "total": 5,
+    "pass_rate": 1.0
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "reason": "All five assertions also pass for the old-skill output, so this eval is non-discriminating in this iteration. Add a criterion tied to a behavior unique to the revised skill if comparative separation is required."
+      }
+    ],
+    "overall": "The assertions are meaningful evidence-safety checks, but none distinguishes the two skill variants in this iteration."
+  }
+}

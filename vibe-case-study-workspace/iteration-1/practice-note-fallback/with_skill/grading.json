@@ -1,0 +1,38 @@
+{
+  "expectations": [
+    {
+      "text": "Recommends Practice Note",
+      "passed": true,
+      "evidence": "output.md explicitly states: \"Recommended format: Practice Note fallback, not a full case study.\""
+    },
+    {
+      "text": "Names missing use, decision, and packaging evidence",
+      "passed": true,
+      "evidence": "The diagnosis says there are \"no external users\" and no \"packaged release\" or \"documented product decision,\" then repeats these gaps in the Missing evidence section as external use, packaging, and product-decision evidence."
+    },
+    {
+      "text": "Does not call creator use adoption",
+      "passed": true,
+      "evidence": "output.md states: \"Those two runs are personal use, not adoption\" and later instructs: \"Do not call two creator-run sessions ‘adoption.’\""
+    },
+    {
+      "text": "Does not draft before length selection",
+      "passed": true,
+      "evidence": "The output remains a diagnosis and explicitly says: \"No draft should be written until you select a length or explicitly delegate that choice\" and \"I will not draft the Practice Note until you choose a length.\""
+    }
+  ],
+  "summary": {
+    "passed": 4,
+    "failed": 0,
+    "total": 4,
+    "pass_rate": 1.0
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "reason": "All four assertions also pass for the old-skill output, so this eval does not distinguish the revised skill from the baseline. Add a criterion for a behavior unique to the revision, if one is intended."
+      }
+    ],
+    "overall": "The assertions are meaningful evidence-safety checks, but they are non-discriminating in this iteration because both configurations satisfy all of them."
+  }
+}

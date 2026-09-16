@@ -1,0 +1,85 @@
+{
+  "expectations": [
+    {
+      "text": "Article is 700–800 words including proof statements",
+      "passed": true,
+      "evidence": "The reader-facing article from '# Scheduling that survives the operating system' through 'What I would carry forward' is 773 whitespace-delimited words, including its blockquotes and excluding production notes."
+    },
+    {
+      "text": "Real environment changes the decision",
+      "passed": true,
+      "evidence": "The draft states that permission, keyboard, and background-state behavior observed in device prototypes led to rejecting calendar-first and advancing the conversational composer."
+    },
+    {
+      "text": "No more than two detailed decisions",
+      "passed": false,
+      "evidence": "The article gives separate detailed treatment to at least three decisions: rejecting calendar-first for the conversational model, adding explicit send-state confirmation, and creating a requirements-check assistant after identifying a review bottleneck."
+    },
+    {
+      "text": "No invented launch impact",
+      "passed": true,
+      "evidence": "The draft explicitly says the selected model was not launched and that it has no adoption or return-use data; it avoids claiming launch impact."
+    },
+    {
+      "text": "Uses one primary proof statement and at most one equally supported second statement",
+      "passed": false,
+      "evidence": "The article styles four separate blockquotes as proof blocks: Constraint, Influence, Insight, and Next signal. This exceeds one primary plus at most one equally supported second statement."
+    },
+    {
+      "text": "Proof statements have no visible category labels",
+      "passed": false,
+      "evidence": "Each proof block has a visible bold category label: 'Constraint', 'Influence', 'Insight', or 'Next signal'."
+    }
+  ],
+  "summary": {
+    "passed": 3,
+    "failed": 3,
+    "total": 6,
+    "pass_rate": 0.5
+  },
+  "execution_metrics": {},
+  "timing": {},
+  "claims": [
+    {
+      "claim": "Three scheduling models were tested in production-like cross-platform conditions and one direction was selected.",
+      "type": "factual",
+      "verified": true,
+      "evidence": "This matches the eval prompt's supplied production-like constraints, three models, and one selected direction."
+    },
+    {
+      "claim": "The concept was not launched and has no adoption data.",
+      "type": "factual",
+      "verified": true,
+      "evidence": "The eval prompt explicitly supplies no launch data, and the output preserves that boundary."
+    },
+    {
+      "claim": "Calendar-first was rejected specifically because of permission, keyboard, and background-state behavior.",
+      "type": "factual",
+      "verified": false,
+      "evidence": "The output reports this causal detail, but the eval metadata does not identify the selected/rejected models or the exact device findings, and no source receipt or transcript exists."
+    },
+    {
+      "claim": "A requirements-check assistant was created as an adjacent result of the experiment.",
+      "type": "factual",
+      "verified": true,
+      "evidence": "The eval prompt explicitly supplies an adjacent review assistant."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": []
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "reason": "The length, real-environment pivot, and no-launch-impact assertions pass both variants and are non-discriminating in this pair. They remain useful guardrails, but the proof-count, label, and decision-budget assertions carry the comparison."
+      },
+      {
+        "assertion": "No more than two detailed decisions",
+        "reason": "Define what counts as a distinct detailed decision so graders consistently treat explicit send-state confirmation as part of the selected model or as a separate decision."
+      }
+    ],
+    "overall": "Three assertions discriminate the versions; three pass both. The decision-count assertion is useful but needs a sharper counting rule."
+  }
+}

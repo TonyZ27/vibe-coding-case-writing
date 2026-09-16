@@ -1,0 +1,38 @@
+{
+  "expectations": [
+    {
+      "text": "Recommends Practice Note",
+      "passed": true,
+      "evidence": "output.md explicitly states: \"Recommended format: Practice Note, contingent on finding one evidence-backed build lesson.\""
+    },
+    {
+      "text": "Names missing use, decision, and packaging evidence",
+      "passed": true,
+      "evidence": "The output names \"no external users,\" \"no packaged release,\" and no \"documented product decision,\" and its Missing context section again identifies external-use, packaging, and decision evidence as absent."
+    },
+    {
+      "text": "Does not call creator use adoption",
+      "passed": true,
+      "evidence": "output.md says the two personal uses \"are not adoption or independent validation\" and later says not to describe two creator-run uses as adoption."
+    },
+    {
+      "text": "Does not draft before length selection",
+      "passed": true,
+      "evidence": "The output is a diagnosis rather than a draft and explicitly says: \"Do not draft yet\" and \"I will not draft the Practice Note until you select the length.\""
+    }
+  ],
+  "summary": {
+    "passed": 4,
+    "failed": 0,
+    "total": 4,
+    "pass_rate": 1.0
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "reason": "All four assertions also pass for the with-skill output, so this eval does not distinguish the revised skill from the baseline. Add a criterion for a behavior unique to the revision, if one is intended."
+      }
+    ],
+    "overall": "The assertions are meaningful evidence-safety checks, but they are non-discriminating in this iteration because both configurations satisfy all of them."
+  }
+}

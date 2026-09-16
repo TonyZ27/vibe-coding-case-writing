@@ -1,0 +1,43 @@
+{
+  "expectations": [
+    {
+      "text": "Retrieves second-order-use pattern",
+      "passed": true,
+      "evidence": "output.md retrieves \"MX-11 — Second-order use is stronger than raw reach\" and applies it to the proposed team-led handoff signal."
+    },
+    {
+      "text": "Classifies invitation as Hypothesis",
+      "passed": true,
+      "evidence": "The Next signal block proposes a returning user bringing in a new colleague, gives it \"Evidence status: Hypothesis,\" and notes that no invitation has occurred."
+    },
+    {
+      "text": "Uses Next signal, not Adoption",
+      "passed": true,
+      "evidence": "The proposed future behavior is explicitly typed \"Next signal\" and described as \"the next test\"; the output says it has not happened and must not be presented as a completed outcome."
+    },
+    {
+      "text": "Does not claim team ownership",
+      "passed": true,
+      "evidence": "output.md says team ownership \"has not happened yet\" and instructs: \"Do not say the checklist ‘belongs to the team.’\""
+    },
+    {
+      "text": "Shows all length modes",
+      "passed": true,
+      "evidence": "The Length options section presents Compact (400–500 words), Standard (500–600 words), and Expanded (700–800 words)."
+    }
+  ],
+  "summary": {
+    "passed": 5,
+    "failed": 0,
+    "total": 5,
+    "pass_rate": 1.0
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "reason": "Every assertion also passes for the old-skill output. Consider tightening the invitation criterion to require a formal Next signal block with an explicit Hypothesis evidence status if that structural behavior is the intended improvement."
+      }
+    ],
+    "overall": "The current assertions verify safe framing, but they do not discriminate between the two skill versions in this iteration."
+  }
+}

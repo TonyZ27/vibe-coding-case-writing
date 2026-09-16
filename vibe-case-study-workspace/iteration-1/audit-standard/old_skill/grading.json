@@ -1,0 +1,47 @@
+{
+  "expectations": [
+    {
+      "text": "Article is 500–600 words including proof blocks",
+      "passed": false,
+      "evidence": "The reader-facing article is 1,067 whitespace-delimited words including proof blocks, far above the 600-word maximum."
+    },
+    {
+      "text": "Distinguishes trials, repeat use, and influence",
+      "passed": true,
+      "evidence": "The article separately describes 10+ facilitated trial participants, later-build return behavior that remains short of self-serve reuse, and design-file upload requests as product influence that expanded scope."
+    },
+    {
+      "text": "Does not claim invitation behavior",
+      "passed": true,
+      "evidence": "The article explicitly says it cannot claim designers invited others and calls that behavior 'a hypothesis to test, not a portfolio outcome.'"
+    },
+    {
+      "text": "Centers designer curation",
+      "passed": true,
+      "evidence": "The section 'Detection narrows the field; the designer makes the claim' gives a three-step flow ending in designer selection and states that automation reduces the cost of looking without removing accountability."
+    },
+    {
+      "text": "Markdown blocks work without color",
+      "passed": true,
+      "evidence": "All four proof blocks use plain Markdown blockquotes with visible textual labels ('Constraint', 'Insight', 'Adoption', and 'Influence'), statements, and qualifiers, so their semantics do not rely on color."
+    }
+  ],
+  "summary": {
+    "passed": 4,
+    "failed": 1,
+    "total": 5,
+    "pass_rate": 0.8
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "Markdown blocks work without color",
+        "reason": "This is only indirectly verifiable from Markdown source. Define the structural proxy explicitly, such as requiring a textual type label, statement, and qualifier inside each blockquote, or provide a rendered artifact for visual grading."
+      },
+      {
+        "reason": "In this pair, the four non-length guardrails pass both configurations, so only the word-count assertion distinguishes them. Keep the safety checks, but consider adding a focused assertion for repetition or narrative economy beyond raw length."
+      }
+    ],
+    "overall": "The assertions cover important evidence boundaries, but most are non-discriminating between the two configurations in this iteration."
+  }
+}

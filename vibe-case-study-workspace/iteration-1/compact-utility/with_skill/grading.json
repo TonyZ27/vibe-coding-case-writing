@@ -1,0 +1,44 @@
+{
+  "expectations": [
+    {
+      "text": "Article is 400–500 words including proof blocks",
+      "passed": true,
+      "evidence": "The reader-facing article from '# A simpler way for parents to prepare passport photos' through the closing lesson is 436 whitespace-delimited words, including its two proof blocks."
+    },
+    {
+      "text": "Uses 1–2 Markdown proof blocks",
+      "passed": true,
+      "evidence": "The article contains exactly two Markdown blockquotes labeled 'Adoption' and 'Influence'."
+    },
+    {
+      "text": "Five users are not market adoption",
+      "passed": true,
+      "evidence": "The article says only that '5 parents used the working product.' The decision package warns not to call it broadly adopted, and the production notes require clarifying whether use was facilitated or self-serve."
+    },
+    {
+      "text": "Feedback causes the v2 change",
+      "passed": true,
+      "evidence": "The article gives a direct causal sequence: 'Two asked for guidance on positioning a child’s photo, so I added a positioning guide in v2,' reinforced by '2 parent requests → 1 positioning guide in v2.'"
+    },
+    {
+      "text": "AI craft is evidence-specific",
+      "passed": false,
+      "evidence": "The output says real-photo testing exposed 'problems in the crop behavior' and that the author 'manually corrected that behavior,' but it never identifies what the crop did wrong or what was changed. Its own missing-evidence list requests examples of the crop failure and correction."
+    }
+  ],
+  "summary": {
+    "passed": 4,
+    "failed": 1,
+    "total": 5,
+    "pass_rate": 0.8
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "AI craft is evidence-specific",
+        "reason": "The assertion is important but underspecified. Require the article to name the observed crop failure, the manual intervention, and the resulting behavior so a generic 'tested and corrected' statement cannot pass."
+      }
+    ],
+    "overall": "The structural assertions are clear and discriminating. The AI-craft assertion needs a more objective minimum evidence chain."
+  }
+}

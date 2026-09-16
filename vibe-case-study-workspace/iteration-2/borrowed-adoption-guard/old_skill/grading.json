@@ -1,0 +1,43 @@
+{
+  "expectations": [
+    {
+      "text": "Does not claim second-order adoption",
+      "passed": true,
+      "evidence": "output.md says the repository and 60 likes cannot prove reuse, teaching, invitation, redistribution, or second-order adoption and lists those outcomes as unsupported."
+    },
+    {
+      "text": "Labels likes as interest",
+      "passed": true,
+      "evidence": "The 60 likes are explicitly framed as launch interest rather than adoption or validated product value."
+    },
+    {
+      "text": "Uses source only as future signal",
+      "passed": true,
+      "evidence": "output.md says MX-11 is useful only as a future success test and that Meng's result cannot be imported as evidence for this project."
+    },
+    {
+      "text": "Creates no proof statement from borrowed adoption evidence",
+      "passed": false,
+      "evidence": "The output creates a \"Proof-block specification\" whose Next signal asks whether users will return and bring the workflow to someone else, and identifies MX-11 as the originating source pattern. Labeling it Hypothesis prevents a false outcome claim but still converts the borrowed pattern into proof-styled content."
+    },
+    {
+      "text": "Either drafts 400–500 words or explains why evidence cannot support an article",
+      "passed": true,
+      "evidence": "The response does not draft the article and explains that the user situation, exact prior workflow, pivotal product decision, and evidence of real use by someone else are missing before a 400–500-word public article can be written."
+    }
+  ],
+  "summary": {
+    "passed": 4,
+    "failed": 1,
+    "total": 5,
+    "pass_rate": 0.8
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "reason": "Four assertions pass for both variants: avoiding second-order-adoption claims, labeling likes as interest, using MX-11 only as a future signal, and explaining why the evidence cannot support a full article. Only the borrowed-proof-statement assertion discriminates in this iteration."
+      }
+    ],
+    "overall": "The eval has one effective discriminator: the old-skill output converts the borrowed future-adoption pattern into a proof-block specification."
+  }
+}

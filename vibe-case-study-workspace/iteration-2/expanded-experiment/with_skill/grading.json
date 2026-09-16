@@ -1,0 +1,85 @@
+{
+  "expectations": [
+    {
+      "text": "Article is 700–800 words including proof statements",
+      "passed": true,
+      "evidence": "The reader-facing article from '# Designing Scheduling Where Static Screens Couldn’t Reach' through its conclusion is 770 whitespace-delimited words, including the blockquoted proof statement and excluding production notes."
+    },
+    {
+      "text": "Real environment changes the decision",
+      "passed": true,
+      "evidence": "The article says permission, keyboard, and background-state behavior appeared in production-like iOS and Android prototypes and changed the comparison enough to reject calendar-first."
+    },
+    {
+      "text": "No more than two detailed decisions",
+      "passed": true,
+      "evidence": "The article develops two consequential decisions: selecting the conversational composer with explicit confirmation after device testing, and creating a bounded requirements-check assistant after the richer prototypes exposed a review bottleneck. The unnamed third model is not elaborated into another decision."
+    },
+    {
+      "text": "No invented launch impact",
+      "passed": true,
+      "evidence": "At a glance states the concept was not launched and makes no adoption or business-impact claim; the conclusion limits the supported outcome to a stronger design decision."
+    },
+    {
+      "text": "Uses one primary proof statement and at most one equally supported second statement",
+      "passed": true,
+      "evidence": "The reader-facing article uses exactly one blockquoted proof statement, centered on device behavior changing the selected direction."
+    },
+    {
+      "text": "Proof statements have no visible category labels",
+      "passed": true,
+      "evidence": "The sole article blockquote begins directly with 'The most important result...' and has no visible label such as Constraint, Influence, or Insight."
+    }
+  ],
+  "summary": {
+    "passed": 6,
+    "failed": 0,
+    "total": 6,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {},
+  "timing": {},
+  "claims": [
+    {
+      "claim": "Three scheduling models were tested in production-like cross-platform conditions and one direction was selected.",
+      "type": "factual",
+      "verified": true,
+      "evidence": "This matches the eval prompt's supplied production-like constraints, three models, and one selected direction."
+    },
+    {
+      "claim": "The concept was not launched and has no adoption data.",
+      "type": "factual",
+      "verified": true,
+      "evidence": "The eval prompt explicitly supplies no launch data, and the output preserves that boundary."
+    },
+    {
+      "claim": "Calendar-first was rejected specifically because of permission, keyboard, and background-state behavior.",
+      "type": "factual",
+      "verified": false,
+      "evidence": "The output reports this causal detail, but the eval metadata does not identify the selected/rejected models or the exact device findings, and no source receipt or transcript exists."
+    },
+    {
+      "claim": "A requirements-check assistant was created as an adjacent result of the experiment.",
+      "type": "factual",
+      "verified": true,
+      "evidence": "The eval prompt explicitly supplies an adjacent review assistant."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": []
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "reason": "The length, real-environment pivot, and no-launch-impact assertions pass both variants and are non-discriminating in this pair. They remain useful guardrails, but the proof-count, label, and decision-budget assertions carry the comparison."
+      },
+      {
+        "assertion": "No more than two detailed decisions",
+        "reason": "Define what counts as a distinct detailed decision so graders consistently treat explicit send-state confirmation as part of the selected model or as a separate decision."
+      }
+    ],
+    "overall": "Three assertions discriminate the versions; three pass both. The decision-count assertion is useful but needs a sharper counting rule."
+  }
+}

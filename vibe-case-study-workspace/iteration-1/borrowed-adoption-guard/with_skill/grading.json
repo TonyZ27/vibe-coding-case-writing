@@ -1,0 +1,47 @@
+{
+  "expectations": [
+    {
+      "text": "Does not claim second-order adoption",
+      "passed": true,
+      "evidence": "output.md says \"repeat use and second-order adoption have not yet been verified\" and states that the project has no adoption receipt."
+    },
+    {
+      "text": "Labels likes as interest",
+      "passed": true,
+      "evidence": "The 60 launch-post likes are explicitly labeled \"an author-reported interest signal, not evidence of use, reuse, teaching, invitation, or redistribution.\""
+    },
+    {
+      "text": "Uses source only as future signal",
+      "passed": true,
+      "evidence": "The output says Meng’s evidence \"can suggest what to measure, but it cannot substantiate adoption here,\" then uses MX-11 only to define a Hypothesis-based Next signal."
+    },
+    {
+      "text": "Creates no borrowed Adoption block",
+      "passed": true,
+      "evidence": "The output rejects Meng’s outcome as an Adoption block and replaces it with a project-specific block typed \"Next signal.\""
+    },
+    {
+      "text": "Any article is 400–500 words",
+      "passed": false,
+      "evidence": "No article is present to verify against the requested range. The entire output is a 329-word evidence diagnosis and production-note specification, below 400 words."
+    }
+  ],
+  "summary": {
+    "passed": 4,
+    "failed": 1,
+    "total": 5,
+    "pass_rate": 0.8
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "Any article is 400–500 words",
+        "reason": "This is conditional and does not require an article, so a diagnostic response makes the intended length check ambiguous. Replace it with \"Produces a 400–500-word article\" if drafting is required, or remove it if a pre-draft evidence decision is acceptable."
+      },
+      {
+        "reason": "The four evidence-safety assertions also pass for the old-skill output, so they do not distinguish the skill versions in this iteration."
+      }
+    ],
+    "overall": "The evidence-boundary checks are substantive but non-discriminating here; the article-length check is ambiguous because article production is not itself asserted."
+  }
+}

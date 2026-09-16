@@ -1,0 +1,85 @@
+{
+  "expectations": [
+    {
+      "text": "Article is 500–600 words including the proof statement",
+      "passed": true,
+      "evidence": "The reader-facing article before 'Production notes' is 591 whitespace-delimited words, including the proof statement."
+    },
+    {
+      "text": "Distinguishes trials, repeat use, and influence",
+      "passed": true,
+      "evidence": "The draft separately identifies facilitated trials ('not self-serve adoption'), return behavior ('some designers returned with later builds'), and influence (upload requests changed the product question)."
+    },
+    {
+      "text": "Does not claim invitation behavior",
+      "passed": true,
+      "evidence": "Invitation is explicitly framed as unobserved future evidence: 'invitation remains a success criterion, not an adoption claim.'"
+    },
+    {
+      "text": "Centers designer curation",
+      "passed": true,
+      "evidence": "The dedicated section 'Automation proposes; the designer decides' explains that the system detects candidates while designers reject irrelevant changes and select what enters the audit record."
+    },
+    {
+      "text": "Uses one unlabeled proof statement for the strongest supported signal",
+      "passed": true,
+      "evidence": "The article contains one unlabeled blockquote. It emphasizes return behavior and pairs it with scope-expanding requests, the strongest supplied repeat-use and influence signals."
+    },
+    {
+      "text": "At a Glance remains neutral",
+      "passed": true,
+      "evidence": "No At a Glance section appears. The output therefore avoids a non-neutral At a Glance, but this is a vacuous pass rather than evidence that it can write one neutrally."
+    }
+  ],
+  "summary": {
+    "passed": 6,
+    "failed": 0,
+    "total": 6,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {},
+  "timing": {},
+  "claims": [
+    {
+      "claim": "The workflow spans Test APK, QtScrcpy, screenshot or video, Finder, and Figma or Excel.",
+      "type": "factual",
+      "verified": true,
+      "evidence": "This matches the eval prompt's confirmed five-tool flow and is consistently represented in the article."
+    },
+    {
+      "claim": "Designers returned with later builds and made scope-expanding requests.",
+      "type": "factual",
+      "verified": true,
+      "evidence": "Repeat use and scope-expanding requests are explicitly supplied by the eval prompt."
+    },
+    {
+      "claim": "More than ten designers joined the facilitated trials.",
+      "type": "factual",
+      "verified": false,
+      "evidence": "The output reports the count, but the eval metadata gives no number and no receipt or transcript exists."
+    },
+    {
+      "claim": "Invitation has not been observed.",
+      "type": "factual",
+      "verified": true,
+      "evidence": "The eval prompt says invitation behavior is hypothetical, and the article preserves that boundary."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": []
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "At a Glance remains neutral",
+        "reason": "The revised output omits At a Glance and still passes. Make presence mandatory if the eval is intended to assess the quality of that section."
+      },
+      {
+        "reason": "All six assertions pass both with_skill and old_skill, so this eval is wholly non-discriminating for the iteration. Add checks for whether the primary proof prioritizes product influence over participant count, whether scope expansion is described as a request rather than an implemented feature, and whether observed versus author-reported evidence is handled consistently."
+      }
+    ],
+    "overall": "The assertions are useful baseline safeguards, but every one passes both variants and therefore this eval cannot measure improvement in iteration 2."
+  }
+}

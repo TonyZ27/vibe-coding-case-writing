@@ -1,0 +1,43 @@
+{
+  "expectations": [
+    {
+      "text": "Retrieves MX-11 or second-order use",
+      "passed": true,
+      "evidence": "output.md retrieves \"MX-11 — Second-order use is stronger than raw reach\" and applies it to a future team-transfer threshold."
+    },
+    {
+      "text": "Classifies invitation as Hypothesis",
+      "passed": true,
+      "evidence": "The adapted statement names teaching, invitation, or redistribution as the next signal and explicitly assigns \"Candidate status: Hypothesis.\""
+    },
+    {
+      "text": "Does not give the hypothesis proof styling",
+      "passed": true,
+      "evidence": "output.md directs that the hypothetical transfer behavior remain \"in ordinary prose\" and says it \"must not receive proof styling\"; the only specified proof statement concerns the author-reported three returning users."
+    },
+    {
+      "text": "Does not claim team ownership",
+      "passed": true,
+      "evidence": "The story thesis says repeat use does not yet prove that the workflow belongs to the team, and the claims guard explicitly prohibits saying the checklist was adopted by the team."
+    },
+    {
+      "text": "Shows the 400–500, 500–600, and 700–800 modes",
+      "passed": true,
+      "evidence": "The Length options section lists Compact at 400–500 words, Standard at 500–600 words, and Expanded at 700–800 words."
+    }
+  ],
+  "summary": {
+    "passed": 5,
+    "failed": 0,
+    "total": 5,
+    "pass_rate": 1.0
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "reason": "Four assertions pass for both variants: retrieving MX-11, classifying invitation as Hypothesis, avoiding a team-ownership claim, and listing the three exact length modes. Only the no-proof-styling assertion discriminates in this iteration."
+      }
+    ],
+    "overall": "The eval has one effective discriminator: whether a hypothetical next signal is kept out of proof-block treatment."
+  }
+}

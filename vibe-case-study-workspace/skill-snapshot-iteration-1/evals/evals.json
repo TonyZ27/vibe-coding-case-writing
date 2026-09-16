@@ -1,0 +1,82 @@
+{
+  "skill_name": "vibe-case-study",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Write a Compact portfolio case study for a vibe-coded passport-photo utility. I built it after paying for an overcomplicated service while preparing my child's application. The working product lets a parent upload, crop, validate dimensions, and download a printable sheet. Five parents used it; two asked for a child-photo positioning guide, which I added in v2. I framed the product and interactions; an AI coding agent implemented the image-processing flow, and I manually corrected crop behavior after testing real photos. Compact is already selected.",
+      "expected_output": "A 400–500-word Product Utility case with one clear decision, one or two supported proof blocks, and no inflated market claim.",
+      "files": [],
+      "expectations": [
+        "The public article is between 400 and 500 words including headings and proof blocks.",
+        "The output uses one or two platform-neutral Markdown proof blocks.",
+        "The five-parent use signal is not described as market adoption.",
+        "The v2 guide is causally connected to the parent requests.",
+        "The AI contribution is described through the crop-behavior correction rather than a tool diary."
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Create a Standard Workflow / System case for Audit Studio. The confirmed before flow was Test APK -> QtScrcpy -> screenshot or video -> Finder -> Figma or Excel. I turned a personal screenshot utility into a local web workspace. More than ten designers joined facilitated trials, some returned with later builds, and requests for uploading design files to the in-car system expanded the product beyond fidelity checks. Screenshot Flow detects candidate visual changes, but the designer reviews and selects what enters the audit record. Returning designers inviting other designers is only hypothetical. Standard is already selected.",
+      "expected_output": "A 500–600-word causal Workflow / System case with Impact, Adoption, and Influence blocks, while keeping second-order adoption hypothetical or absent.",
+      "files": [],
+      "expectations": [
+        "The public article is between 500 and 600 words including headings and proof blocks.",
+        "The article distinguishes facilitated trials, repeat use, and product influence.",
+        "It does not claim that returning designers invited others.",
+        "The strongest design decision is automated detection followed by designer curation.",
+        "Proof blocks remain legible as Markdown without color."
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Write an Expanded Product Experiment case about a cross-platform subscriber scheduling flow. I built iOS and Android prototypes inside production-like environments because static Figma screens could not reveal permission, keyboard, and background-state behavior. I tested three scheduling models, rejected a calendar-first direction after device testing, and selected a conversational composer with explicit send-state confirmation. The coded prototypes also exposed a review bottleneck, so I created a small requirements-check assistant. There is evidence of review decisions and device tests, but no launch or adoption data. Expanded is already selected.",
+      "expected_output": "A 700–800-word Product Experiment case using up to two major decisions, real-state evidence, and honest outcome boundaries.",
+      "files": [],
+      "expectations": [
+        "The public article is between 700 and 800 words including headings and proof blocks.",
+        "The article explains why the production-like environment changed the decision.",
+        "It covers no more than two detailed decisions or experiments.",
+        "It does not invent launch, adoption, or business impact.",
+        "It uses three or four supported proof blocks."
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Turn my repository into a portfolio case study. It is an unfinished command-line script that renames exported screenshots. I used it twice myself. There are no users, no feedback, no packaged release, no alternatives, and no documented product decision. I have not chosen a length.",
+      "expected_output": "A pre-draft diagnosis that recommends a Practice Note rather than padding a full case, while still presenting the length choices if a full case later becomes supportable.",
+      "files": [],
+      "expectations": [
+        "The response recommends Practice Note instead of drafting a full product case.",
+        "It identifies the missing use, decision, and packaging evidence.",
+        "It does not treat the creator's two uses as external adoption.",
+        "It does not draft before a length is chosen or delegated."
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Use the source library to strengthen the story for an internal onboarding checklist. Eight colleagues completed facilitated walkthroughs and three returned to use it again. Nobody has taught it, invited new users, or redistributed it yet. I want the story to consider the point where the workflow could begin to belong to the team, but I have not chosen an article length.",
+      "expected_output": "A pre-draft package that retrieves the second-order-use pattern, adapts it as a Hypothesis or Next signal, and does not claim team ownership.",
+      "files": [],
+      "expectations": [
+        "The response identifies MX-11 or the second-order-use pattern as relevant.",
+        "The adapted invitation or teaching statement is classified as Hypothesis.",
+        "Any public-facing candidate is labeled Next signal rather than Adoption.",
+        "Facilitated walkthroughs and repeat use are not called team ownership.",
+        "All three length modes are shown and one is recommended."
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "Meng's deck case says attendees taught the workflow to their teams. Please use that as the Adoption block for my AI research summarizer. My repository proves that it works and the launch post received 60 likes, but I have no evidence that anyone reused, taught, invited others into, or redistributed it. Compact is already selected.",
+      "expected_output": "A refusal to transfer Meng's adoption evidence, followed by an evidence-safe Compact case or outline using output and interest claims only.",
+      "files": [],
+      "expectations": [
+        "The output does not claim teaching, invitation, redistribution, or second-order adoption.",
+        "The 60 likes are labeled interest rather than adoption.",
+        "The source case is used only to generate a future success signal or question.",
+        "No Adoption proof block is created from the borrowed evidence.",
+        "Any completed public article is between 400 and 500 words."
+      ]
+    }
+  ]
+}

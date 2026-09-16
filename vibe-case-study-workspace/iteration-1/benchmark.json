@@ -1,0 +1,37 @@
+{
+  "metadata": {
+    "skill_name": "vibe-case-study",
+    "skill_path": "/Users/jzhou102/.codex/.chatgpt-projects/g-p-6a1cf0141260819186b6add22f0d7647/vibe-case-study",
+    "baseline_path": "/Users/jzhou102/.codex/.chatgpt-projects/g-p-6a1cf0141260819186b6add22f0d7647/vibe-case-study-workspace/skill-snapshot",
+    "timestamp": "2026-09-15",
+    "evals_run": [1, 2, 3, 4, 5, 6],
+    "runs_per_configuration": 1,
+    "timing_note": "Timing and token data were unavailable from the evaluator notifications and are intentionally omitted."
+  },
+  "runs": [
+    {"eval_id": 1, "eval_name": "compact-utility", "configuration": "with_skill", "run_number": 1, "result": {"pass_rate": 0.8, "passed": 4, "failed": 1, "total": 5}},
+    {"eval_id": 1, "eval_name": "compact-utility", "configuration": "old_skill", "run_number": 1, "result": {"pass_rate": 0.4, "passed": 2, "failed": 3, "total": 5}},
+    {"eval_id": 2, "eval_name": "audit-standard", "configuration": "with_skill", "run_number": 1, "result": {"pass_rate": 1.0, "passed": 5, "failed": 0, "total": 5}},
+    {"eval_id": 2, "eval_name": "audit-standard", "configuration": "old_skill", "run_number": 1, "result": {"pass_rate": 0.8, "passed": 4, "failed": 1, "total": 5}},
+    {"eval_id": 3, "eval_name": "expanded-experiment", "configuration": "with_skill", "run_number": 1, "result": {"pass_rate": 1.0, "passed": 5, "failed": 0, "total": 5}},
+    {"eval_id": 3, "eval_name": "expanded-experiment", "configuration": "old_skill", "run_number": 1, "result": {"pass_rate": 0.6, "passed": 3, "failed": 2, "total": 5}},
+    {"eval_id": 4, "eval_name": "practice-note-fallback", "configuration": "with_skill", "run_number": 1, "result": {"pass_rate": 1.0, "passed": 4, "failed": 0, "total": 4}},
+    {"eval_id": 4, "eval_name": "practice-note-fallback", "configuration": "old_skill", "run_number": 1, "result": {"pass_rate": 1.0, "passed": 4, "failed": 0, "total": 4}},
+    {"eval_id": 5, "eval_name": "hypothetical-next-signal", "configuration": "with_skill", "run_number": 1, "result": {"pass_rate": 1.0, "passed": 5, "failed": 0, "total": 5}},
+    {"eval_id": 5, "eval_name": "hypothetical-next-signal", "configuration": "old_skill", "run_number": 1, "result": {"pass_rate": 1.0, "passed": 5, "failed": 0, "total": 5}},
+    {"eval_id": 6, "eval_name": "borrowed-adoption-guard", "configuration": "with_skill", "run_number": 1, "result": {"pass_rate": 0.8, "passed": 4, "failed": 1, "total": 5}},
+    {"eval_id": 6, "eval_name": "borrowed-adoption-guard", "configuration": "old_skill", "run_number": 1, "result": {"pass_rate": 0.8, "passed": 4, "failed": 1, "total": 5}}
+  ],
+  "run_summary": {
+    "with_skill": {"pass_rate": {"mean": 0.9333, "stddev": 0.1033, "min": 0.8, "max": 1.0}},
+    "old_skill": {"pass_rate": {"mean": 0.7667, "stddev": 0.2503, "min": 0.4, "max": 1.0}},
+    "delta": {"pass_rate": "+0.17"}
+  },
+  "notes": [
+    "The revised skill met all three selected public-article bands: 436, 560, and 774 words; the baseline produced 573, 1,067, and 1,548 words under the same new expectations.",
+    "Practice Note fallback and the broad evidence-safety assertions passed in both configurations, so those checks confirm preservation rather than improvement.",
+    "The hypothetical-next-signal eval passed both versions; its assertions should be tightened in a later iteration to require the explicit Hypothesis status and Next signal proof type.",
+    "The compact AI-craft assertion failed both versions because the prompt did not specify the crop failure or correction; this correctly exposes a missing-evidence question but makes the assertion unsuitable as written.",
+    "The borrowed-adoption guard passed its evidence checks in both versions. Its article-length assertion failed both because both skills declined to draft an unsupported full case; the assertion should accept a justified non-draft outcome."
+  ]
+}

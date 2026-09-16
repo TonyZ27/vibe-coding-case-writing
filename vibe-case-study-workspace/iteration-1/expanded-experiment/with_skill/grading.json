@@ -1,0 +1,48 @@
+{
+  "expectations": [
+    {
+      "text": "Article is 700–800 words including proof blocks",
+      "passed": true,
+      "evidence": "The reader-facing article from '# Designing scheduling around state, not the calendar' through the closing lesson is 774 whitespace-delimited words, including proof blocks."
+    },
+    {
+      "text": "Real environment changes the decision",
+      "passed": true,
+      "evidence": "The article links permission prompts, keyboard behavior, and background transitions observed on devices to weakening the calendar-first model and selecting the conversational composer with explicit send-state confirmation."
+    },
+    {
+      "text": "No more than two detailed decisions",
+      "passed": true,
+      "evidence": "The article develops two decision arcs: the primary scheduling-model selection and the bounded creation of a requirements-check assistant. The three tested models are treated as alternatives within the first decision, not as separate decisions."
+    },
+    {
+      "text": "No invented launch impact",
+      "passed": true,
+      "evidence": "The opening states, 'This was a design decision, not a launch result,' and the limitations section explicitly says the work did not establish completion, trust, or return-use outcomes."
+    },
+    {
+      "text": "Uses 3–4 supported proof blocks",
+      "passed": true,
+      "evidence": "The article contains four proof blocks. Three are tied to author-reported project evidence ('Constraint', 'Influence', and 'Insight'); the fourth is clearly labeled 'Next signal' and phrased as a future validation question rather than an achieved claim."
+    }
+  ],
+  "summary": {
+    "passed": 5,
+    "failed": 0,
+    "total": 5,
+    "pass_rate": 1.0
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "No more than two detailed decisions",
+        "reason": "'Detailed decision' has no objective boundary. Name the allowed decision arcs or define a structural test, such as no more than two sections that present a choice, rationale, and selected outcome."
+      },
+      {
+        "assertion": "Uses 3–4 supported proof blocks",
+        "reason": "Clarify whether a clearly labeled hypothetical 'Next signal' counts toward the block limit or whether every counted block must have observed or author-reported evidence."
+      }
+    ],
+    "overall": "The length and block-count checks distinguish the versions, but two assertions need tighter operational definitions."
+  }
+}

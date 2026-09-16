@@ -1,0 +1,44 @@
+{
+  "expectations": [
+    {
+      "text": "Article is 400–500 words including proof blocks",
+      "passed": false,
+      "evidence": "The reader-facing article is 573 whitespace-delimited words including proof blocks, exceeding the 500-word maximum."
+    },
+    {
+      "text": "Uses 1–2 Markdown proof blocks",
+      "passed": false,
+      "evidence": "The article contains three Markdown blockquotes: two labeled 'Insight' and one labeled 'Influence'."
+    },
+    {
+      "text": "Five users are not market adoption",
+      "passed": true,
+      "evidence": "The public copy describes 'Five parents used the utility' without claiming market adoption. The production notes explicitly say not to imply self-serve adoption unless confirmed."
+    },
+    {
+      "text": "Feedback causes the v2 change",
+      "passed": true,
+      "evidence": "The article states that two parents requested positioning help and that 'In v2, I added a child-photo positioning guide,' with the proof block summarizing the same causal link."
+    },
+    {
+      "text": "AI craft is evidence-specific",
+      "passed": false,
+      "evidence": "The article says testing exposed 'a gap in the crop behavior' and that the author manually corrected it, but gives no specific failure mode or correction. The evidence map itself lists 'what specifically failed in the original crop behavior' as missing context."
+    }
+  ],
+  "summary": {
+    "passed": 2,
+    "failed": 3,
+    "total": 5,
+    "pass_rate": 0.4
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "AI craft is evidence-specific",
+        "reason": "The assertion is important but underspecified. Require the article to name the observed crop failure, the manual intervention, and the resulting behavior so a generic 'tested and corrected' statement cannot pass."
+      }
+    ],
+    "overall": "The structural assertions distinguish this output from the newer one. The AI-craft assertion needs a more objective minimum evidence chain."
+  }
+}

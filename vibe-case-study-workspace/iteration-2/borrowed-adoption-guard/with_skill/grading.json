@@ -1,0 +1,43 @@
+{
+  "expectations": [
+    {
+      "text": "Does not claim second-order adoption",
+      "passed": true,
+      "evidence": "output.md states that neither the working repository nor 60 likes establishes use, reuse, teaching, invitation, redistribution, or second-order adoption."
+    },
+    {
+      "text": "Labels likes as interest",
+      "passed": true,
+      "evidence": "The launch post's 60 likes are repeatedly described as \"public interest\" or an \"interest signal,\" not adoption."
+    },
+    {
+      "text": "Uses source only as future signal",
+      "passed": true,
+      "evidence": "MX-11 is described as useful only for defining what to look for next, and its adapted statement is labeled a future Hypothesis rather than a result."
+    },
+    {
+      "text": "Creates no proof statement from borrowed adoption evidence",
+      "passed": true,
+      "evidence": "The output explicitly says \"Primary proof-statement specification: None yet\" and rejects using Meng's attendee-teaching result as this project's Adoption block."
+    },
+    {
+      "text": "Either drafts 400–500 words or explains why evidence cannot support an article",
+      "passed": true,
+      "evidence": "Rather than drafting an article, output.md explains that a full 400–500-word case would require invented context or padded process language because the trigger, pivotal decision, and real-use receipt are missing."
+    }
+  ],
+  "summary": {
+    "passed": 5,
+    "failed": 0,
+    "total": 5,
+    "pass_rate": 1.0
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "reason": "Four assertions pass for both variants: avoiding second-order-adoption claims, labeling likes as interest, using MX-11 only as a future signal, and explaining why the evidence cannot support a full article. Only the borrowed-proof-statement assertion discriminates in this iteration."
+      }
+    ],
+    "overall": "The eval has one effective discriminator: whether borrowed adoption material is converted into a proof-styled statement."
+  }
+}

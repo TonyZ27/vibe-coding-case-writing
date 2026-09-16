@@ -1,0 +1,1325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eval Review</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&family=Lora:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js" integrity="sha384-EnyY0/GSHQGSxSgMwaIPzSESbqoOLSexfnSMN2AP+39Ckmn92stwABZynq1JyzdT" crossorigin="anonymous"></script>
+  <style>
+    :root {
+      --bg: #faf9f5;
+      --surface: #ffffff;
+      --border: #e8e6dc;
+      --text: #141413;
+      --text-muted: #b0aea5;
+      --accent: #d97757;
+      --accent-hover: #c4613f;
+      --green: #788c5d;
+      --green-bg: #eef2e8;
+      --red: #c44;
+      --red-bg: #fceaea;
+      --header-bg: #141413;
+      --header-text: #faf9f5;
+      --radius: 6px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Lora', Georgia, serif;
+      background: var(--bg);
+      color: var(--text);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ---- Header ---- */
+    .header {
+      background: var(--header-bg);
+      color: var(--header-text);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    .header h1 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+    .header .instructions {
+      font-size: 0.8rem;
+      opacity: 0.7;
+      margin-top: 0.25rem;
+    }
+    .header .progress {
+      font-size: 0.875rem;
+      opacity: 0.8;
+      text-align: right;
+    }
+
+    /* ---- Main content ---- */
+    .main {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1.5rem 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    /* ---- Sections ---- */
+    .section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      flex-shrink: 0;
+    }
+    .section-header {
+      font-family: 'Poppins', sans-serif;
+      padding: 0.75rem 1rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border);
+      background: var(--bg);
+    }
+    .section-body {
+      padding: 1rem;
+    }
+
+    /* ---- Config badge ---- */
+    .config-badge {
+      display: inline-block;
+      padding: 0.2rem 0.625rem;
+      border-radius: 9999px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.6875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      margin-left: 0.75rem;
+      vertical-align: middle;
+    }
+    .config-badge.config-primary {
+      background: rgba(33, 150, 243, 0.12);
+      color: #1976d2;
+    }
+    .config-badge.config-baseline {
+      background: rgba(255, 193, 7, 0.15);
+      color: #f57f17;
+    }
+
+    /* ---- Prompt ---- */
+    .prompt-text {
+      white-space: pre-wrap;
+      font-size: 0.9375rem;
+      line-height: 1.6;
+    }
+
+    /* ---- Outputs ---- */
+    .output-file {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .output-file + .output-file {
+      margin-top: 1rem;
+    }
+    .output-file-header {
+      padding: 0.5rem 0.75rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      font-family: 'SF Mono', SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .output-file-header .dl-btn {
+      font-size: 0.7rem;
+      color: var(--accent);
+      text-decoration: none;
+      cursor: pointer;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-weight: 500;
+      opacity: 0.8;
+    }
+    .output-file-header .dl-btn:hover {
+      opacity: 1;
+      text-decoration: underline;
+    }
+    .output-file-content {
+      padding: 0.75rem;
+      overflow-x: auto;
+    }
+    .output-file-content pre {
+      font-size: 0.8125rem;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-family: 'SF Mono', SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace;
+    }
+    .output-file-content img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 4px;
+    }
+    .output-file-content iframe {
+      width: 100%;
+      height: 600px;
+      border: none;
+    }
+    .output-file-content table {
+      border-collapse: collapse;
+      font-size: 0.8125rem;
+      width: 100%;
+    }
+    .output-file-content table td,
+    .output-file-content table th {
+      border: 1px solid var(--border);
+      padding: 0.375rem 0.5rem;
+      text-align: left;
+    }
+    .output-file-content table th {
+      background: var(--bg);
+      font-weight: 600;
+    }
+    .output-file-content .download-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 0.875rem;
+      cursor: pointer;
+    }
+    .output-file-content .download-link:hover {
+      background: var(--border);
+    }
+    .empty-state {
+      color: var(--text-muted);
+      font-style: italic;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    /* ---- Feedback ---- */
+    .prev-feedback {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.625rem 0.75rem;
+      margin-top: 0.75rem;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+    .prev-feedback-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.25rem;
+      color: var(--text-muted);
+    }
+    .feedback-textarea {
+      width: 100%;
+      min-height: 100px;
+      padding: 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-family: inherit;
+      font-size: 0.9375rem;
+      line-height: 1.5;
+      resize: vertical;
+      color: var(--text);
+    }
+    .feedback-textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+    .feedback-status {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 0.5rem;
+      min-height: 1.1em;
+    }
+
+    /* ---- Grades (collapsible) ---- */
+    .grades-toggle {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      user-select: none;
+    }
+    .grades-toggle:hover {
+      color: var(--accent);
+    }
+    .grades-toggle .arrow {
+      margin-right: 0.5rem;
+      transition: transform 0.15s;
+      font-size: 0.75rem;
+    }
+    .grades-toggle .arrow.open {
+      transform: rotate(90deg);
+    }
+    .grades-content {
+      display: none;
+      margin-top: 0.75rem;
+    }
+    .grades-content.open {
+      display: block;
+    }
+    .grades-summary {
+      font-size: 0.875rem;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .grade-badge {
+      display: inline-block;
+      padding: 0.125rem 0.5rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .grade-pass { background: var(--green-bg); color: var(--green); }
+    .grade-fail { background: var(--red-bg); color: var(--red); }
+    .assertion-list {
+      list-style: none;
+    }
+    .assertion-item {
+      padding: 0.625rem 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.8125rem;
+    }
+    .assertion-item:last-child { border-bottom: none; }
+    .assertion-status {
+      font-weight: 600;
+      margin-right: 0.5rem;
+    }
+    .assertion-status.pass { color: var(--green); }
+    .assertion-status.fail { color: var(--red); }
+    .assertion-evidence {
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      margin-top: 0.25rem;
+      padding-left: 1.5rem;
+    }
+
+    /* ---- View tabs ---- */
+    .view-tabs {
+      display: flex;
+      gap: 0;
+      padding: 0 2rem;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .view-tab {
+      font-family: 'Poppins', sans-serif;
+      padding: 0.625rem 1.25rem;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      background: none;
+      color: var(--text-muted);
+      border-bottom: 2px solid transparent;
+      transition: all 0.15s;
+    }
+    .view-tab:hover { color: var(--text); }
+    .view-tab.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+    .view-panel { display: none; }
+    .view-panel.active { display: flex; flex-direction: column; flex: 1; overflow: hidden; }
+
+    /* ---- Benchmark view ---- */
+    .benchmark-view {
+      padding: 1.5rem 2rem;
+      overflow-y: auto;
+      flex: 1;
+    }
+    .benchmark-table {
+      border-collapse: collapse;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 0.8125rem;
+      width: 100%;
+      margin-bottom: 1.5rem;
+    }
+    .benchmark-table th, .benchmark-table td {
+      padding: 0.625rem 0.75rem;
+      text-align: left;
+      border: 1px solid var(--border);
+    }
+    .benchmark-table th {
+      font-family: 'Poppins', sans-serif;
+      background: var(--header-bg);
+      color: var(--header-text);
+      font-weight: 500;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .benchmark-table tr:hover { background: var(--bg); }
+    .benchmark-table tr.benchmark-row-with { background: rgba(33, 150, 243, 0.06); }
+    .benchmark-table tr.benchmark-row-without { background: rgba(255, 193, 7, 0.06); }
+    .benchmark-table tr.benchmark-row-with:hover { background: rgba(33, 150, 243, 0.12); }
+    .benchmark-table tr.benchmark-row-without:hover { background: rgba(255, 193, 7, 0.12); }
+    .benchmark-table tr.benchmark-row-avg { font-weight: 600; border-top: 2px solid var(--border); }
+    .benchmark-table tr.benchmark-row-avg.benchmark-row-with { background: rgba(33, 150, 243, 0.12); }
+    .benchmark-table tr.benchmark-row-avg.benchmark-row-without { background: rgba(255, 193, 7, 0.12); }
+    .benchmark-delta-positive { color: var(--green); font-weight: 600; }
+    .benchmark-delta-negative { color: var(--red); font-weight: 600; }
+    .benchmark-notes {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem;
+    }
+    .benchmark-notes h3 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.875rem;
+      margin-bottom: 0.75rem;
+    }
+    .benchmark-notes ul {
+      list-style: disc;
+      padding-left: 1.25rem;
+    }
+    .benchmark-notes li {
+      font-size: 0.8125rem;
+      line-height: 1.6;
+      margin-bottom: 0.375rem;
+    }
+    .benchmark-empty {
+      color: var(--text-muted);
+      font-style: italic;
+      text-align: center;
+      padding: 3rem;
+    }
+
+    /* ---- Navigation ---- */
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      border-top: 1px solid var(--border);
+      background: var(--surface);
+      flex-shrink: 0;
+    }
+    .nav-btn {
+      font-family: 'Poppins', sans-serif;
+      padding: 0.5rem 1.25rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      cursor: pointer;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text);
+      transition: all 0.15s;
+    }
+    .nav-btn:hover:not(:disabled) {
+      background: var(--bg);
+      border-color: var(--text-muted);
+    }
+    .nav-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+    .done-btn {
+      font-family: 'Poppins', sans-serif;
+      padding: 0.5rem 1.5rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: all 0.15s;
+    }
+    .done-btn:hover {
+      background: var(--bg);
+      border-color: var(--text-muted);
+    }
+    .done-btn.ready {
+      border: none;
+      background: var(--accent);
+      color: white;
+      font-weight: 600;
+    }
+    .done-btn.ready:hover {
+      background: var(--accent-hover);
+    }
+    /* ---- Done overlay ---- */
+    .done-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 100;
+      justify-content: center;
+      align-items: center;
+    }
+    .done-overlay.visible {
+      display: flex;
+    }
+    .done-card {
+      background: var(--surface);
+      border-radius: 12px;
+      padding: 2rem 3rem;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      max-width: 500px;
+    }
+    .done-card h2 {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .done-card p {
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+      line-height: 1.5;
+    }
+    .done-card .btn-row {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+    }
+    .done-card button {
+      padding: 0.5rem 1.25rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      cursor: pointer;
+      font-size: 0.875rem;
+    }
+    .done-card button:hover {
+      background: var(--bg);
+    }
+    /* ---- Toast ---- */
+    .toast {
+      position: fixed;
+      bottom: 5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--header-bg);
+      color: var(--header-text);
+      padding: 0.625rem 1.25rem;
+      border-radius: var(--radius);
+      font-size: 0.875rem;
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+      z-index: 200;
+    }
+    .toast.visible {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <div id="app" style="height:100vh; display:flex; flex-direction:column;">
+    <div class="header">
+      <div>
+        <h1>Eval Review: <span id="skill-name"></span></h1>
+        <div class="instructions">Review each output and leave feedback below. Navigate with arrow keys or buttons. When done, copy feedback and paste into Claude Code.</div>
+      </div>
+      <div class="progress" id="progress"></div>
+    </div>
+
+    <!-- View tabs (only shown when benchmark data exists) -->
+    <div class="view-tabs" id="view-tabs" style="display:none;">
+      <button class="view-tab active" onclick="switchView('outputs')">Outputs</button>
+      <button class="view-tab" onclick="switchView('benchmark')">Benchmark</button>
+    </div>
+
+    <!-- Outputs panel (qualitative review) -->
+    <div class="view-panel active" id="panel-outputs">
+    <div class="main">
+      <!-- Prompt -->
+      <div class="section">
+        <div class="section-header">Prompt <span class="config-badge" id="config-badge" style="display:none;"></span></div>
+        <div class="section-body">
+          <div class="prompt-text" id="prompt-text"></div>
+        </div>
+      </div>
+
+      <!-- Outputs -->
+      <div class="section">
+        <div class="section-header">Output</div>
+        <div class="section-body" id="outputs-body">
+          <div class="empty-state">No output files found</div>
+        </div>
+      </div>
+
+      <!-- Previous Output (collapsible) -->
+      <div class="section" id="prev-outputs-section" style="display:none;">
+        <div class="section-header">
+          <div class="grades-toggle" onclick="togglePrevOutputs()">
+            <span class="arrow" id="prev-outputs-arrow">&#9654;</span>
+            Previous Output
+          </div>
+        </div>
+        <div class="grades-content" id="prev-outputs-content"></div>
+      </div>
+
+      <!-- Grades (collapsible) -->
+      <div class="section" id="grades-section" style="display:none;">
+        <div class="section-header">
+          <div class="grades-toggle" onclick="toggleGrades()">
+            <span class="arrow" id="grades-arrow">&#9654;</span>
+            Formal Grades
+          </div>
+        </div>
+        <div class="grades-content" id="grades-content"></div>
+      </div>
+
+      <!-- Feedback -->
+      <div class="section">
+        <div class="section-header">Your Feedback</div>
+        <div class="section-body">
+          <textarea
+            class="feedback-textarea"
+            id="feedback"
+            placeholder="What do you think of this output? Any issues, suggestions, or things that look great?"
+          ></textarea>
+          <div class="feedback-status" id="feedback-status"></div>
+          <div class="prev-feedback" id="prev-feedback" style="display:none;">
+            <div class="prev-feedback-label">Previous feedback</div>
+            <div id="prev-feedback-text"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav" id="outputs-nav">
+      <button class="nav-btn" id="prev-btn" onclick="navigate(-1)">&#8592; Previous</button>
+      <button class="done-btn" id="done-btn" onclick="showDoneDialog()">Submit All Reviews</button>
+      <button class="nav-btn" id="next-btn" onclick="navigate(1)">Next &#8594;</button>
+    </div>
+    </div><!-- end panel-outputs -->
+
+    <!-- Benchmark panel (quantitative stats) -->
+    <div class="view-panel" id="panel-benchmark">
+      <div class="benchmark-view" id="benchmark-content">
+        <div class="benchmark-empty">No benchmark data available. Run a benchmark to see quantitative results here.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Done overlay -->
+  <div class="done-overlay" id="done-overlay">
+    <div class="done-card">
+      <h2>Review Complete</h2>
+      <p>Your feedback has been saved. Go back to your Claude Code session and tell Claude you're done reviewing.</p>
+      <div class="btn-row">
+        <button onclick="closeDoneDialog()">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // ---- Embedded data (injected by generate_review.py) ----
+    const EMBEDDED_DATA = {"skill_name": "Vibe Case Study", "runs": [{"id": "compact-utility-old_skill", "prompt": "Write a Compact portfolio case study for a vibe-coded passport-photo utility with five parent users, a feedback-led v2 guide, and one concrete AI/manual crop correction. Compact is selected.", "eval_id": 1, "outputs": [{"name": "output.md", "type": "text", "content": "# A simpler way for parents to make printable passport photos\n\nAfter paying for an overcomplicated passport-photo service while preparing my child\u2019s application, I built a focused utility for the task I actually needed: turn a photo into a correctly sized, printable sheet without navigating an oversized service.\n\n## At a glance\n\n**What:** A working passport-photo utility for parents.  \n**Core flow:** Upload a photo, crop it, validate its dimensions, and download a printable sheet.  \n**My role:** I framed the product and interactions, directed an AI coding agent, tested the result with real photos, and corrected the crop behavior.  \n**Response:** Five parents used the product; feedback from two of them shaped v2.\n\n## Starting with the job, not the service\n\nThe trigger was personal and immediate. I was preparing my child\u2019s application, but the service I paid for made a narrow task feel needlessly complicated. That experience gave me a clear product boundary: this did not need to become a broad photo editor or application platform. It needed to help a parent move from an existing photo to a printable output.\n\nI reduced the experience to four connected actions: upload, crop, validate dimensions, and download. Each step answered a practical question in sequence: Is this the right photo? Is the subject framed correctly? Does the output have the required dimensions? Can I print it now?\n\n> **Insight**  \n> **The minimum useful product was one complete task, not more photo-editing features.**\n\n## Correcting the crop where the design met real photos\n\nI framed the flow and interaction behavior, then an AI coding agent implemented the image-processing path. The first working build made the idea tangible, but testing it with real photos exposed a gap in the crop behavior. A technically functioning crop was not enough if it made positioning the subject difficult or produced an unexpected result.\n\nI manually corrected that behavior after testing. This became the clearest human\u2013AI boundary in the project: the agent could assemble the processing flow, while I remained responsible for judging whether the interaction behaved predictably with the material people would actually use.\n\n> **Insight**  \n> **A working image pipeline still required hands-on interaction judgment.**\n\n## Five uses led to one focused v2 change\n\nFive parents used the utility. Two asked for help positioning a child within the photo, pointing to uncertainty that dimension validation alone did not resolve. In v2, I added a child-photo positioning guide so parents could make a better framing decision while cropping, before reaching the final sheet.\n\nThat request did not justify expanding the product in every direction. It revealed one missing piece inside the existing task: parents needed guidance before they needed validation. The change strengthened the original flow instead of turning the utility into a larger service.\n\n> **Influence**  \n> **2 of 5 parent users requested positioning help, leading to the v2 guide.**\n\n## What I took forward\n\nThis project changed how I use AI coding agents in product work. Framing the task precisely helped the agent build a complete flow quickly, but real inputs were what exposed the important interaction flaw. My role was not finished when the implementation ran; it shifted to testing behavior, correcting the boundary cases I could see, and deciding which feedback belonged in the product.\n\nThe lesson was deliberately small: for rules-heavy utilities, reduce the journey to a complete task, then use real material and real requests to decide where guidance is more valuable than another feature.\n\n---\n\n## Production notes\n\n### Editorial decision\n\n- **Recommended format:** Product Utility\n- **Confidence:** High\n- **Alternative format:** Practice Note, only if the working flow or parent-use claims cannot be evidenced publicly\n- **Story Thesis:** By focusing on a parent preparing a child\u2019s application, I reduced a needlessly complicated photo task to one guided flow, showing that small utilities become useful through clear boundaries and targeted guidance.\n- **Selected length:** Compact, as provided by the author; the story has one clear arc, one detailed interaction correction, and one feedback-led v2 change.\n- **Selected narrative modules:** Minimum Useful Scope; AI Collaboration; v1 \u2192 v2\n\n### Evidence map\n\n- **Observed:** None independently inspected for this draft.\n- **Author-reported:** The paid-service trigger; the working upload, crop, dimension-validation, and printable-sheet flow; five parent users; two requests for a child-photo positioning guide; the v2 addition; the division of work between the author and AI coding agent; manual correction of crop behavior after testing real photos.\n- **Inferred:** The existing service contained more scope than this task required. The draft keeps this qualitative and does not claim specific steps, cost savings, speed gains, or compliance outcomes.\n- **Missing context:** Whether use was self-serve or facilitated; exact passport standard or country; what specifically failed in the original crop behavior; what was deliberately excluded from v1; dates, URL, screenshots, and anonymized feedback receipts.\n\n### Visual evidence plan and capture requests\n\n1. **Product overview**\n   - Claim supported: The utility provides one complete parent task.\n   - Asset filename: `passport-photo-final-flow.png`\n   - Capture: Final interface showing the flow from upload through printable output.\n   - Must show: Real product UI and the four core capabilities.\n   - Avoid: Generated replacement UI or personal application data.\n\n2. **Core-task demo**\n   - Claim supported: A parent can upload, crop, validate dimensions, and download a printable sheet.\n   - Asset filename: `passport-photo-core-flow.mp4`\n   - Capture: An 8\u201312 second recording of the complete task using a consented or synthetic photo.\n   - Must show: State changes and downloaded sheet.\n   - Avoid: A real child\u2019s identifiable photo without explicit permission.\n\n3. **Crop correction comparison**\n   - Claim supported: Real-photo testing led to a manual interaction correction.\n   - Asset filename: `crop-behavior-v1-v2.png`\n   - Capture: Side-by-side v1 and corrected behavior with annotations naming the specific issue.\n   - Must show: The same test photo and the changed crop result or control behavior.\n   - Avoid: Claiming the correction improved success rate unless measured.\n\n4. **Feedback-to-v2 receipt**\n   - Claim supported: Two parent requests led to the positioning guide.\n   - Asset filename: `positioning-feedback-and-v2.png`\n   - Capture: An anonymized feedback excerpt paired with the implemented guide.\n   - Must show: The request and inspectable v2 change.\n   - Avoid: Names, profile photos, contact details, or wording that implies a broader study.\n\n### Claims to verify, soften, or avoid\n\n- Verify the count of five users and two guide requests before publication.\n- Describe the five uses as facilitated trials if the parents required the author\u2019s help; do not imply self-serve adoption unless confirmed.\n- Say the tool validates dimensions, not that it guarantees passport acceptance or compliance with every jurisdiction.\n- Do not claim time or cost savings without a documented comparison.\n- Do not describe the crop correction as AI failure unless the original output and causal diagnosis can be shown.\n- The outline uses the source-library patterns \u201cPersonal constraint sharpens scope,\u201d \u201cFeedback visibly changes v2,\u201d and \u201cHuman-AI handoff beats full automation.\u201d\n"}], "grading": {"expectations": [{"text": "Article is 400\u2013500 words including proof blocks", "passed": false, "evidence": "The reader-facing article is 573 whitespace-delimited words including proof blocks, exceeding the 500-word maximum."}, {"text": "Uses 1\u20132 Markdown proof blocks", "passed": false, "evidence": "The article contains three Markdown blockquotes: two labeled 'Insight' and one labeled 'Influence'."}, {"text": "Five users are not market adoption", "passed": true, "evidence": "The public copy describes 'Five parents used the utility' without claiming market adoption. The production notes explicitly say not to imply self-serve adoption unless confirmed."}, {"text": "Feedback causes the v2 change", "passed": true, "evidence": "The article states that two parents requested positioning help and that 'In v2, I added a child-photo positioning guide,' with the proof block summarizing the same causal link."}, {"text": "AI craft is evidence-specific", "passed": false, "evidence": "The article says testing exposed 'a gap in the crop behavior' and that the author manually corrected it, but gives no specific failure mode or correction. The evidence map itself lists 'what specifically failed in the original crop behavior' as missing context."}], "summary": {"passed": 2, "failed": 3, "total": 5, "pass_rate": 0.4}, "eval_feedback": {"suggestions": [{"assertion": "AI craft is evidence-specific", "reason": "The assertion is important but underspecified. Require the article to name the observed crop failure, the manual intervention, and the resulting behavior so a generic 'tested and corrected' statement cannot pass."}], "overall": "The structural assertions distinguish this output from the newer one. The AI-craft assertion needs a more objective minimum evidence chain."}}}, {"id": "compact-utility-with_skill", "prompt": "Write a Compact portfolio case study for a vibe-coded passport-photo utility with five parent users, a feedback-led v2 guide, and one concrete AI/manual crop correction. Compact is selected.", "eval_id": 1, "outputs": [{"name": "output.md", "type": "text", "content": "# Decision package\n\nRecommended archetype: Product Utility  \nConfidence: High  \nStory thesis: By focusing on parents preparing a child\u2019s application, I reduced a costly, overcomplicated photo task to a focused printable-sheet workflow\u2014and learned that real photos and real requests should determine where AI implementation ends and product judgment begins.  \nLength options: Compact (400\u2013500 words) for this single clear arc; Standard (500\u2013600) only with stronger v1/v2 and testing receipts; Expanded (700\u2013800) only with multiple consequential decisions and richer adoption evidence.  \nRecommended length: Compact, as selected.  \nObserved evidence: None independently inspected; no repository, product, or artifacts were supplied.  \nAuthor-reported evidence: Personal trigger; working upload, crop, dimension-validation, and printable-sheet flow; five parent users; two requests for a child-photo positioning guide; guide added in v2; designer/AI ownership split; manual crop correction after real-photo testing.  \nMissing evidence: Product URL or build; screenshots; anonymized use and feedback receipts; v1/v2 comparison; examples of the crop failure and correction; exact passport-photo specification supported.  \nRelevant source patterns: MX-01 Personal constraint sharpens scope; MX-02 Feedback visibly changes the next version; MX-06 Human\u2013AI handoff beats full automation; MX-12 One artifact earns a broader belief.  \nAdapted candidate statements: A costly personal task constrained v1 to the shortest complete path; two parent requests produced a visible v2 change; real-photo failures moved crop judgment back to the designer; a narrow utility can improve through concrete use rather than speculative scope.  \nCandidate status: All four are Author-reported.  \nProof-block specifications: Adoption\u2014\u201c5 parents used the working product\u201d (Author-reported; E-USE-01; after core flow; MX-01). Influence\u2014\u201c2 requests led to a child-photo positioning guide in v2\u201d (Author-reported; E-FEEDBACK-01; beside v2 section; MX-02).  \nVisual receipts required: Final product overview; 8\u201312 second upload-to-download demo; annotated crop before/after using a real photo; anonymized feedback beside a v1/v2 guide comparison.  \nClaims to avoid or qualify: Do not call the product launched, compliant with every passport standard, broadly adopted, or proven to save money or time without supporting receipts.\n\n---\n\n# A simpler way for parents to prepare passport photos\n\nAfter paying for an overcomplicated passport-photo service while preparing my child\u2019s application, I built the focused utility I had expected to find: a parent can upload a photo, crop it, validate its dimensions, and download a printable sheet.\n\nThe project was small by design. It was not an attempt to replace the application process or interpret every passport rule. I focused on the shortest complete path from an existing photo to a file a parent could print.\n\n> **Adoption**\n> **5 parents used the working product**\n> Author-reported use of the complete upload-to-download flow.\n\n## Turning a frustrating purchase into a minimum useful flow\n\nThe original experience made a straightforward task feel like a service package. My response was to remove everything that did not help a parent finish the photo itself.\n\nI framed the product around four actions: upload, crop, validate dimensions, and download. The sequence keeps attention on the photo and gives dimension feedback before the printable sheet is created. That boundary mattered: the utility needed to complete one job clearly, not accumulate adjacent application features.\n\n[Visual: 8\u201312 second demo showing upload \u2192 crop \u2192 dimension validation \u2192 printable sheet.]\n\n## Real photos exposed where the agent needed direction\n\nI defined the product scope and interactions, then used an AI coding agent to implement the image-processing flow. The first implementation made the workflow functional, but testing with real photos exposed problems in the crop behavior.\n\nI manually corrected that behavior and tested the flow again with real images. This was the pivotal build decision: implementation could be delegated, but the quality bar for how a parent positions a child\u2019s face still required direct observation and adjustment. The useful boundary was not \u201chuman versus AI\u201d; it was repeatable processing versus interaction judgment.\n\n[Visual: annotated before/after showing the crop behavior that failed and the corrected result.]\n\n## Two requests shaped v2\n\nFive parents used the product. Two asked for guidance on positioning a child\u2019s photo, so I added a positioning guide in v2. Their request revealed that correct output dimensions were only part of the uncertainty. Parents also needed confidence before downloading that the face was placed appropriately within the crop.\n\n> **Influence**\n> **2 parent requests \u2192 1 positioning guide in v2**\n> Feedback changed the product, not just the backlog.\n\n[Visual: anonymized feedback receipt beside the v1 crop view and v2 positioning guide.]\n\nThe project changed how I approach small AI-built utilities. Start with the narrow task, use working software to expose interaction failures, and let specific behavior\u2014not speculative feature ideas\u2014earn the next version.\n\n---\n\n# Production notes\n\n## Evidence and capture requests\n\n1. **Core flow**\n   - Claim supported: The working product completes upload, crop, dimension validation, and printable-sheet download.\n   - Asset filename: `01-core-flow.mp4`\n   - Capture: One uninterrupted end-to-end task.\n   - Length: 8\u201312 seconds.\n   - Must show: Input photo, crop adjustment, validation state, downloaded sheet.\n   - Avoid: Personal application data or a full product tour.\n\n2. **Crop correction**\n   - Claim supported: Real-photo testing exposed crop behavior that the designer manually corrected.\n   - Asset filename: `02-crop-correction.png`\n   - Capture: Side-by-side failed and corrected crop with short annotations.\n   - Must show: The same anonymized or consented photo in both states.\n   - Avoid: Claiming the change guarantees official acceptance.\n\n3. **v1 \u2192 v2**\n   - Claim supported: Two parent requests led to the positioning guide.\n   - Asset filename: `03-v1-v2-feedback.png`\n   - Capture: Anonymized request excerpts beside matched v1 and v2 screens.\n   - Must show: The guide as an inspectable product change.\n   - Avoid: Names, child images, or identifying message metadata without consent.\n\n## Claim verification\n\n- E-PRODUCT-01 \u2014 Working four-step flow \u2014 Author-reported; verify with product demo or repository.\n- E-USE-01 \u2014 Five parents used the product \u2014 Author-reported; verify with anonymized test/use log and clarify whether use was facilitated or self-serve.\n- E-FEEDBACK-01 \u2014 Two requested positioning guidance \u2014 Author-reported; verify with anonymized messages or notes.\n- E-V2-01 \u2014 Positioning guide added in v2 \u2014 Author-reported; verify with matched screenshots or version history.\n- E-AI-01 \u2014 AI agent implemented image processing; designer framed interactions and corrected crop behavior \u2014 Author-reported; verify with prompts, diff/history, or annotated build notes if publicly appropriate.\n\n## Confidentiality guidance\n\nUse only consented or anonymized child photos. Remove names, application details, message metadata, and document identifiers. If feedback receipts cannot be published, retain careful attribution in the article and note privately that the evidence was reviewed.\n"}], "grading": {"expectations": [{"text": "Article is 400\u2013500 words including proof blocks", "passed": true, "evidence": "The reader-facing article from '# A simpler way for parents to prepare passport photos' through the closing lesson is 436 whitespace-delimited words, including its two proof blocks."}, {"text": "Uses 1\u20132 Markdown proof blocks", "passed": true, "evidence": "The article contains exactly two Markdown blockquotes labeled 'Adoption' and 'Influence'."}, {"text": "Five users are not market adoption", "passed": true, "evidence": "The article says only that '5 parents used the working product.' The decision package warns not to call it broadly adopted, and the production notes require clarifying whether use was facilitated or self-serve."}, {"text": "Feedback causes the v2 change", "passed": true, "evidence": "The article gives a direct causal sequence: 'Two asked for guidance on positioning a child\u2019s photo, so I added a positioning guide in v2,' reinforced by '2 parent requests \u2192 1 positioning guide in v2.'"}, {"text": "AI craft is evidence-specific", "passed": false, "evidence": "The output says real-photo testing exposed 'problems in the crop behavior' and that the author 'manually corrected that behavior,' but it never identifies what the crop did wrong or what was changed. Its own missing-evidence list requests examples of the crop failure and correction."}], "summary": {"passed": 4, "failed": 1, "total": 5, "pass_rate": 0.8}, "eval_feedback": {"suggestions": [{"assertion": "AI craft is evidence-specific", "reason": "The assertion is important but underspecified. Require the article to name the observed crop failure, the manual intervention, and the resulting behavior so a generic 'tested and corrected' statement cannot pass."}], "overall": "The structural assertions are clear and discriminating. The AI-craft assertion needs a more objective minimum evidence chain."}}}, {"id": "audit-standard-old_skill", "prompt": "Create a Standard Audit Studio Workflow / System case from the confirmed five-tool before flow, 10+ facilitated trials, repeat use, scope-expanding requests, and designer-curated Screenshot Flow. Invitation behavior is hypothetical. Standard is selected.", "eval_id": 2, "outputs": [{"name": "output.md", "type": "text", "content": "# Direction and evidence decision\n\nRecommended format: Workflow / System\n\nConfidence: High. The project begins with a concrete multi-tool workflow, became a reusable local workspace, was used by more than ten designers in facilitated trials, and changed scope in response to participant requests.\n\nAlternative format: Product Utility, if the story is narrowed to the personal screenshot tool and its immediate fidelity-checking value. This would underplay the stronger evidence that the workflow traveled beyond its creator and evolved through use.\n\nStory Thesis: I turned a fragmented capture-to-audit workflow into a local web workspace that helps designers move from a running Test APK to a reviewed audit record, while keeping the final evidence decision in human hands.\n\nObserved evidence: None supplied as independently inspectable artifacts in this task.\n\nAuthor-reported evidence:\n\n- Confirmed before flow: Test APK \u2192 QtScrcpy \u2192 screenshot or video \u2192 Finder \u2192 Figma or Excel.\n- Audit Studio evolved from a personal screenshot utility into a local web workspace.\n- More than ten designers joined facilitated trials.\n- Some designers returned with later builds.\n- Requests to upload design files to the in-car system expanded the product beyond fidelity checks.\n- Screenshot Flow detects candidate visual changes; a designer reviews and selects what enters the audit record.\n- Designer-to-designer invitations are hypothetical, not observed.\n\nMissing context:\n\n- Inspectable before/after artifacts and a real audit record.\n- How Audit Studio was packaged, launched, or shared with trial participants.\n- Which parts the author, AI, and collaborators each defined or implemented.\n- A concrete AI-building failure or correction that changed the build method.\n- Whether later-build use happened independently or through another facilitated session.\n- Public or anonymizable receipts for trial participation, return use, and upload requests.\n\nRecommended length: Standard \u2014 800\u20131,100 words.\n\nLength rationale: The evidence supports a meaningful evolution, three consequential product decisions, a human\u2013automation boundary, facilitated trial behavior, and a scope-changing request. It does not yet support the additional phases or deeper distribution evidence needed for Extended.\n\nLength options for user selection:\n\n- Compact \u2014 450\u2013650: best if the case should focus only on the old workflow and Screenshot Flow\u2019s review boundary.\n- Standard \u2014 800\u20131,100: selected because it can carry the personal-tool-to-shared-workspace evolution, trial evidence, and product-scope change without padding.\n- Extended \u2014 1,300\u20131,800: worthwhile only with version history, detailed distribution constraints, richer adoption receipts, and a concrete AI-building episode.\n\nAdoption level: Facilitated trial, with a return-use signal from designers who brought later builds. Do not claim self-serve reuse, contribution, second-order adoption, or organization-wide rollout.\n\nSelected narrative modules: Before Workflow; System Model; Workflow Walkthrough; Adoption Loop; Failure / Boundary.\n\nCandidate proof blocks: the confirmed five-step before flow; 10+ designers in facilitated trials; automatic detection with designer selection; upload requests expanding scope beyond fidelity checks.\n\nVisual Evidence Plan: a before-workflow diagram; a real Screenshot Flow input/review/output sequence; the local workspace surface; an anonymized facilitated-trial receipt; a later-build return receipt; and the design-upload request paired with the resulting product change.\n\nClaims to avoid or soften: time saved; full replacement of every old tool; autonomous visual auditing; correctness without designer review; self-serve adoption; designer-to-designer invitation; organization-wide use; target-system compatibility; and AI-building capability growth without a concrete episode.\n\n---\n\n# Audit Studio: Turning a fragmented audit handoff into a shared workspace\n\nI turned a personal screenshot utility into Audit Studio, a local web workspace for reviewing in-car interface builds. It brought a fragmented capture-to-documentation workflow into one working surface, then grew through facilitated use by other designers.\n\nThe aim was not to automate design judgment. It was to remove enough operational friction that designers could spend that judgment on the evidence that mattered.\n\n## At a glance\n\n**What:** A local workspace for capturing, reviewing, and organizing visual audit evidence from Test APKs.\n\n**How:** Screenshot Flow detects candidate visual changes, then asks a designer to decide which ones belong in the audit record.\n\n**Why it matters:** More than ten designers joined facilitated trials. Some returned with later builds, and their requests began to move the product beyond fidelity checks.\n\n> **Constraint**\n> **Test APK \u2192 QtScrcpy \u2192 screenshot or video \u2192 Finder \u2192 Figma or Excel**\n> The confirmed before flow moved evidence across five distinct stages before it became part of an audit.\n\n## The audit was scattered across the handoff\n\nThe starting point was a practical sequence. A designer opened a Test APK through QtScrcpy, captured a screenshot or video, found the exported file in Finder, and moved it into Figma or Excel to continue the audit.\n\nEach tool performed a legitimate job, but the audit itself lived between them. Capturing evidence and turning it into a usable record were separate activities. The designer had to carry context across the running build, exported media, and a documentation surface.\n\nI first responded to my own part of that friction with a screenshot utility. That solved a narrow capture problem, but it also revealed a larger opportunity: the useful unit was not the screenshot. It was the path from a running build to reviewed, traceable audit evidence.\n\n## From a personal utility to a local workspace\n\nI expanded the utility into Audit Studio, a local web workspace. This changed the product\u2019s center of gravity. Instead of treating capture as the finish line, the workspace could support the sequence around it: bringing evidence together, reviewing it, and deciding what should enter the audit record.\n\nKeeping the workspace local made it suited to the working context in which I was building it. More importantly, turning the utility into a workspace made the workflow legible to someone other than me. A designer could work through the audit in a shared product model instead of inheriting my personal file-handling habits.\n\nThis is also where the project became a system rather than a collection of shortcuts. The system had an input\u2014a build and its visual states; an automated action\u2014finding candidate changes; a decision point\u2014designer review; and an output\u2014a selected audit record.\n\n## Detection narrows the field; the designer makes the claim\n\nScreenshot Flow detects candidate visual changes. That detection is deliberately not the final audit decision. A designer reviews the candidates and selects what should be recorded.\n\nThat boundary matters because a visual difference is not automatically a design issue. A detected change may be expected, irrelevant, duplicated, or meaningful only in context. If Audit Studio wrote every candidate directly into the audit record, it would make the output look more certain while reducing its usefulness.\n\nThe workflow therefore uses automation for breadth and human review for meaning:\n\n1. The system detects candidate visual changes.\n2. The designer reviews those candidates in context.\n3. The designer selects the evidence that enters the audit record.\n\n> **Insight**\n> **Detect automatically; curate deliberately.**\n> Audit Studio accelerates evidence discovery without outsourcing the audit decision.\n\nThis division of labor became the core product principle. Automation should reduce the cost of looking, not erase accountability for what the audit says.\n\n## Facilitated trials showed that the workflow could travel\n\nMore than ten designers joined facilitated trials of Audit Studio. This was not self-serve adoption: I was present in the trial context, so the evidence supports a claim about guided use rather than independent rollout.\n\nStill, the trials moved the project beyond personal utility. Other designers could bring their own work into the workflow and evaluate whether the workspace helped them audit it. Some later returned with newer builds, a stronger signal than first-session interest because they saw enough value to apply the workflow again as their product changed.\n\n> **Adoption**\n> **10+ designers joined facilitated trials.**\n> Some returned with later builds; independent self-serve reuse remains unverified.\n\nThe boundary is as useful as the signal. I can say that designers tried the workflow and that some returned. I cannot say that they adopted it without support, rolled it out across an organization, or invited other designers. That last behavior remains a hypothesis to test, not a portfolio outcome.\n\n## Use expanded the product beyond fidelity checks\n\nThe most consequential feedback did not ask for a faster version of the same audit. Designers requested the ability to upload design files to the in-car system. That pushed Audit Studio beyond comparing implementation fidelity and toward a broader design-validation workflow.\n\nThe request changed the product question. Audit Studio was no longer only about documenting whether a build matched an intended design. It could begin to support getting design material into the environment where designers needed to evaluate it.\n\n> **Influence**\n> **Upload requests expanded the product\u2019s scope.**\n> Facilitated use revealed a need beyond fidelity checks: moving design files toward the in-car system.\n\nThis is the clearest evidence of influence in the project. The trials did not merely confirm the original concept; they exposed an adjacent job and redirected what the workspace could become.\n\n## What Audit Studio proves\u2014and what it does not\n\nAudit Studio shows how a repeated handoff can become a reusable capability when the workflow, decision boundary, and output are made explicit. It also shows why a system does not need to automate the final judgment to create leverage. In this case, preserving designer selection is part of the product\u2019s integrity.\n\nThe current evidence supports facilitated trial, return behavior, and product influence. It does not yet prove self-serve distribution or second-order adoption. Those are the next validation boundaries: can a designer start the workflow without me, use it on another build, and help another designer do the same?\n\nThe lesson I would carry forward is narrow but durable: automate the search space, then design the moment where a person turns detected information into a defensible decision.\n\n---\n\n# Production notes\n\n## Evidence and capture requests\n\n1. Capture the old flow with real, anonymized screens from Test APK, QtScrcpy, Finder, and the final Figma or Excel record. Present it as a workflow diagram, not a tool collage.\n2. Record one real Screenshot Flow run showing the source state, detected candidates, designer review, selections, and resulting audit record.\n3. Capture the local workspace\u2019s launch or access surface to show how the workflow was packaged and shared.\n4. Add an anonymized receipt for the 10+ facilitated-trial count, such as a session log or participant list with identifying details removed.\n5. Pair one later-build return with dated or versioned evidence. Confirm whether it was independently initiated or part of another facilitated session.\n6. Pair an upload request with the resulting interface or version change. If the feature was not implemented, describe it only as a scope-changing request or future direction.\n\n## Claim verification\n\n- Keep \u201cfacilitated trials\u201d in every public claim about the 10+ designers.\n- Describe later builds as return behavior until independent reuse is verified.\n- Do not publish the hypothetical claim that returning designers invited others.\n- Do not claim time savings without a consistent before/after task and measurement basis.\n- Do not imply Screenshot Flow produces correct audit findings automatically; selection remains a designer decision.\n- Verify what \u201cuploading design files to the in-car system\u201d technically means before implying compatibility, deployment, or successful use in the target environment.\n\n## Ownership and AI-building gap\n\nThe author\u2019s ownership of the utility-to-workspace evolution is clear from the supplied account. Before publication, document who defined the product decisions, who implemented the system, what AI executed, and what collaborators contributed. No AI-building craft section appears in the public draft because the current evidence contains no concrete constraint \u2192 changed agent method \u2192 better result episode.\n\n## Confidentiality guidance\n\nBlur product names, unreleased vehicle UI, participant identities, build identifiers, file paths, and internal issue content. Preserve dates or version relationships where they are needed to prove return behavior, but replace sensitive labels consistently.\n\n## Editorial pattern used\n\nThe outline uses two compatible source-library patterns: \u201cRepeated friction becomes a workflow\u201d for the before-to-system progression, and \u201cFeedback visibly changes v2\u201d for the upload-request expansion. The final reflection follows \u201cOne artifact becomes a broader belief,\u201d bounded to the demonstrated human\u2013automation decision rather than a general claim about AI.\n"}], "grading": {"expectations": [{"text": "Article is 500\u2013600 words including proof blocks", "passed": false, "evidence": "The reader-facing article is 1,067 whitespace-delimited words including proof blocks, far above the 600-word maximum."}, {"text": "Distinguishes trials, repeat use, and influence", "passed": true, "evidence": "The article separately describes 10+ facilitated trial participants, later-build return behavior that remains short of self-serve reuse, and design-file upload requests as product influence that expanded scope."}, {"text": "Does not claim invitation behavior", "passed": true, "evidence": "The article explicitly says it cannot claim designers invited others and calls that behavior 'a hypothesis to test, not a portfolio outcome.'"}, {"text": "Centers designer curation", "passed": true, "evidence": "The section 'Detection narrows the field; the designer makes the claim' gives a three-step flow ending in designer selection and states that automation reduces the cost of looking without removing accountability."}, {"text": "Markdown blocks work without color", "passed": true, "evidence": "All four proof blocks use plain Markdown blockquotes with visible textual labels ('Constraint', 'Insight', 'Adoption', and 'Influence'), statements, and qualifiers, so their semantics do not rely on color."}], "summary": {"passed": 4, "failed": 1, "total": 5, "pass_rate": 0.8}, "eval_feedback": {"suggestions": [{"assertion": "Markdown blocks work without color", "reason": "This is only indirectly verifiable from Markdown source. Define the structural proxy explicitly, such as requiring a textual type label, statement, and qualifier inside each blockquote, or provide a rendered artifact for visual grading."}, {"reason": "In this pair, the four non-length guardrails pass both configurations, so only the word-count assertion distinguishes them. Keep the safety checks, but consider adding a focused assertion for repetition or narrative economy beyond raw length."}], "overall": "The assertions cover important evidence boundaries, but most are non-discriminating between the two configurations in this iteration."}}}, {"id": "audit-standard-with_skill", "prompt": "Create a Standard Audit Studio Workflow / System case from the confirmed five-tool before flow, 10+ facilitated trials, repeat use, scope-expanding requests, and designer-curated Screenshot Flow. Invitation behavior is hypothetical. Standard is selected.", "eval_id": 2, "outputs": [{"name": "output.md", "type": "text", "content": "# Audit Studio \u2014 Decision Package\n\nRecommended archetype: Workflow / System  \nConfidence: High  \nStory thesis: I turned a fragmented Android HMI review process into a local web workspace that connects build review and evidence capture while keeping the designer responsible for what enters the audit record.  \nSelected length: Standard \u2014 500\u2013600 words. The evidence supports a clear before state, product evolution, a consequential automation boundary, facilitated trials, and feedback-led scope expansion.  \nObserved evidence: No product or repository evidence was independently verified for this response.  \nAuthor-reported evidence: The confirmed before flow; the evolution from personal screenshot utility to local web workspace; facilitated trials with more than ten designers; some designers returning with later builds; requests to upload design files to the in-car system; Screenshot Flow's candidate detection and designer-controlled selection.  \nMissing evidence: Publishable screenshots of the workspace and Screenshot Flow; anonymized trial, return-use, and feature-request receipts; one real input/output audit record; confirmation of which capabilities work end to end.  \nRelevant source patterns: MX-04 Repeated friction becomes a workflow; MX-02 Feedback visibly changes the next version; MX-11 Second-order use is stronger than raw reach.  \nAdapted candidate statements: The disconnected review sequence became one workspace organized around the audit task (Author-reported). Requests to validate design files in-car expanded the product beyond fidelity checks (Author-reported). Returning designers inviting others would indicate second-order adoption (Hypothesis).  \nClaims to avoid or qualify: Do not call facilitated trials self-serve adoption. Do not claim time savings, production readiness, independent reuse, or designer-to-designer invitations without receipts.\n\n# Public Case-Study Draft\n\n# From a Screenshot Shortcut to a Shared HMI Review Workspace\n\nI built Audit Studio after noticing that a routine Android HMI review was spread across a chain of tools. What began as a personal screenshot utility became a local web workspace, shaped by facilitated trials with more than ten designers and by requests that pushed the product beyond implementation-fidelity checks.\n\n> **Impact**\n> **A fragmented review flow became one workspace**\n> Build review, capture, and evidence handling were organized around one designer task.\n\n## One review, six handoffs\n\nThe original workflow was consistent but fragmented: receive a test APK, open it through QtScrcpy, capture screenshots or video, find and organize the files in Finder, then move the evidence into Figma or Excel.\n\nEach tool handled its part. The friction came from the handoffs between them. The designer had to keep the review state, the captured media, and the eventual audit record connected manually.\n\nI first addressed the part I felt most directly: taking screenshots. That utility solved a personal inconvenience, but it did not yet reorganize the full review.\n\n## Turning utilities into a review workflow\n\nI moved the utility into a local web workspace and structured it around what a designer was trying to accomplish: open a build, inspect the in-car experience, capture relevant states, and carry selected evidence into an audit record.\n\nThis reframing mattered more than adding another capture control. Audit Studio connected previously separate actions into one sequence, so the product model followed the review rather than the underlying technical tools.\n\nThe key design decision appeared in Screenshot Flow. As a designer moves through the interface, the system detects candidate visual changes. It does not decide that every changed frame deserves to become evidence. The designer reviews the candidates and selects what enters the audit record.\n\n> **Insight**\n> **Detect changes automatically; curate evidence deliberately**\n> The system handles repetitive detection while the designer retains editorial judgment.\n\nThat boundary made the automation useful without pretending that visual difference and design significance are the same thing. Detection is mechanical. Relevance depends on the review question, context, and the designer's judgment.\n\n## Trials changed the product's scope\n\nI introduced the workspace through facilitated sessions. More than ten designers joined the trials, and some returned with later builds to review. Because I was still present, I treat this as repeated trial behavior\u2014not proof of self-serve adoption.\n\n> **Adoption**\n> **10+ designers joined facilitated trials**\n> Some returned with later builds, showing repeated demand while the workflow still depended on facilitation.\n\nThe more consequential signal was what participants asked for next. Some wanted to upload design files to the in-car system and review them in context before implementation. Their request expanded the problem from checking whether a build matched a design to supporting broader in-car design validation.\n\nThat changed my understanding of the product. Audit Studio was no longer just a faster path to screenshots. It was becoming a workspace where designers could bring different review inputs to the same physical context, observe the result, and decide what evidence mattered.\n\n## What this case changed for me\n\nAudit Studio taught me that the product opportunity was not a new capture technology. It was the orchestration of existing capabilities around a designer's actual review sequence\u2014and a clear boundary between what the system can notice and what a designer must decide.\n\n# Production Notes\n\n## Evidence and capture requests\n\n1. **Before workflow** \u2014 Create a reconstructed diagram labeled: `Test APK \u2192 QtScrcpy \u2192 screenshot/video \u2192 Finder \u2192 Figma or Excel`. Do not add time or efficiency estimates.\n2. **Workspace overview** \u2014 Capture the local web workspace with a real or approved demo build visible. This supports the shift from personal utility to shared workflow.\n3. **Screenshot Flow** \u2014 Record a 10\u201315 second sequence showing candidate detection, review, deselection, and saving. Keep both automatic and human actions visible.\n4. **Real input/output pair** \u2014 Show one source build state beside the selected evidence in an audit record. Redact product names, device identifiers, internal paths, and confidential HMI content.\n5. **Trial receipt** \u2014 Provide anonymized evidence that more than ten designers participated and that some returned with later builds.\n6. **Influence receipt** \u2014 Pair an anonymized request to upload design files to the in-car system with the resulting product direction or implemented change. Until implementation is shown, describe this as scope expansion, not delivered capability.\n\n## Proof-block specifications\n\n| Type | Statement | Qualifier | Evidence status | Evidence ID | Placement | Source pattern |\n| --- | --- | --- | --- | --- | --- | --- |\n| Impact | A fragmented review flow became one workspace | Build review, capture, and evidence handling were organized around one designer task. | Author-reported | AS-WORKFLOW-01 | After hero | MX-04 |\n| Insight | Detect changes automatically; curate evidence deliberately | The system handles repetitive detection while the designer retains editorial judgment. | Author-reported | AS-BOUNDARY-01 | Screenshot Flow section | none |\n| Adoption | 10+ designers joined facilitated trials | Some returned with later builds; the creator still facilitated use. | Author-reported | AS-TRIAL-01 | Trials section | MX-11, qualified |\n\n## Claim verification and boundaries\n\n- Verify every product capability shown in the public draft with a fresh end-to-end capture before publication.\n- Keep \u201cmore than ten\u201d and return behavior attributed until anonymized receipts are available.\n- Call the current evidence **facilitated trial**, not self-serve adoption, reuse, or team-wide rollout.\n- Do not claim that returning designers invited others. That is a **hypothesis** and may appear only as a future success signal: \u201cDo returning designers bring other designers into the workflow without creator facilitation?\u201d\n- Do not claim reduced review time without a consistent before/after measurement.\n- Do not imply that requests to upload design files prove the capability was implemented.\n- Do not use tests, interface screenshots, or code complexity as evidence of user value.\n- No AI-building craft section is included because no concrete failure, correction, or changed agent-working method was supplied.\n\n## Confidentiality guidance\n\nUse only approved HMI content. Redact designer names, project names, build identifiers, device details, internal paths, and chat metadata. If a real product screen cannot be published, capture an approved demo rather than generating replacement product UI and presenting it as evidence.\n"}], "grading": {"expectations": [{"text": "Article is 500\u2013600 words including proof blocks", "passed": true, "evidence": "The reader-facing article from '# From a Screenshot Shortcut to a Shared HMI Review Workspace' through its closing reflection is 560 whitespace-delimited words, including proof blocks."}, {"text": "Distinguishes trials, repeat use, and influence", "passed": true, "evidence": "The article separately identifies '10+ designers' in facilitated trials, says some returned with later builds as 'repeated trial behavior\u2014not proof of self-serve adoption,' and describes upload requests as the signal that expanded product scope."}, {"text": "Does not claim invitation behavior", "passed": true, "evidence": "No invitation behavior is presented as an outcome. The production notes explicitly state: 'Do not claim that returning designers invited others. That is a hypothesis.'"}, {"text": "Centers designer curation", "passed": true, "evidence": "Screenshot Flow is framed around system-detected candidates followed by designer review and selection: 'Detect changes automatically; curate evidence deliberately.' The text explains that relevance depends on the review question and designer judgment."}, {"text": "Markdown blocks work without color", "passed": true, "evidence": "All three proof blocks are plain Markdown blockquotes with textual type labels ('Impact', 'Insight', and 'Adoption'), bold statements, and explanatory qualifiers; their meaning does not depend on color."}], "summary": {"passed": 5, "failed": 0, "total": 5, "pass_rate": 1.0}, "eval_feedback": {"suggestions": [{"assertion": "Markdown blocks work without color", "reason": "This is only indirectly verifiable from Markdown source. Define the structural proxy explicitly, such as requiring a textual type label, statement, and qualifier inside each blockquote, or provide a rendered artifact for visual grading."}, {"reason": "In this pair, the four non-length guardrails pass both configurations, so only the word-count assertion distinguishes them. Keep the safety checks, but consider adding a focused assertion for repetition or narrative economy beyond raw length."}], "overall": "The assertions cover important evidence boundaries, but most are non-discriminating between the two configurations in this iteration."}}}, {"id": "expanded-experiment-old_skill", "prompt": "Write an Expanded cross-platform scheduling Product Experiment with production-like constraints, three tested models, one selected direction, an adjacent review assistant, and no launch data. Expanded is selected.", "eval_id": 3, "outputs": [{"name": "output.md", "type": "text", "content": "# Decision package\n\nRecommended format: Product Experiment\n\nConfidence: High. The case contains a specific interaction question, three competing models, production-like prototypes on two platforms, device-test evidence, a rejected direction, and a documented selection. It does not contain launch or adoption evidence.\n\nAlternative format: Workflow / System could become a separate, shorter case if the requirements-check assistant later has evidence of repeated use beyond the author. At present, it is best treated as a supporting spin-off.\n\nStory Thesis: By testing subscriber scheduling inside production-like iOS and Android environments, I learned that the strongest model was not the one that organized time most visibly, but the one that kept composition primary and made the final send state unmistakable.\n\nObserved evidence: None was directly inspected for this response.\n\nAuthor-reported evidence: iOS and Android coded prototypes; three scheduling models; device tests covering permission, keyboard, and background-state behavior; rejection of a calendar-first direction; selection of a conversational composer with explicit send-state confirmation; review decisions; and a small requirements-check assistant prompted by review friction.\n\nMissing context: Product and team setting; exact subscriber use case; names and behavior of all three models; participant count and test protocol; exact device findings by platform; decision-makers and collaborators; engineering and AI division of labor; requirements-assistant inputs and outputs; dates; and anonymizable source artifacts.\n\nRecommended length: Expanded, interpreted as the skill's Extended mode of 1,300\u20131,800 reader-facing words, because the user has already selected it. The material can support that length if the final publication includes the reported comparison, device-state receipts, and review evidence.\n\nLength rationale: The case spans two platforms, three alternatives, several system states, a consequential rejection, and a workflow spin-off. The long format is justified by decision depth, not by prototype volume.\n\nLength options for user selection: Compact \u2014 450\u2013650 words for the calendar-first rejection alone. Standard \u2014 800\u20131,100 words for the main product decision without much workflow detail. Expanded / Extended \u2014 1,300\u20131,800 words, selected, to preserve the cross-platform experiments, decision logic, and bounded system spin-off.\n\nSelected narrative modules: The Bet; Why Existing Fidelity Was Insufficient; Competing Directions; Real-State Validation; Decision Moment; System Spin-Off.\n\nCandidate proof blocks: Static screens could not expose operating-system behavior; three models were tested in working flows; device testing reversed the calendar-first direction; explicit send-state confirmation became part of the selected model; review friction produced a requirements-check assistant.\n\nVisual Evidence Plan: An annotated map of permission, keyboard, and background states; the three models at the same scale and task state; paired iOS and Android device captures; calendar-first failure evidence; selected composer and confirmation sequence; review-decision receipt; requirements-assistant input/output example.\n\nClaims to avoid or soften: Do not claim launch, adoption, conversion, retention, time savings, user validation, production release, or organizational impact. Do not describe stakeholder review as subscriber validation. Do not claim the assistant improved review speed or quality without measured or documented evidence. Do not name AI tools or describe an AI working method without a concrete, verifiable episode.\n\n---\n\n# Scheduling is not a calendar problem\n\n## Testing a subscriber scheduling flow where static screens stopped being truthful\n\nI was designing a cross-platform flow for scheduling messages to subscribers. The apparent task was straightforward: choose what to send, choose when to send it, and confirm the schedule. But the important design questions sat outside the static interface. What happens when the operating system asks for permission? Does the keyboard compress, cover, or interrupt the composer? What does the sender see after the app moves into the background and returns? And at what point does a scheduled message feel committed rather than merely drafted?\n\nFigma could describe the intended path, but it could not answer those questions. I built production-like prototypes for iOS and Android so the scheduling models could be tested inside the states that would determine whether the experience felt dependable.\n\n> **Constraint**\n> **The decisive behavior lived between screens.**\n> Permission prompts, keyboard transitions, and background-state changes required working device flows.\n\n## At a glance\n\n**What** \u2014 A cross-platform experiment for scheduling subscriber messages.\n\n**How** \u2014 I implemented three scheduling models in production-like iOS and Android environments, tested them on devices, and used the resulting behavior to guide review.\n\n**Decision** \u2014 I rejected a calendar-first direction and selected a conversational composer with explicit confirmation of the final send state.\n\n**Secondary output** \u2014 When the prototypes exposed a bottleneck in checking requirements during review, I created a small assistant to make that check more consistent.\n\n**Evidence boundary** \u2014 The work produced a reviewed product direction and documented device findings. It did not reach launch, and there is no adoption data.\n\n## The bet: scheduling should fit the act of composing\n\nThe experiment began with an unresolved product question: should scheduling be organized around the calendar, or should it remain part of the conversation the sender is already composing?\n\nA calendar-first model offered an obvious advantage. It made time visible and gave the schedule a familiar structure. That clarity was attractive in static review because a reviewer could immediately see dates, slots, and planned sends. But it also risked changing the center of gravity of the task. The user was not arriving primarily to manage a calendar; they were trying to prepare a message for subscribers and decide when it should go out.\n\nI tested three models rather than treating that framing as settled. The alternatives were useful only if they represented different product behavior, so I compared them as complete flows rather than as isolated screen treatments. Each had to carry the sender from composition through timing and into a legible final state.\n\n> **Experiment**\n> **Three scheduling models were implemented as working flows.**\n> The comparison focused on how each model connected composing, choosing a time, and understanding what would happen next.\n\n## Raising fidelity to expose the real interaction\n\nThe coded prototypes were not an exercise in making polished mockups. They were test instruments. Their purpose was to reveal behavior that the design file could only imply.\n\nPermission was one of those behaviors. A system prompt can interrupt the designed sequence, change what the user believes has been completed, or return them to a state the static happy path never shows. The keyboard created another set of constraints. In a scheduling flow, composition and timing controls compete for limited space, especially when the sender is editing content and adjusting delivery details in the same session. Backgrounding added a third question: after leaving and returning to the app, would the sender still understand whether the message was a draft, scheduled, or awaiting confirmation?\n\nBuilding both iOS and Android versions made those transitions part of the design material. It also prevented a single platform's behavior from being mistaken for the universal interaction. Instead of reviewing only the intended sequence, I could bring the actual interruptions, layout changes, and resumed states into the decision.\n\nThis changed the role of the prototype. It was no longer a presentation of a preferred answer. It became a way to discover which answer remained coherent when the operating system participated in the flow.\n\n## The device test that changed the direction\n\nOn a static canvas, the calendar-first direction looked structured and reassuring. On devices, that structure came with a cost: it made the act of choosing a date feel like the primary task and pushed the message\u2014the thing being scheduled\u2014into a supporting role.\n\nThat trade-off became harder to ignore once the flow had to accommodate the keyboard, system permissions, and returning from the background. These states did not merely add edge cases around the calendar. They made continuity more important. The sender needed to retain a clear sense of the message they were composing, the timing attached to it, and whether the action had actually been committed.\n\nThe device tests therefore changed the decision. I rejected the calendar-first direction, not because calendars are unfamiliar, but because its hierarchy did not hold up under the full cross-platform task. Familiarity at the control level was not enough if the overall flow made the user's object of attention less stable.\n\n> **Decision**\n> **Device testing reversed the calendar-first direction.**\n> Its visible time structure could not compensate for the loss of continuity around the message being composed.\n\nThis was the point of using production-like environments: the selected direction was not simply the one that looked clearest in a review frame. It was the one that remained understandable through the states the real product would have to survive.\n\n## Keeping the conversation primary\n\nThe selected model used a conversational composer as the main surface. Scheduling became part of preparing the message rather than a separate planning destination. This preserved the relationship between content and timing: the sender could understand what they were sending while deciding when it should be delivered.\n\nThat choice created a new responsibility. If the interface stayed conversational, the final scheduled state could not be left implicit. A message that looks ready, queued, or sent can carry very different consequences. The flow therefore included explicit send-state confirmation so the sender could distinguish composing from commitment and see what the system believed would happen next.\n\nThis confirmation was not decorative reassurance added at the end. It completed the interaction model. The conversational composer protected continuity during preparation; the explicit final state protected certainty after the scheduling action. Together, they answered the two parts of the original question: where scheduling belonged and how commitment should be communicated.\n\n> **Insight**\n> **Preserve continuity while composing; become explicit at commitment.**\n> The selected model kept the message central and made the scheduled send state unmistakable.\n\n## A prototype can also reveal a review problem\n\nThe coded experiments surfaced a second bottleneck: reviewing realistic flows required repeatedly checking whether each direction covered the agreed requirements and critical states. As the number of platform conditions and alternatives grew, that check became a small workflow of its own.\n\nI created a requirements-check assistant to support that review. Its role was narrow: help compare the prototype against the requirements that mattered to the decision. It did not make the product choice, replace device testing, or turn subjective judgment into an automated score. The product decision still depended on seeing the flow on devices and weighing the trade-offs.\n\nThe assistant belongs in this case because it emerged directly from the experiment. Building at higher fidelity increased what the team could learn, but it also increased the review surface. The assistant was a response to that new cost: a lightweight way to keep requirement coverage visible while human reviewers focused on interaction quality and product fit.\n\n> **Workflow spin-off**\n> **Higher-fidelity experiments created a new review surface.**\n> A small assistant helped check requirement coverage; documented review decisions remained the source of product judgment.\n\nThere is evidence that the assistant and review process were used for this project. Without evidence of repeated use, measured review improvement, or adoption by others, I treat it as a project output rather than a proven team system.\n\n## What the experiment resolved\n\nThe work resolved a product direction before launch. Three models were tested in working cross-platform flows. The calendar-first direction was rejected after device testing. A conversational composer with explicit send-state confirmation was selected, and the review decisions and device tests provide receipts for that choice.\n\nThe experiment did not establish whether subscribers or senders would adopt the feature, whether scheduling would improve engagement, or whether the selected flow would perform better in market. Those questions require launch or subsequent behavioral research. The evidence here supports a narrower\u2014and still consequential\u2014claim: realistic prototyping changed the interaction decision and exposed the system states the final design needed to handle.\n\n## The principle I carried forward\n\nHigh fidelity is valuable when it answers a question that lower fidelity cannot. In this project, code mattered because the product experience depended on operating-system behavior, physical-device constraints, and state continuity. The implementation was not proof of impact; it was a way to make hidden conditions available to design judgment.\n\nThe resulting principle is specific: when a workflow crosses composition, system interruption, and delayed execution, design the continuity first and make commitment explicit. Test that logic in the environments that can break it. Then use tooling to support the review, while keeping the final decision with the people accountable for the product.\n\n---\n\n# Production notes\n\n## Evidence gaps and verification requests\n\n- Replace general device-test language with the exact observed behavior for permission, keyboard, and background states. Record device model, OS version, build, date, task, and observer where available.\n- Name and describe the third scheduling model before publication. The public draft truthfully says three models were tested but only contrasts the calendar-first and selected conversational directions because no details for the third were supplied.\n- Confirm who selected or approved the final direction and what role the author, product partners, engineers, and any AI tools played.\n- Verify that \u201cproduction-like\u201d is the team's accepted description. Do not upgrade it to \u201cproduction\u201d or \u201cproduction-validated.\u201d\n- Document the requirements-check assistant's actual inputs, outputs, and use during review. Keep claims limited to project use unless there is evidence of reuse.\n- Confirm the object being scheduled is accurately described as a \u201cmessage to subscribers.\u201d Adjust terminology if the product used posts, notifications, campaigns, or another content type.\n\n## Capture requests\n\n1. One annotated state map showing composition, scheduling, confirmation, permission interruption, keyboard-open state, backgrounding, and return.\n2. The three scheduling models at the same device scale and equivalent task state, with one sentence identifying the product question each tested.\n3. Paired iOS and Android captures of the same critical transition.\n4. A short device recording of the calendar-first failure point and the selected composer's corresponding behavior.\n5. A review receipt showing the rejection and selection rationale; redact names or internal links as needed.\n6. The explicit send-state confirmation sequence, including the state after returning from the background.\n7. One real, redacted requirements-assistant input/output pair next to the requirement it checked.\n\n## Confidentiality guidance\n\nAnonymize subscriber data, message content, account identifiers, internal product names, unreleased dates, employee names, repository paths, and review-channel metadata. Preserve timestamps only when they are necessary to establish sequence. Prefer redaction of authentic artifacts over reconstructed UI. If reconstruction is unavoidable, label it clearly as a reconstruction and do not use it as proof of device behavior.\n\n## Claim verification before publication\n\n- Supported once receipts are attached: three implemented models; iOS and Android device testing; calendar-first rejection; conversational-composer selection; explicit send-state confirmation; documented review decisions; creation and project use of the requirements-check assistant.\n- Keep bounded: \u201cthe prototypes exposed,\u201d \u201cdevice testing changed the direction,\u201d and \u201cthe assistant supported requirements checking.\u201d\n- Do not claim without new evidence: launch, self-serve use, adoption, conversion, retention, engagement, subscriber satisfaction, time saved, fewer review errors, organizational rollout, or a causal business result.\n- Do not describe stakeholder or team review as user validation. If test participants were actual users, document who they were, how many participated, what tasks they completed, and what was observed before changing this language.\n\n## Editorial lineage\n\nThe outline uses two optional source-library patterns: \u201cProduction context reveals design constraints\u201d for the main decision arc and \u201cOne artifact becomes a broader belief\u201d for the bounded closing principle. The requirements-check assistant is presented as a system spin-off under the Product Experiment contract, not as evidence of adoption or a separate workflow transformation.\n"}], "grading": {"expectations": [{"text": "Article is 700\u2013800 words including proof blocks", "passed": false, "evidence": "The reader-facing article is 1,548 whitespace-delimited words including proof blocks, exceeding the 800-word maximum."}, {"text": "Real environment changes the decision", "passed": true, "evidence": "The article says on-device permission, keyboard, and background states made continuity decisive and directly led to rejecting the calendar-first direction in favor of the conversational composer."}, {"text": "No more than two detailed decisions", "passed": true, "evidence": "Despite its excessive length, the article develops two substantive decision arcs: selection of the scheduling model and creation of the bounded requirements-check assistant. Prototype fidelity is presented as the method used to resolve the primary product decision."}, {"text": "No invented launch impact", "passed": true, "evidence": "The article states that the work resolved a direction 'before launch' and explicitly disclaims adoption, engagement, market performance, and measured review improvement."}, {"text": "Uses 3\u20134 supported proof blocks", "passed": false, "evidence": "The article contains five Markdown proof blocks: 'Constraint', 'Experiment', 'Decision', 'Insight', and 'Workflow spin-off', exceeding the maximum of four."}], "summary": {"passed": 3, "failed": 2, "total": 5, "pass_rate": 0.6}, "eval_feedback": {"suggestions": [{"assertion": "No more than two detailed decisions", "reason": "'Detailed decision' has no objective boundary. Name the allowed decision arcs or define a structural test, such as no more than two sections that present a choice, rationale, and selected outcome."}, {"assertion": "Uses 3\u20134 supported proof blocks", "reason": "Clarify whether a clearly labeled hypothetical 'Next signal' counts toward the block limit or whether every counted block must have observed or author-reported evidence."}], "overall": "The length and block-count checks distinguish the versions, but two assertions need tighter operational definitions."}}}, {"id": "expanded-experiment-with_skill", "prompt": "Write an Expanded cross-platform scheduling Product Experiment with production-like constraints, three tested models, one selected direction, an adjacent review assistant, and no launch data. Expanded is selected.", "eval_id": 3, "outputs": [{"name": "output.md", "type": "text", "content": "# Direction decision\n\n**Recommended archetype:** Product Experiment  \n**Confidence:** High  \n**Selected length:** Expanded, 700\u2013800 words of reader-facing copy  \n**Product question:** Which scheduling model would preserve subscriber confidence across iOS and Android when permissions, keyboards, and background transitions became part of the experience?  \n**Primary constraint:** Static Figma screens could show layout but not the system behavior that determined whether scheduling felt trustworthy.  \n**Story thesis:** By testing three scheduling models in production-like iOS and Android environments, I learned that explicit state continuity mattered more than calendar-led organization, changing both the product direction and the way requirements were reviewed.\n\n**Observed evidence:** No project artifacts were independently inspected for this draft.  \n**Author-reported evidence:** Working iOS and Android prototypes; three scheduling models; device tests covering permission, keyboard, and background-state behavior; rejection of the calendar-first direction; selection of a conversational composer with explicit send-state confirmation; review-decision receipts; and a requirements-check assistant created after the prototypes exposed a review bottleneck.  \n**Missing evidence:** The third model\u2019s interaction logic; test participants and protocol; exact review criteria and decision owners; collaborator and AI roles; assistant inputs, outputs, and actual use; launch status; adoption; and behavioral outcomes.  \n**Relevant source patterns:** MX-03, production context reveals design constraints; MX-12, one artifact earns a broader belief.  \n**Adapted candidate statements:** \u201cBuilding the scheduling flow on both platforms exposed state transitions that changed the selected interaction model\u201d \u2014 **Author-reported**. \u201cFor stateful mobile interactions, fidelity should be chosen by the uncertainty the team needs to resolve\u201d \u2014 **Author-reported insight**.  \n**Directions worth showing:** All three models at the same task and state; identify the unnamed third model before publication.  \n**Decision evidence:** Device-test captures paired with the review record that documents why calendar-first was rejected and the conversational composer selected.  \n**Claims to avoid or qualify:** Do not call the work launched, adopted, production-validated, or proven to improve completion, trust, or review speed. Do not describe stakeholder review as user validation.\n\n---\n\n# Designing scheduling around state, not the calendar\n\nI designed a cross-platform scheduling flow by testing three interaction models inside production-like iOS and Android environments. The work shifted from a calendar-first experience to a conversational composer with explicit send-state confirmation.\n\nThis was a design decision, not a launch result. The evidence shows what the prototypes revealed and which direction reviewers selected; it does not yet show adoption or behavior after release.\n\n> **Constraint**\n> **Static screens could not reveal the states that determined trust.**\n> Permissions, keyboards, and background transitions had to be experienced on-device.\n\n## The real question lived between the screens\n\nAt first, scheduling appeared to be an interface-organization problem: choose content, set a time, and confirm. Figma could represent each moment, but not answer the consequential questions. What happened when a permission interrupted the flow? Would the keyboard obscure the next action? After leaving and returning, would the scheduled state remain legible?\n\nThose transitions were not edge decoration. They shaped whether a subscriber could understand the commitment they had made. I therefore treated prototype fidelity as part of the research method and built both platform versions far enough inside production-like environments to encounter native behavior.\n\n*[Visual 1: Bet-and-constraint diagram connecting the scheduling question to permission, keyboard, and background states.]*\n\n## Three models, one comparable task\n\nI tested three scheduling models against the same task. One made the calendar the primary surface. Another kept scheduling inside a conversational composer. The third should be named in the final publication once its interaction logic is documented.\n\nThe point of the comparison was not visual variety. Each model proposed a different answer to where subscribers should form intent and where the product should confirm it. Keeping the task and state consistent made the behavioral trade-offs visible across platforms.\n\n*[Visual 2: The three directions at the same scale and task state, annotated by the product question each tested.]*\n\n## Device behavior changed the decision\n\nOn-device testing exposed what the static sequence had hidden. Permission prompts could break the apparent continuity of the task. Keyboard behavior changed the usable space and action hierarchy. Moving the app into the background introduced a gap between scheduling something and feeling certain that it remained scheduled.\n\nThese findings weakened the calendar-first direction. It gave time selection a strong visual home, but it separated the scheduling decision from the composition context and made continuity harder to communicate through interruptions.\n\nThe conversational composer kept intent, content, and timing closer together. I selected it with an explicit send-state confirmation so the subscriber could see not only that an action had been accepted, but also what the system now believed would happen.\n\n> **Influence**\n> **Device tests moved the product away from calendar-first scheduling.**\n> The selected composer preserved context and made the committed send state explicit.\n\n*[Visual 3: Calendar-first and composer directions shown before and after an interruption.]*\n\n*[Visual 4: Final cross-platform sequence from composition through explicit send-state confirmation.]*\n\n## The prototype also revealed a review problem\n\nThe coded flows also revealed a bottleneck: checking whether each build still covered the intended requirements had become a separate task. I created a small requirements-check assistant to compare the evolving experience against the expected flow and surface gaps.\n\nThis assistant is a spin-off, not evidence of product adoption. Its relevance is narrower: building at higher fidelity created more inspectable behavior, which in turn required a more structured way to review that behavior. The case should show the assistant\u2019s actual input and output before claiming that it saved time or changed team performance.\n\n> **Insight**\n> **Higher-fidelity prototypes need higher-fidelity review.**\n> More realistic behavior creates better decisions only when requirements remain traceable.\n\n*[Visual 5: An anonymized requirement, the corresponding prototype state, and the assistant\u2019s review output.]*\n\n## What this experiment established\u2014and what remains open\n\nThe experiment established a direction: a conversational composer with explicit confirmation was selected over the calendar-first model after cross-platform device testing. Review records and device-test receipts can substantiate that decision. They should appear beside the comparison rather than as an unsupported outcome statement.\n\nThe work did not establish that subscribers complete scheduling more often, trust it more, or return to use it. Those questions require launch and behavioral evidence.\n\n> **Next signal**\n> **Can subscribers schedule, leave, return, and correctly verify the send state without assistance?**\n\n*[Visual 6: Anonymized review decision linking device evidence to the selected direction.]*\n\nThe transferable lesson is bounded but useful: for stateful mobile interactions, choose prototype fidelity according to the uncertainty that must be resolved. When the decision depends on operating-system behavior and continuity across interruptions, the experience between screens is part of the product\u2014not implementation detail.\n\n---\n\n# Production notes\n\n## Evidence and capture requests\n\n1. **Bet and constraint** \u2014 Create a compact, clearly labeled reconstruction of the initial decision question. Do not invent research inputs.\n2. **Comparable directions** \u2014 Capture all three models at the same scale, platform, task, and state. Add the third model\u2019s verified name and behavioral hypothesis.\n3. **Device-test receipt** \u2014 Use an original video or frame sequence showing at least one permission interruption, keyboard collision or resize, and background/return state. Identify platform and build version.\n4. **Selected flow** \u2014 Capture both iOS and Android from composition through explicit send-state confirmation. Avoid implying pixel parity if native behavior differs.\n5. **Review decision** \u2014 Anonymize names and sensitive product details while preserving date, decision, rationale, and connection to device evidence.\n6. **Requirements-check assistant** \u2014 Show one real requirement, its checked prototype state, and the resulting output. Do not claim time savings without comparative evidence.\n\n## Proof-block specifications\n\n### Block 1\n\n- **Type:** Constraint\n- **Statement:** Static screens could not reveal the states that determined trust.\n- **Optional qualifier:** Permissions, keyboards, and background transitions had to be experienced on-device.\n- **Evidence status:** Author-reported\n- **Evidence ID:** E1 \u2014 cross-platform device-test capture\n- **Intended placement:** After the opening orientation\n- **Originating source pattern:** MX-03\n\n### Block 2\n\n- **Type:** Influence\n- **Statement:** Device tests moved the product away from calendar-first scheduling.\n- **Optional qualifier:** The selected composer preserved context and made the committed send state explicit.\n- **Evidence status:** Author-reported\n- **Evidence ID:** E2 \u2014 device-test comparison plus review decision\n- **Intended placement:** After the decision explanation\n- **Originating source pattern:** MX-03\n\n### Block 3\n\n- **Type:** Insight\n- **Statement:** Higher-fidelity prototypes need higher-fidelity review.\n- **Optional qualifier:** More realistic behavior creates better decisions only when requirements remain traceable.\n- **Evidence status:** Author-reported\n- **Evidence ID:** E3 \u2014 requirements-check assistant input/output\n- **Intended placement:** In the system spin-off section\n- **Originating source pattern:** MX-12\n\n### Block 4\n\n- **Type:** Next signal\n- **Statement:** Can subscribers schedule, leave, return, and correctly verify the send state without assistance?\n- **Optional qualifier:** None\n- **Evidence status:** Hypothesis\n- **Evidence ID:** H1 \u2014 proposed post-launch validation question\n- **Intended placement:** In the limitations section\n- **Originating source pattern:** none\n\n## Verification and confidentiality\n\n- Confirm the third model, test protocol, reviewer roles, and decision date before publication.\n- Replace broad references to \u201csubscribers\u201d with the verified audience definition if the product serves a narrower segment.\n- Confirm whether \u201cproduction-like\u201d means production code, a debug build, realistic services, or only native-device execution; use the most precise supported term.\n- Obtain permission or anonymize all review excerpts, account data, notification content, and internal requirements.\n- Keep the assistant claim at artifact level until there is evidence of repeated use, independent use, or measurable review improvement.\n- Recheck that no caption or proof block implies launch, adoption, user validation, or improved trust.\n"}], "grading": {"expectations": [{"text": "Article is 700\u2013800 words including proof blocks", "passed": true, "evidence": "The reader-facing article from '# Designing scheduling around state, not the calendar' through the closing lesson is 774 whitespace-delimited words, including proof blocks."}, {"text": "Real environment changes the decision", "passed": true, "evidence": "The article links permission prompts, keyboard behavior, and background transitions observed on devices to weakening the calendar-first model and selecting the conversational composer with explicit send-state confirmation."}, {"text": "No more than two detailed decisions", "passed": true, "evidence": "The article develops two decision arcs: the primary scheduling-model selection and the bounded creation of a requirements-check assistant. The three tested models are treated as alternatives within the first decision, not as separate decisions."}, {"text": "No invented launch impact", "passed": true, "evidence": "The opening states, 'This was a design decision, not a launch result,' and the limitations section explicitly says the work did not establish completion, trust, or return-use outcomes."}, {"text": "Uses 3\u20134 supported proof blocks", "passed": true, "evidence": "The article contains four proof blocks. Three are tied to author-reported project evidence ('Constraint', 'Influence', and 'Insight'); the fourth is clearly labeled 'Next signal' and phrased as a future validation question rather than an achieved claim."}], "summary": {"passed": 5, "failed": 0, "total": 5, "pass_rate": 1.0}, "eval_feedback": {"suggestions": [{"assertion": "No more than two detailed decisions", "reason": "'Detailed decision' has no objective boundary. Name the allowed decision arcs or define a structural test, such as no more than two sections that present a choice, rationale, and selected outcome."}, {"assertion": "Uses 3\u20134 supported proof blocks", "reason": "Clarify whether a clearly labeled hypothetical 'Next signal' counts toward the block limit or whether every counted block must have observed or author-reported evidence."}], "overall": "The length and block-count checks distinguish the versions, but two assertions need tighter operational definitions."}}}, {"id": "practice-note-fallback-old_skill", "prompt": "Diagnose an unfinished screenshot-renaming script used only twice by its creator, with no external users, feedback, packaging, alternatives, or documented product decision. No length is selected.", "eval_id": 4, "outputs": [{"name": "output.md", "type": "text", "content": "# Case-study diagnosis\n\n**Recommended format:** Practice Note, contingent on finding one evidence-backed build lesson\n\n**Confidence:** High that a full portfolio case study is not supported; medium that a publishable Practice Note can be supported after a short context interview\n\n**Reason a full case study is not supported:** The project is unfinished, has only been used twice by its creator, and has no external users, feedback, packaged release, tested alternatives, or documented product decision. Those two personal uses show that the script ran in a real workflow; they are not adoption or independent validation. A Product Utility case would need a specific problem, a complete working experience, at least one consequential scope or interaction decision, and a real-use or iteration receipt. The available evidence does not meet that gate.\n\n**Alternative format:** Keep it as a private project note if there is no concrete failure, comparison, or judgment behind the build. A public Practice Note should not be created from the artifact alone.\n\n**Selected variant:** Build lesson\n\n**Provisional Story Thesis:** I built a command-line script to rename exported screenshots and used it in two of my own workflows. The publishable lesson is still unknown: the note needs one concrete account of what the manual process made difficult, what changed in the script, and what those two runs demonstrated.\n\nThis thesis is deliberately provisional. It describes the artifact and the known use boundary without claiming that the script saved time, improved quality, or solved a problem for anyone else.\n\n## Evidence map\n\n**Observed evidence:** None yet. No relevant repository files, history, documentation, sample inputs, or outputs were available to inspect with the request.\n\n**Author-reported evidence:**\n\n- The repository contains an unfinished command-line script.\n- The script renames exported screenshots.\n- You used it twice yourself.\n- There are no other users and no feedback.\n- There is no packaged release.\n- No alternatives were evaluated.\n- No product decision has been documented.\n\n**Inferred, not publishable as fact:**\n\n- Manual screenshot renaming may have been repetitive or error-prone.\n- A naming convention may have mattered to a downstream portfolio, documentation, or handoff workflow.\n- The second use may indicate personal reuse, but it does not establish reliability or broader usefulness.\n\n**Missing context:**\n\n- The concrete moment or recurring task that triggered the script.\n- The exact before-state workflow and what was unsatisfactory about it.\n- A failure, constraint, version change, or implementation choice that required judgment.\n- What happened in each of the two runs, including whether the output was correct and what still required manual work.\n- Inspectable before-and-after filenames or terminal output.\n- What you decided versus what AI or another tool generated.\n- The conditions where this approach is useful and where it is not.\n- Any complete task flow, external use, feedback, packaging, release, or distribution evidence that could later support a full Product Utility case.\n\n## Recommended length\n\n**Recommendation:** Compact, 450\u2013650 words, if the missing trigger, contrast, and judgment can be supplied. One bounded build lesson is the most this evidence can carry without padding. Do not draft yet: you have not selected or delegated a length, and the Practice Note evidence gate is not complete.\n\n**Length options for selection:**\n\n- **Compact \u2014 450\u2013650 words:** Recommended. Best for one trigger, one change or constraint, evidence from the two creator-run uses, and one bounded lesson.\n- **Standard \u2014 800\u20131,100 words:** Not currently supported. It would require meaningful evolution, two or three consequential decisions, and receipts showing iteration or validation.\n- **Extended \u2014 1,300\u20131,800 words:** Not appropriate for the current project. It would require multiple phases, alternatives, richer constraints, and substantial evidence.\n\n## Proposed narrative modules\n\nIf the evidence gate is met, the Practice Note should use this narrow progression:\n\n1. **The renaming task that triggered the script** \u2014 the actual export context and why manual naming mattered.\n2. **What the first run exposed** \u2014 a concrete failure, awkward step, or constraint, if one occurred.\n3. **What changed before the second run** \u2014 only if repository history or your account can verify a change and its rationale.\n4. **What the two runs do and do not prove** \u2014 personal reuse and inspectable output, with no claim of adoption or general reliability.\n5. **Where the method applies** \u2014 a bounded recommendation and the situations that still require manual review.\n\nDo not add Research, Personas, Ideation, Usability Testing, or Impact sections unless evidence of those activities is supplied.\n\n## Candidate proof blocks\n\nNo impact or adoption block is currently supportable. After verification, two modest blocks may be possible:\n\n> **Constraint**  \n> [Verified description of the screenshot-export naming problem]\n\n> **Evidence**  \n> Used in two creator-run workflows; no external-use validation yet.\n\nThe number \u201ctwo\u201d may document the basis of personal reuse, but it should not appear in an Adoption or Impact block.\n\n## Visual Evidence Plan\n\n1. **Trigger evidence** \u2014 capture a real export folder before renaming. It must show the original filenames and enough context to explain the task. Do not reconstruct it unless clearly labeled.\n2. **Contrast** \u2014 show the same files before and after one verified run. Preserve the exact filename transformation; do not claim time savings without a consistent measurement.\n3. **Method** \u2014 use a compact, clearly labeled workflow: exported screenshots \u2192 script input or command \u2192 renamed files \u2192 manual review. Confirm every step before publishing it.\n4. **Result** \u2014 capture terminal output and the resulting directory from one of the two real runs, including any errors or manual corrections.\n\nIf no original artifacts remain, use a text reconstruction labeled \u201cReconstructed from the author\u2019s account,\u201d not generated replacement product UI.\n\n## Claims to avoid or soften\n\n- Do not call the script launched, released, packaged, production-ready, or reliable.\n- Do not describe two creator-run uses as adoption, validation, or user success.\n- Do not claim users, feedback-led iteration, market need, or business impact.\n- Do not claim the script saved time, reduced errors, or improved consistency unless a before/after basis can be shown.\n- Do not claim a deliberate product decision until the decision, alternatives considered, and rationale are documented.\n- Do not call it a reusable workflow or system while it remains an unpackaged personal script.\n- Do not describe AI activity as design judgment unless a specific constraint, correction, or human\u2013AI handoff can be evidenced.\n\n## What would upgrade this to a full case study\n\nA Product Utility case could become supportable if the project gains a complete demonstrable task flow, one documented scope or interaction decision, a packaged way for someone else to use it, and at least one external-use, feedback, repeat-use, or evidence-triggered version-change receipt. Availability alone would not count as adoption.\n\n## First question\n\nWhich length should I use if the evidence gate is met: **Compact (recommended), Standard, Extended, or delegate the choice to me**?\n\nI will not draft the Practice Note until you select the length. After that, the next question should establish the concrete trigger or failure that gives the note a defensible lesson.\n"}], "grading": {"expectations": [{"text": "Recommends Practice Note", "passed": true, "evidence": "output.md explicitly states: \"Recommended format: Practice Note, contingent on finding one evidence-backed build lesson.\""}, {"text": "Names missing use, decision, and packaging evidence", "passed": true, "evidence": "The output names \"no external users,\" \"no packaged release,\" and no \"documented product decision,\" and its Missing context section again identifies external-use, packaging, and decision evidence as absent."}, {"text": "Does not call creator use adoption", "passed": true, "evidence": "output.md says the two personal uses \"are not adoption or independent validation\" and later says not to describe two creator-run uses as adoption."}, {"text": "Does not draft before length selection", "passed": true, "evidence": "The output is a diagnosis rather than a draft and explicitly says: \"Do not draft yet\" and \"I will not draft the Practice Note until you select the length.\""}], "summary": {"passed": 4, "failed": 0, "total": 4, "pass_rate": 1.0}, "eval_feedback": {"suggestions": [{"reason": "All four assertions also pass for the with-skill output, so this eval does not distinguish the revised skill from the baseline. Add a criterion for a behavior unique to the revision, if one is intended."}], "overall": "The assertions are meaningful evidence-safety checks, but they are non-discriminating in this iteration because both configurations satisfy all of them."}}}, {"id": "practice-note-fallback-with_skill", "prompt": "Diagnose an unfinished screenshot-renaming script used only twice by its creator, with no external users, feedback, packaging, alternatives, or documented product decision. No length is selected.", "eval_id": 4, "outputs": [{"name": "output.md", "type": "text", "content": "# Case-study diagnosis\n\n**Recommended format:** Practice Note fallback, not a full case study  \n**Confidence:** High  \n**Recommended archetype:** None yet. Practice Note is a fallback format, not a fourth archetype.  \n**Alternative:** Product Utility, but only if the script becomes a working, intentionally scoped tool and gains a concrete product decision plus a real-use receipt.  \n**Selected variant:** Build lesson, provisionally. This variant is only viable if one specific failure, change, or implementation insight can be demonstrated.\n\n## Why a full case study is not supported\n\nThe available evidence describes an unfinished command-line script used twice by its creator. Those two runs are personal use, not adoption. There are no external users, feedback-led changes, packaged release, considered alternatives, or documented product decision. That leaves no defensible causal arc from problem to decision to validated outcome, and no basis for presenting the script as a reusable workflow or product success.\n\nA Practice Note is the strongest honest direction, but it is not ready to draft yet. Even that shorter format needs one concrete trigger, an inspectable contrast, and a lesson that came from a choice the author actually made. If no such episode exists, keep this as private project documentation rather than publishing a generic reflection.\n\n## Provisional story thesis\n\n> An unfinished screenshot-renaming script can document an emerging personal workflow, but two creator-run uses prove only that the script was tried\u2014not that it is reliable, reusable, or valuable to others.\n\nThis is a framing boundary, not yet a publishable thesis. A final thesis must name the specific naming problem, what failed or changed, and the bounded lesson supported by that event.\n\n## Length options\n\n- **Compact \u2014 400\u2013500 words:** Recommended if a concrete build lesson and one before/after receipt can be supplied. It is the shortest mode that can carry a trigger, change, evidence, and limitation without padding.\n\n- **Standard \u2014 500\u2013600 words:** Suitable only if there are two or three consequential decisions or visible iterations with receipts. The current evidence does not support it.\n\n- **Expanded \u2014 700\u2013800 words:** Worthwhile only for a multi-phase project with alternatives, validation, adoption, and several strong visuals. The current project does not support it.\n\n**Recommended length:** Compact Practice Note, pending your choice. No draft should be written until you select a length or explicitly delegate that choice.\n\n## Evidence map\n\n### Observed evidence\n\n- None independently inspected or supplied as a repository artifact in this request.\n\n### Author-reported evidence\n\n- The artifact is an unfinished command-line script.\n- It renames exported screenshots.\n- The creator used it twice.\n- It has no external users or feedback.\n- It has no packaged release.\n- No alternatives were evaluated.\n- No product decision was documented.\n\n### Inferred \u2014 not publishable as fact\n\n- Screenshot renaming was repetitive or costly enough to motivate automation.\n- The two runs succeeded or saved time.\n- The script improved filename consistency.\n- AI materially changed the creator's working method.\n- The script could be useful to other designers.\n\n### Missing evidence\n\n- The concrete trigger: what happened during screenshot export that prompted the script.\n- A real input/output example from one of the two runs.\n- What failed, remained uncertain, or changed during the build.\n- The author's actual judgment or lesson from that event.\n- The author's role versus any AI tool's role.\n- A transfer boundary: when this method is useful and when it is not.\n- Basic reliability evidence, such as handling one representative batch correctly.\n- External use, feedback, packaging, and distribution evidence needed for a full case study.\n\n## Relevant source patterns\n\n### MX-01 \u2014 Personal constraint sharpens scope\n\n**Why it matches:** This is a creator-built utility, so a narrow personal trigger could explain its scope without inventing a market need. The required trigger and working-task receipt are still missing.\n\n**Adapted candidate statement:** \u201cBecause [specific screenshot-export situation], I limited the first version to [essential renaming behavior] rather than [unnecessary scope].\u201d  \n**Candidate status:** Unsupported until the trigger, scope decision, and real output are confirmed.\n\n### MX-05 \u2014 Packaging separates reuse from the creator\n\n**Why it matches:** The absence of packaging is a meaningful boundary. It explains why the project cannot yet be described as a reusable workflow.\n\n**Adapted candidate statement:** \u201cThe script remained an unfinished, creator-operated command-line tool; nobody else has used it independently.\u201d  \n**Candidate status:** Author-reported. Suitable for limitations, not as an adoption or impact claim.\n\n### MX-12 \u2014 One artifact earns a broader belief\n\n**Why it matches:** A Practice Note needs one bounded lesson, but that lesson must follow from a specific event rather than be generated from the existence of code.\n\n**Adapted candidate statement:** \u201cThis project showed me that [bounded lesson] when [specific condition].\u201d  \n**Candidate status:** Unsupported until a failure, decision, and result form a causal chain.\n\n## Proof-block specifications\n\n### Proof block 1\n\n**Type:** Constraint  \n**Statement:** Unfinished CLI, used in two creator-run sessions  \n**Optional qualifier:** Personal use only; no external validation  \n**Evidence status:** Author-reported  \n**Evidence ID:** AR-01  \n**Intended placement:** Orientation  \n**Originating source pattern:** none\n\n### Proof block 2\n\n**Type:** Next signal  \n**Statement:** Can another person rename one screenshot batch without the creator's help?  \n**Optional qualifier:** Requires packaging and an independent-use receipt  \n**Evidence status:** Hypothesis  \n**Evidence ID:** H-01  \n**Intended placement:** Limitations or next experiment  \n**Originating source pattern:** MX-05\n\nNo Impact, Adoption, or Influence block is supportable.\n\n## Visual Evidence Plan\n\n1. **Trigger evidence:** A real pre-script folder listing showing the original exported filenames. Do not reconstruct it unless clearly labeled.\n2. **Method and result:** One terminal capture showing the command and the resulting filenames from the same real batch.\n3. **Contrast:** A side-by-side before/after from one of the two actual runs. Do not claim time savings without a recorded baseline.\n4. **Failure or change:** The actual error, edge case, or earlier output that caused a code or workflow change. If none exists, omit this module rather than inventing iteration.\n5. **Ownership:** If AI-building craft is included, preserve the prompt, diff, or note that shows what AI executed and what the author reviewed or corrected.\n\n## Claims to avoid or soften\n\n- Do not call two creator-run sessions \u201cadoption,\u201d \u201cuser validation,\u201d or \u201crepeat usage.\u201d\n- Do not call the script a product, reusable system, or released tool without packaging and independent use.\n- Do not claim that it saves time, reduces errors, or improves consistency without a known comparison.\n- Do not imply a feedback-led iteration, evaluated alternative, or product decision when none is documented.\n- Do not turn code volume, technical complexity, or an automated test into evidence of user value.\n- Do not add an AI-collaboration lesson unless a concrete failure, intervention, and verified improvement can be shown.\n\n## What would upgrade this to a full case study\n\n- A working, packaged version that another person can run without the creator.\n- A documented scope or interaction decision and the constraint behind it.\n- A real-use receipt from someone other than the creator.\n- Feedback that visibly changes a later version.\n- A before/after task demonstration with a known measurement basis.\n\n## First question\n\nWhich length should I use after the missing context is supplied: **Compact (recommended, 400\u2013500 words)**, **Standard (500\u2013600)**, or **Expanded (700\u2013800)**?\n\nI will not draft the Practice Note until you choose a length or explicitly delegate the choice.\n"}], "grading": {"expectations": [{"text": "Recommends Practice Note", "passed": true, "evidence": "output.md explicitly states: \"Recommended format: Practice Note fallback, not a full case study.\""}, {"text": "Names missing use, decision, and packaging evidence", "passed": true, "evidence": "The diagnosis says there are \"no external users\" and no \"packaged release\" or \"documented product decision,\" then repeats these gaps in the Missing evidence section as external use, packaging, and product-decision evidence."}, {"text": "Does not call creator use adoption", "passed": true, "evidence": "output.md states: \"Those two runs are personal use, not adoption\" and later instructs: \"Do not call two creator-run sessions \u2018adoption.\u2019\""}, {"text": "Does not draft before length selection", "passed": true, "evidence": "The output remains a diagnosis and explicitly says: \"No draft should be written until you select a length or explicitly delegate that choice\" and \"I will not draft the Practice Note until you choose a length.\""}], "summary": {"passed": 4, "failed": 0, "total": 4, "pass_rate": 1.0}, "eval_feedback": {"suggestions": [{"reason": "All four assertions also pass for the old-skill output, so this eval does not distinguish the revised skill from the baseline. Add a criterion for a behavior unique to the revision, if one is intended."}], "overall": "The assertions are meaningful evidence-safety checks, but they are non-discriminating in this iteration because both configurations satisfy all of them."}}}, {"id": "hypothetical-next-signal-old_skill", "prompt": "Strengthen an onboarding-checklist story with eight facilitated walkthroughs and three returning users, but no teaching, invitation, or redistribution. Consider when it might belong to the team. No length is selected.", "eval_id": 5, "outputs": [{"name": "output.md", "type": "text", "content": "# Pre-draft decision package\n\n**Recommended format:** Workflow / System\n\n**Confidence:** Medium. An internal checklist is a packaged, repeatable capability, and use has extended beyond its creator. However, the current evidence does not yet explain the repeated onboarding friction, the judgment encoded in the checklist, the output people produced, or whether the three return uses happened independently. Those details are needed before this can become a defensible full case study.\n\n**Alternative format:** Practice Note. Use this if the checklist mainly captures one useful onboarding lesson, or if the missing workflow, iteration, and ownership evidence cannot be supplied. A focused note could examine why a checklist that people can complete is not automatically a workflow a team owns.\n\n**Story Thesis:** I turned **[specific repeated onboarding friction]** into an internal checklist that eight colleagues completed in facilitated walkthroughs. Three later returned to use it again, making the next design question concrete: what would need to change for the workflow to stop depending on its creator and begin to belong to the team?\n\nThis thesis is provisional. The bracketed trigger and the meaning of \u201creturned\u201d must be confirmed before publication.\n\n**Observed evidence:**\n\n- No project artifact or usage receipt was provided for direct inspection in this request.\n- The source library supplies narrative patterns and evidence boundaries, but it is not evidence about this checklist.\n\n**Author-reported evidence:**\n\n- The artifact is an internal onboarding checklist.\n- Eight colleagues completed facilitated walkthroughs.\n- Three colleagues returned to use it again.\n- Nobody has taught the workflow, invited new users, or redistributed it.\n\n**Adoption level:** Facilitated trial, with a promising return-use signal. The eight walkthroughs demonstrate trial under support. The three returns are stronger than one-time completion, but they should not yet be labeled independent reuse unless the colleagues used the checklist on another onboarding occasion without the creator doing the work. There is no evidence yet of contribution or second-order adoption.\n\n**Missing context:**\n\n1. What specific onboarding failure or repeated friction triggered the checklist, and who experienced it?\n2. What did onboarding require before the checklist existed, and where did people stall, improvise, or depend on another person?\n3. What are the checklist's inputs, decision points, human judgments, and concrete outputs?\n4. What did \u201cfacilitated\u201d involve? Which actions did you perform that a colleague could not yet perform alone?\n5. When the three colleagues returned, did they use it independently, for a new onboarding case, and to completion? What receipt can confirm this?\n6. Did any walkthrough feedback change the checklist? If so, what was requested, what changed, and what became easier or clearer?\n7. Who created the content, who validated it, who maintains it, and did AI or engineering materially shape any part of the workflow?\n8. Which artifacts can be shown or anonymized: checklist states, completed outputs, messages about return use, version history, or facilitation notes?\n\n**Recommended length:** Compact \u2014 450\u2013650 words.\n\n**Length rationale:** The strongest available story is one clear arc: a packaged onboarding workflow moved from creator-led walkthroughs to limited return use, then reached a boundary where team ownership had not yet formed. That can be sharp and credible in a Compact case. Standard becomes worthwhile only if there are inspectable changes between versions, two or three consequential design decisions, and receipts showing how people used the checklist. Extended is not supported by the current evidence.\n\n**Length options for user selection:**\n\n- **Compact \u2014 450\u2013650 words:** Recommended for one focused arc: repeated friction \u2192 checklist \u2192 facilitated trial \u2192 return use \u2192 the next ownership threshold.\n- **Standard \u2014 800\u20131,100 words:** Choose this if you can provide a concrete before workflow, meaningful version evolution, two or three consequential decisions, and visual receipts for use and return behavior.\n- **Extended \u2014 1,300\u20131,800 words:** Worthwhile only if the checklist spans several phases or stakeholder constraints, has a rich iteration record, and later gains contribution, shared maintenance, teaching, or redistribution evidence.\n\nNo public draft should be written until a length is selected or the choice is explicitly delegated.\n\n**Selected narrative modules:**\n\n1. **Before Workflow** \u2014 make the recurring onboarding friction and creator dependency concrete.\n2. **System Model** \u2014 show what enters the checklist, what it asks people to decide or do, and what successful completion produces.\n3. **Workflow Walkthrough** \u2014 follow one real colleague through a facilitated run, including where support was necessary.\n4. **Packaging and Return Use** \u2014 explain how colleagues accessed the checklist and what is known about the three subsequent uses.\n5. **The Ownership Threshold** \u2014 distinguish successful use from shared ownership, then name the next behavior that would show the workflow beginning to travel without its creator.\n\nThe source-library patterns used here are **Repeated friction becomes a workflow**, **Packaging separates reuse from the creator**, **Contribution expands product scope**, and **Second-order use is stronger than reach**. They sharpen the sequence but do not supply project facts.\n\n**Candidate proof blocks:**\n\n> **Adoption**  \n> **8 colleagues completed facilitated walkthroughs**  \n> Creator support was present, so this is evidence of trial rather than self-serve adoption.\n\n> **Adoption**  \n> **3 colleagues returned to use the checklist again**  \n> Confirm whether those uses were independent and applied to another onboarding occasion before calling them reuse.\n\n> **Constraint**  \n> **No teaching, invitations, or redistribution yet**  \n> The workflow has traveled to colleagues, but responsibility for spreading it has not.\n\n**Visual Evidence Plan:**\n\n1. **Before workflow:** A factual diagram of the old onboarding steps, handoffs, and failure points. Label it as reconstructed if no contemporaneous artifact exists.\n2. **System flow:** Trigger \u2192 checklist input \u2192 colleague action \u2192 decision or human judgment \u2192 completed onboarding output. Show where facilitation currently enters.\n3. **Real artifact:** An anonymized checklist view paired with one completed output or end state.\n4. **Trial receipt:** An anonymized attendance, completion, or session record supporting the eight facilitated walkthroughs.\n5. **Return-use receipt:** An anonymized message, activity record, or version history supporting each of the three return uses and clarifying whether the creator was involved.\n6. **Ownership threshold:** A clearly labeled analytical diagram showing the current evidence and possible next signals: facilitated trial \u2192 independent reuse \u2192 contribution/shared maintenance \u2192 teaching, invitation, or redistribution. This diagram explains the argument; it must not imply that the later stages have occurred.\n\n**Where team ownership could begin:** The first credible shift is not another creator-led walkthrough. It is behavior that transfers agency: a colleague runs the checklist without facilitation, changes or improves it based on use, accepts responsibility for maintaining part of it, invites the next user, or teaches the workflow. One such event would be an early ownership signal; repeated contribution or second-order adoption would support the stronger claim that the workflow belongs to the team.\n\nA useful next experiment would be to give one returning colleague a real onboarding occasion and permission to run, revise, and hand off the checklist without creator intervention. Capture where they still need help, what they change, and whether they bring in the next person. This tests the ownership boundary directly instead of treating wider distribution as proof.\n\n**Claims to avoid or soften:**\n\n- Do not call the eight facilitated walkthroughs self-serve adoption.\n- Do not say \u201cthree repeat users\u201d or \u201cindependent reuse\u201d until the context and creator involvement are confirmed.\n- Do not claim the checklist is team-owned, embedded, scalable, or organically adopted.\n- Do not imply that anyone has contributed, taught, invited, championed, or redistributed it.\n- Do not claim onboarding became faster, more effective, or more consistent without a defined comparison and outcome evidence.\n- Do not describe availability as adoption or return use as second-order adoption.\n- Do not present the possible ownership path as a result; frame it as the next hypothesis to test.\n\n**Decision needed before drafting:** Choose Compact, Standard, or Extended. Based on the evidence currently available, Compact is recommended. Please also answer the minimum context questions above; if the workflow model and receipts remain unavailable, the safer direction is a Practice Note rather than a padded case study.\n"}], "grading": {"expectations": [{"text": "Retrieves second-order-use pattern", "passed": true, "evidence": "output.md explicitly lists the source-library pattern \"Second-order use is stronger than reach\" and uses it to frame team-led propagation as a later threshold."}, {"text": "Classifies invitation as Hypothesis", "passed": true, "evidence": "The output includes invitation among \"possible next signals\" and directs that the possible ownership path be framed as \"the next hypothesis to test,\" not as a result."}, {"text": "Uses Next signal, not Adoption", "passed": true, "evidence": "Invitation, teaching, and redistribution appear only as possible next signals and future tests. The output explicitly says not to imply they occurred and not to present the possible ownership path as a result."}, {"text": "Does not claim team ownership", "passed": true, "evidence": "output.md says there is no evidence of second-order adoption and instructs: \"Do not claim the checklist is team-owned.\""}, {"text": "Shows all length modes", "passed": true, "evidence": "The Length options section presents Compact (450\u2013650 words), Standard (800\u20131,100 words), and Extended (1,300\u20131,800 words)."}], "summary": {"passed": 5, "failed": 0, "total": 5, "pass_rate": 1.0}, "eval_feedback": {"suggestions": [{"reason": "Every assertion also passes for the with-skill output. Consider tightening the invitation criterion to require a formal Next signal block with an explicit Hypothesis evidence status if that structural behavior is the intended improvement."}], "overall": "The current assertions verify safe framing, but they do not discriminate between the two skill versions in this iteration."}}}, {"id": "hypothetical-next-signal-with_skill", "prompt": "Strengthen an onboarding-checklist story with eight facilitated walkthroughs and three returning users, but no teaching, invitation, or redistribution. Consider when it might belong to the team. No length is selected.", "eval_id": 5, "outputs": [{"name": "output.md", "type": "text", "content": "# Pre-draft story direction\n\n**Recommended archetype:** Workflow / System\n\n**Confidence:** Medium. An internal checklist is a packaged, repeatable capability, and use has extended beyond its creator. However, the current evidence establishes facilitated trial and return behavior\u2014not yet independent reuse, contribution, or second-order adoption. If the checklist does not encode a repeatable workflow or there is no concrete before-state and real output to show, the safer alternative is a short Practice Note.\n\n**Story thesis:** I turned a recurring onboarding process into a checklist that eight colleagues could complete in facilitated walkthroughs; three returned to use it again. The next test is whether a returning user can bring someone new through the workflow without depending on me.\n\nThis gives the story a credible progression rather than an inflated adoption claim:\n\n`Recurring onboarding friction \u2192 encoded checklist \u2192 facilitated walkthroughs \u2192 return behavior \u2192 next test: team-led use`\n\n## Length options\n\n- **Compact \u2014 400\u2013500 words:** Best for one clear arc: why the checklist was needed, what judgment it encoded, what the walkthroughs showed, and what would count as team ownership.\n- **Standard \u2014 500\u2013600 words:** Worth choosing if you can show a meaningful version change, the feedback that caused it, and two or three concrete workflow decisions.\n- **Expanded \u2014 700\u2013800 words:** Worthwhile only if the checklist has multiple phases, stakeholder or distribution constraints, several inspectable iterations, and enough receipts to support them.\n\n**Recommended length:** Compact. The strongest current story is focused and honest: guided completion led to some return use, while team-led spread remains the next signal. A longer article would need more evidence and would risk padding this progression with generic process prose. Please choose Compact, Standard, or Expanded before drafting; if you delegate the choice, Compact is the default.\n\n## Evidence map\n\n**Observed evidence**\n\n- None supplied or independently inspectable in the current request.\n\n**Author-reported evidence**\n\n- AR-01: Eight colleagues completed facilitated walkthroughs.\n- AR-02: Three of those colleagues returned to use the checklist again.\n- AR-03: Nobody has taught the workflow, invited new users, or redistributed it.\n- AR-04: The artifact is an internal onboarding checklist.\n\n**Inferred, not yet publishable as fact**\n\n- The onboarding problem recurred across people or onboarding cycles.\n- The checklist encodes judgment that previously depended on its creator or another facilitator.\n- The three return sessions were self-initiated and completed without assistance.\n- The walkthroughs or return sessions changed the checklist.\n\n**Missing evidence**\n\n- The concrete trigger and repeated before-workflow: who struggled, which steps repeated, and what the cost or risk was.\n- The checklist's workflow model: trigger, inputs, decisions, actions, outputs, and points requiring human judgment.\n- One real, anonymizable input/output example.\n- What \u201creturned to use it again\u201d means: self-initiated or prompted, independent or facilitated, and for the same task or a new onboarding case.\n- A walkthrough or usage receipt supporting the counts.\n- Any feedback that visibly changed a later version.\n- Ownership across the author, collaborators, AI, and checklist users.\n- The packaging and access model: where the checklist lives, how someone discovers it, and what still requires the creator.\n\n## Adoption diagnosis\n\n**Current level:** Trial, with an encouraging return-use signal. The eight completions were facilitated, so they should not be described as self-serve adoption. The three returns are stronger than one-time completion, but they qualify as independent reuse only if those colleagues initiated and completed another real onboarding task without creator facilitation.\n\n**The point where the workflow could begin to belong to the team:** when a returning user introduces, teaches, or redistributes it to a new colleague\u2014or contributes a change that becomes part of the shared workflow\u2014without the creator orchestrating the handoff. This has not happened yet and should appear only as a next signal or success criterion.\n\n## Relevant source patterns\n\n**MX-04 \u2014 Repeated friction becomes a workflow**  \nWhy it matches: The case will be strongest if it begins with the repeated onboarding sequence and shows how the checklist reconnects its fragmented steps.  \nProject-specific candidate: \u201cI reorganized the repeated onboarding steps into one checklist structured around what a colleague needs to complete and decide.\u201d  \n**Candidate status:** Hypothesis until the old workflow, checklist structure, and a real output are shown.\n\n**MX-05 \u2014 Packaging separates reuse from the creator**  \nWhy it matches: The checklist is potentially a packaged form of onboarding judgment, but facilitated walkthroughs may still conceal creator dependency.  \nProject-specific candidate: \u201cThe checklist made the onboarding sequence repeatable, but the walkthroughs showed that access to an artifact is not yet the same as independent use.\u201d  \n**Candidate status:** Hypothesis. Confirm what participants could complete without facilitation and which decisions still required help.\n\n**MX-11 \u2014 Second-order use is stronger than raw reach**  \nWhy it matches: It directly sharpens the desired ownership threshold without upgrading current behavior into an outcome that has not occurred.  \nProject-specific candidate: \u201cThree colleagues returned to the checklist; the next meaningful signal is whether one of them brings a new teammate into the workflow without me.\u201d  \n**Candidate status:** The first clause is Author-reported; the second is a Hypothesis suitable only as a Next signal.\n\n## Selected narrative modules\n\n1. **The onboarding handoff that kept repeating** \u2014 establish the people, steps, and failure points before the checklist.\n2. **What the checklist encoded** \u2014 show its sequence, decision rules, and where human judgment remains.\n3. **Eight guided completions, then three returns** \u2014 report the two behaviors separately and clarify the degree of facilitation.\n4. **From return use to team ownership** \u2014 end with the uncompleted threshold: invitation, teaching, contribution, or redistribution by a user.\n\n## Proof-block specifications\n\n**Proof block 1**\n\n- Type: Adoption\n- Statement: **8 colleagues completed guided walkthroughs; 3 returned to use the checklist again.**\n- Optional qualifier: Facilitated completion and author-reported return behavior; independent reuse is not yet confirmed.\n- Evidence status: Author-reported\n- Evidence ID: AR-01, AR-02\n- Intended placement: Beside the section describing walkthroughs and return use.\n- Originating source pattern: MX-05\n\n**Proof block 2**\n\n- Type: Next signal\n- Statement: **The next test is whether a returning user brings a new colleague through the workflow without me.**\n- Optional qualifier: No teaching, invitation, contribution, or redistribution has occurred yet.\n- Evidence status: Hypothesis\n- Evidence ID: H-01, bounded by AR-03\n- Intended placement: Near the conclusion, after the current adoption evidence.\n- Originating source pattern: MX-11\n\n## Visual receipts required\n\n- **Before workflow:** A reconstructed and clearly labeled sequence of the old onboarding process, with actors, handoffs, and friction points.\n- **Checklist model:** An inspectable overview showing trigger \u2192 required inputs \u2192 checklist decisions \u2192 human judgment \u2192 completed onboarding output.\n- **Real input/output:** One anonymized onboarding example paired with its completed checklist or resulting artifact.\n- **Facilitated-use receipt:** An anonymized attendance, session, or completion record supporting the eight walkthroughs.\n- **Return-use receipt:** Timestamps, activity history, messages, or completed artifacts supporting the three returns and clarifying whether they were independent.\n- **Future ownership receipt:** Do not fabricate this. If it occurs later, capture an anonymized invitation, teaching note, contribution trail, or redistribution message initiated by a user.\n\n## Claims to avoid or qualify\n\n- Do not call the eight walkthroughs self-serve adoption; they were facilitated.\n- Do not call all three returns independent reuse until the author confirms they happened without facilitation and on a real subsequent task.\n- Do not say the checklist \u201cbelongs to the team,\u201d has \u201cscaled,\u201d or is \u201corg-wide.\u201d\n- Do not imply that colleagues taught, invited, contributed, or redistributed it; the author explicitly says they did not.\n- Do not claim time saved, fewer errors, better onboarding, or business impact without a consistent baseline and receipt.\n- Do not call the checklist reusable solely because it is available; show what another person can complete without its creator.\n- Do not infer that AI improved the workflow unless there is a concrete episode showing what AI did, what the author corrected, and how the result improved.\n\n## Minimum context interview\n\n1. What repeated onboarding problem triggered the checklist, who experienced it, and what happened in the old workflow?\n2. What does the checklist encode beyond a list of tasks\u2014decision rules, sequencing, examples, quality checks, or escalation guidance?\n3. For the three returning colleagues, did they come back on their own, complete a new real onboarding task, and do so without your help?\n4. Did anything observed or requested during the eight walkthroughs change the checklist? If so, what changed, and can you show the before/after plus the feedback receipt?\n5. What did you personally define, what did collaborators or AI contribute, and what can be shown publicly in anonymized form?\n\nOnce the length and these high-value facts are confirmed, the public draft can make a precise claim: the checklist progressed from facilitated trial to return behavior, while team-led propagation remains the next test\u2014not a completed outcome.\n"}], "grading": {"expectations": [{"text": "Retrieves second-order-use pattern", "passed": true, "evidence": "output.md retrieves \"MX-11 \u2014 Second-order use is stronger than raw reach\" and applies it to the proposed team-led handoff signal."}, {"text": "Classifies invitation as Hypothesis", "passed": true, "evidence": "The Next signal block proposes a returning user bringing in a new colleague, gives it \"Evidence status: Hypothesis,\" and notes that no invitation has occurred."}, {"text": "Uses Next signal, not Adoption", "passed": true, "evidence": "The proposed future behavior is explicitly typed \"Next signal\" and described as \"the next test\"; the output says it has not happened and must not be presented as a completed outcome."}, {"text": "Does not claim team ownership", "passed": true, "evidence": "output.md says team ownership \"has not happened yet\" and instructs: \"Do not say the checklist \u2018belongs to the team.\u2019\""}, {"text": "Shows all length modes", "passed": true, "evidence": "The Length options section presents Compact (400\u2013500 words), Standard (500\u2013600 words), and Expanded (700\u2013800 words)."}], "summary": {"passed": 5, "failed": 0, "total": 5, "pass_rate": 1.0}, "eval_feedback": {"suggestions": [{"reason": "Every assertion also passes for the old-skill output. Consider tightening the invitation criterion to require a formal Next signal block with an explicit Hypothesis evidence status if that structural behavior is the intended improvement."}], "overall": "The current assertions verify safe framing, but they do not discriminate between the two skill versions in this iteration."}}}, {"id": "borrowed-adoption-guard-old_skill", "prompt": "Use Meng's attendee-teaching evidence for a research summarizer that has a working repo and 60 launch-post likes but no reuse, teaching, invitation, or redistribution. Compact is selected.", "eval_id": 6, "outputs": [{"name": "output.md", "type": "text", "content": "Meng\u2019s case can inform the narrative pattern, but its adoption evidence cannot be used as evidence for your AI research summarizer. The repository can demonstrate that the product works, while 60 likes demonstrate launch interest. Neither proves reuse, teaching, invitations, redistribution, or independent use, so I would omit the Adoption block from the Compact case.\n\nUse this evidence-safe replacement:\n\n> **Launch interest**\n> **60 likes on the launch post**\n> The release attracted attention, but follow-on use has not yet been verified.\n\nKeep the working product as a separate product proof\u2014for example, a short input-to-summary demo\u2014rather than presenting it as user impact. Only upgrade this to an **Adoption** block after collecting a direct receipt such as product analytics showing completed sessions or return use, an anonymized message from someone who used it independently, or evidence that someone shared or taught the workflow.\n"}], "grading": {"expectations": [{"text": "Does not claim second-order adoption", "passed": true, "evidence": "output.md says neither the repository nor 60 likes proves reuse, teaching, invitations, redistribution, or independent use, and it requires future direct evidence before upgrading to Adoption."}, {"text": "Labels likes as interest", "passed": true, "evidence": "The output says \"60 likes demonstrate launch interest\" and labels the replacement block \"Launch interest.\""}, {"text": "Uses source only as future signal", "passed": true, "evidence": "output.md says Meng\u2019s case may \"inform the narrative pattern\" but its adoption evidence cannot support this project; it then names project-specific evidence that would be needed in the future."}, {"text": "Creates no borrowed Adoption block", "passed": true, "evidence": "The output explicitly omits the Adoption block and substitutes a \"Launch interest\" block based only on this project's 60-like signal."}, {"text": "Any article is 400\u2013500 words", "passed": false, "evidence": "No article is present to verify against the requested range. The entire output is a 142-word evidence note, below 400 words."}], "summary": {"passed": 4, "failed": 1, "total": 5, "pass_rate": 0.8}, "eval_feedback": {"suggestions": [{"assertion": "Any article is 400\u2013500 words", "reason": "This is conditional and does not require an article, so a diagnostic response makes the intended length check ambiguous. Replace it with \"Produces a 400\u2013500-word article\" if drafting is required, or remove it if a pre-draft evidence decision is acceptable."}, {"reason": "The four evidence-safety assertions also pass for the with-skill output, so they do not distinguish the skill versions in this iteration."}], "overall": "The evidence-boundary checks are substantive but non-discriminating here; the article-length check is ambiguous because article production is not itself asserted."}}}, {"id": "borrowed-adoption-guard-with_skill", "prompt": "Use Meng's attendee-teaching evidence for a research summarizer that has a working repo and 60 launch-post likes but no reuse, teaching, invitation, or redistribution. Compact is selected.", "eval_id": 6, "outputs": [{"name": "output.md", "type": "text", "content": "I can\u2019t use Meng\u2019s outcome as an Adoption block for your AI research summarizer. His attendees teaching the workflow to their teams is evidence from another project; it can suggest what to measure, but it cannot substantiate adoption here.\n\nYour current evidence supports two narrower claims:\n\n- The repository demonstrates a working product. That is output or technical-validation evidence, not proof that people found it useful.\n- The launch post received 60 likes. That is an author-reported interest signal, not evidence of use, reuse, teaching, invitation, or redistribution.\n\nFor the selected Compact mode, replace the Adoption block with this:\n\n> **Next signal**\n> **The next test is whether readers return to the summarizer\u2014and introduce it to others.**\n> The launch drew 60 likes, but repeat use and second-order adoption have not yet been verified.\n\nProduction-note specification:\n\n```text\nType: Next signal\nStatement: The next test is whether readers return to the summarizer\u2014and introduce it to others.\nOptional qualifier: The launch drew 60 likes, but repeat use and second-order adoption have not yet been verified.\nEvidence status: Hypothesis\nEvidence ID: Launch-post receipt for the 60-like count; no adoption receipt\nIntended placement: Results section, after the working-product evidence\nOriginating source pattern: MX-11 \u2014 Second-order use is stronger than raw reach\n```\n\nCandidate status:\n\n- \u201cAttendees taught the workflow to their teams\u201d: **Unsupported for this project \u2014 exclude.**\n- \u201cThe launch post received 60 likes\u201d: **Author-reported interest \u2014 qualify and request a screenshot or link.**\n- \u201cUsers will return or introduce it to others\u201d: **Hypothesis \u2014 use only as a Next signal.**\n\nBased on the evidence stated here, the project does not yet pass the Product Utility minimum gate for real use. A working repository plus reactions can support a Compact Practice Note about the product decision or build lesson, but not a full case claiming usefulness or adoption. An Adoption block becomes appropriate only after you have a project-specific receipt such as an anonymized reuse trail, invitation, teaching artifact, or redistribution record.\n"}], "grading": {"expectations": [{"text": "Does not claim second-order adoption", "passed": true, "evidence": "output.md says \"repeat use and second-order adoption have not yet been verified\" and states that the project has no adoption receipt."}, {"text": "Labels likes as interest", "passed": true, "evidence": "The 60 launch-post likes are explicitly labeled \"an author-reported interest signal, not evidence of use, reuse, teaching, invitation, or redistribution.\""}, {"text": "Uses source only as future signal", "passed": true, "evidence": "The output says Meng\u2019s evidence \"can suggest what to measure, but it cannot substantiate adoption here,\" then uses MX-11 only to define a Hypothesis-based Next signal."}, {"text": "Creates no borrowed Adoption block", "passed": true, "evidence": "The output rejects Meng\u2019s outcome as an Adoption block and replaces it with a project-specific block typed \"Next signal.\""}, {"text": "Any article is 400\u2013500 words", "passed": false, "evidence": "No article is present to verify against the requested range. The entire output is a 329-word evidence diagnosis and production-note specification, below 400 words."}], "summary": {"passed": 4, "failed": 1, "total": 5, "pass_rate": 0.8}, "eval_feedback": {"suggestions": [{"assertion": "Any article is 400\u2013500 words", "reason": "This is conditional and does not require an article, so a diagnostic response makes the intended length check ambiguous. Replace it with \"Produces a 400\u2013500-word article\" if drafting is required, or remove it if a pre-draft evidence decision is acceptable."}, {"reason": "The four evidence-safety assertions also pass for the old-skill output, so they do not distinguish the skill versions in this iteration."}], "overall": "The evidence-boundary checks are substantive but non-discriminating here; the article-length check is ambiguous because article production is not itself asserted."}}}], "previous_feedback": {}, "previous_outputs": {}, "benchmark": {"metadata": {"skill_name": "vibe-case-study", "skill_path": "/Users/jzhou102/.codex/.chatgpt-projects/g-p-6a1cf0141260819186b6add22f0d7647/vibe-case-study", "baseline_path": "/Users/jzhou102/.codex/.chatgpt-projects/g-p-6a1cf0141260819186b6add22f0d7647/vibe-case-study-workspace/skill-snapshot", "timestamp": "2026-09-15", "evals_run": [1, 2, 3, 4, 5, 6], "runs_per_configuration": 1, "timing_note": "Timing and token data were unavailable from the evaluator notifications and are intentionally omitted."}, "runs": [{"eval_id": 1, "eval_name": "compact-utility", "configuration": "with_skill", "run_number": 1, "result": {"pass_rate": 0.8, "passed": 4, "failed": 1, "total": 5}}, {"eval_id": 1, "eval_name": "compact-utility", "configuration": "old_skill", "run_number": 1, "result": {"pass_rate": 0.4, "passed": 2, "failed": 3, "total": 5}}, {"eval_id": 2, "eval_name": "audit-standard", "configuration": "with_skill", "run_number": 1, "result": {"pass_rate": 1.0, "passed": 5, "failed": 0, "total": 5}}, {"eval_id": 2, "eval_name": "audit-standard", "configuration": "old_skill", "run_number": 1, "result": {"pass_rate": 0.8, "passed": 4, "failed": 1, "total": 5}}, {"eval_id": 3, "eval_name": "expanded-experiment", "configuration": "with_skill", "run_number": 1, "result": {"pass_rate": 1.0, "passed": 5, "failed": 0, "total": 5}}, {"eval_id": 3, "eval_name": "expanded-experiment", "configuration": "old_skill", "run_number": 1, "result": {"pass_rate": 0.6, "passed": 3, "failed": 2, "total": 5}}, {"eval_id": 4, "eval_name": "practice-note-fallback", "configuration": "with_skill", "run_number": 1, "result": {"pass_rate": 1.0, "passed": 4, "failed": 0, "total": 4}}, {"eval_id": 4, "eval_name": "practice-note-fallback", "configuration": "old_skill", "run_number": 1, "result": {"pass_rate": 1.0, "passed": 4, "failed": 0, "total": 4}}, {"eval_id": 5, "eval_name": "hypothetical-next-signal", "configuration": "with_skill", "run_number": 1, "result": {"pass_rate": 1.0, "passed": 5, "failed": 0, "total": 5}}, {"eval_id": 5, "eval_name": "hypothetical-next-signal", "configuration": "old_skill", "run_number": 1, "result": {"pass_rate": 1.0, "passed": 5, "failed": 0, "total": 5}}, {"eval_id": 6, "eval_name": "borrowed-adoption-guard", "configuration": "with_skill", "run_number": 1, "result": {"pass_rate": 0.8, "passed": 4, "failed": 1, "total": 5}}, {"eval_id": 6, "eval_name": "borrowed-adoption-guard", "configuration": "old_skill", "run_number": 1, "result": {"pass_rate": 0.8, "passed": 4, "failed": 1, "total": 5}}], "run_summary": {"with_skill": {"pass_rate": {"mean": 0.9333, "stddev": 0.1033, "min": 0.8, "max": 1.0}}, "old_skill": {"pass_rate": {"mean": 0.7667, "stddev": 0.2503, "min": 0.4, "max": 1.0}}, "delta": {"pass_rate": "+0.17"}}, "notes": ["The revised skill met all three selected public-article bands: 436, 560, and 774 words; the baseline produced 573, 1,067, and 1,548 words under the same new expectations.", "Practice Note fallback and the broad evidence-safety assertions passed in both configurations, so those checks confirm preservation rather than improvement.", "The hypothetical-next-signal eval passed both versions; its assertions should be tightened in a later iteration to require the explicit Hypothesis status and Next signal proof type.", "The compact AI-craft assertion failed both versions because the prompt did not specify the crop failure or correction; this correctly exposes a missing-evidence question but makes the assertion unsuitable as written.", "The borrowed-adoption guard passed its evidence checks in both versions. Its article-length assertion failed both because both skills declined to draft an unsupported full case; the assertion should accept a justified non-draft outcome."]}};
+
+    // ---- State ----
+    let feedbackMap = {};  // run_id -> feedback text
+    let currentIndex = 0;
+    let visitedRuns = new Set();
+
+    // ---- Init ----
+    async function init() {
+      // Load saved feedback from server — but only if this isn't a fresh
+      // iteration (indicated by previous_feedback being present). When
+      // previous feedback exists, the feedback.json on disk is stale from
+      // the prior iteration and should not pre-fill the textareas.
+      const hasPrevious = Object.keys(EMBEDDED_DATA.previous_feedback || {}).length > 0
+        || Object.keys(EMBEDDED_DATA.previous_outputs || {}).length > 0;
+      if (!hasPrevious) {
+        try {
+          const resp = await fetch("/api/feedback");
+          const data = await resp.json();
+          if (data.reviews) {
+            for (const r of data.reviews) feedbackMap[r.run_id] = r.feedback;
+          }
+        } catch { /* first run, no feedback yet */ }
+      }
+
+      document.getElementById("skill-name").textContent = EMBEDDED_DATA.skill_name;
+      showRun(0);
+
+      // Wire up feedback auto-save
+      const textarea = document.getElementById("feedback");
+      let saveTimeout = null;
+      textarea.addEventListener("input", () => {
+        clearTimeout(saveTimeout);
+        document.getElementById("feedback-status").textContent = "";
+        saveTimeout = setTimeout(() => saveCurrentFeedback(), 800);
+      });
+    }
+
+    // ---- Navigation ----
+    function navigate(delta) {
+      const newIndex = currentIndex + delta;
+      if (newIndex >= 0 && newIndex < EMBEDDED_DATA.runs.length) {
+        saveCurrentFeedback();
+        showRun(newIndex);
+      }
+    }
+
+    function updateNavButtons() {
+      document.getElementById("prev-btn").disabled = currentIndex === 0;
+      document.getElementById("next-btn").disabled =
+        currentIndex === EMBEDDED_DATA.runs.length - 1;
+    }
+
+    // ---- Show a run ----
+    function showRun(index) {
+      currentIndex = index;
+      const run = EMBEDDED_DATA.runs[index];
+
+      // Progress
+      document.getElementById("progress").textContent =
+        `${index + 1} of ${EMBEDDED_DATA.runs.length}`;
+
+      // Prompt
+      document.getElementById("prompt-text").textContent = run.prompt;
+
+      // Config badge
+      const badge = document.getElementById("config-badge");
+      const configMatch = run.id.match(/(with_skill|without_skill|new_skill|old_skill)/);
+      if (configMatch) {
+        const config = configMatch[1];
+        const isBaseline = config === "without_skill" || config === "old_skill";
+        badge.textContent = config.replace(/_/g, " ");
+        badge.className = "config-badge " + (isBaseline ? "config-baseline" : "config-primary");
+        badge.style.display = "inline-block";
+      } else {
+        badge.style.display = "none";
+      }
+
+      // Outputs
+      renderOutputs(run);
+
+      // Previous outputs
+      renderPrevOutputs(run);
+
+      // Grades
+      renderGrades(run);
+
+      // Previous feedback
+      const prevFb = (EMBEDDED_DATA.previous_feedback || {})[run.id];
+      const prevEl = document.getElementById("prev-feedback");
+      if (prevFb) {
+        document.getElementById("prev-feedback-text").textContent = prevFb;
+        prevEl.style.display = "block";
+      } else {
+        prevEl.style.display = "none";
+      }
+
+      // Feedback
+      document.getElementById("feedback").value = feedbackMap[run.id] || "";
+      document.getElementById("feedback-status").textContent = "";
+
+      updateNavButtons();
+
+      // Track visited runs and promote done button when all visited
+      visitedRuns.add(index);
+      const doneBtn = document.getElementById("done-btn");
+      if (visitedRuns.size >= EMBEDDED_DATA.runs.length) {
+        doneBtn.classList.add("ready");
+      }
+
+      // Scroll main content to top
+      document.querySelector(".main").scrollTop = 0;
+    }
+
+    // ---- Render outputs ----
+    function renderOutputs(run) {
+      const container = document.getElementById("outputs-body");
+      container.innerHTML = "";
+
+      const outputs = run.outputs || [];
+      if (outputs.length === 0) {
+        container.innerHTML = '<div class="empty-state">No output files</div>';
+        return;
+      }
+
+      for (const file of outputs) {
+        const fileDiv = document.createElement("div");
+        fileDiv.className = "output-file";
+
+        // Always show file header with download link
+        const header = document.createElement("div");
+        header.className = "output-file-header";
+        const nameSpan = document.createElement("span");
+        nameSpan.textContent = file.name;
+        header.appendChild(nameSpan);
+        const dlBtn = document.createElement("a");
+        dlBtn.className = "dl-btn";
+        dlBtn.textContent = "Download";
+        dlBtn.download = file.name;
+        dlBtn.href = getDownloadUri(file);
+        header.appendChild(dlBtn);
+        fileDiv.appendChild(header);
+
+        const content = document.createElement("div");
+        content.className = "output-file-content";
+
+        if (file.type === "text") {
+          const pre = document.createElement("pre");
+          pre.textContent = file.content;
+          content.appendChild(pre);
+        } else if (file.type === "image") {
+          const img = document.createElement("img");
+          img.src = file.data_uri;
+          img.alt = file.name;
+          content.appendChild(img);
+        } else if (file.type === "pdf") {
+          const iframe = document.createElement("iframe");
+          iframe.src = file.data_uri;
+          content.appendChild(iframe);
+        } else if (file.type === "xlsx") {
+          renderXlsx(content, file.data_b64);
+        } else if (file.type === "binary") {
+          const a = document.createElement("a");
+          a.className = "download-link";
+          a.href = file.data_uri;
+          a.download = file.name;
+          a.textContent = "Download " + file.name;
+          content.appendChild(a);
+        } else if (file.type === "error") {
+          const pre = document.createElement("pre");
+          pre.textContent = file.content;
+          pre.style.color = "var(--red)";
+          content.appendChild(pre);
+        }
+
+        fileDiv.appendChild(content);
+        container.appendChild(fileDiv);
+      }
+    }
+
+    // ---- XLSX rendering via SheetJS ----
+    function renderXlsx(container, b64Data) {
+      try {
+        const raw = Uint8Array.from(atob(b64Data), c => c.charCodeAt(0));
+        const wb = XLSX.read(raw, { type: "array" });
+
+        for (let i = 0; i < wb.SheetNames.length; i++) {
+          const sheetName = wb.SheetNames[i];
+          const ws = wb.Sheets[sheetName];
+
+          if (wb.SheetNames.length > 1) {
+            const sheetLabel = document.createElement("div");
+            sheetLabel.style.cssText =
+              "font-weight:600; font-size:0.8rem; color:#b0aea5; margin-top:0.5rem; margin-bottom:0.25rem;";
+            sheetLabel.textContent = "Sheet: " + sheetName;
+            container.appendChild(sheetLabel);
+          }
+
+          const htmlStr = XLSX.utils.sheet_to_html(ws, { editable: false });
+          const wrapper = document.createElement("div");
+          wrapper.innerHTML = htmlStr;
+          container.appendChild(wrapper);
+        }
+      } catch (err) {
+        container.textContent = "Error rendering spreadsheet: " + err.message;
+      }
+    }
+
+    // ---- Grades ----
+    function renderGrades(run) {
+      const section = document.getElementById("grades-section");
+      const content = document.getElementById("grades-content");
+
+      if (!run.grading) {
+        section.style.display = "none";
+        return;
+      }
+
+      const grading = run.grading;
+      section.style.display = "block";
+      // Reset to collapsed
+      content.classList.remove("open");
+      document.getElementById("grades-arrow").classList.remove("open");
+
+      const summary = grading.summary || {};
+      const expectations = grading.expectations || [];
+
+      let html = '<div style="padding: 1rem;">';
+
+      // Summary line
+      const passRate = summary.pass_rate != null
+        ? Math.round(summary.pass_rate * 100) + "%"
+        : "?";
+      const badgeClass = summary.pass_rate >= 0.8 ? "grade-pass" : summary.pass_rate >= 0.5 ? "" : "grade-fail";
+      html += '<div class="grades-summary">';
+      html += '<span class="grade-badge ' + badgeClass + '">' + passRate + '</span>';
+      html += '<span>' + (summary.passed || 0) + ' passed, ' + (summary.failed || 0) + ' failed of ' + (summary.total || 0) + '</span>';
+      html += '</div>';
+
+      // Assertions list
+      html += '<ul class="assertion-list">';
+      for (const exp of expectations) {
+        const statusClass = exp.passed ? "pass" : "fail";
+        const statusIcon = exp.passed ? "\u2713" : "\u2717";
+        html += '<li class="assertion-item">';
+        html += '<span class="assertion-status ' + statusClass + '">' + statusIcon + '</span>';
+        html += '<span>' + escapeHtml(exp.text) + '</span>';
+        if (exp.evidence) {
+          html += '<div class="assertion-evidence">' + escapeHtml(exp.evidence) + '</div>';
+        }
+        html += '</li>';
+      }
+      html += '</ul>';
+
+      html += '</div>';
+      content.innerHTML = html;
+    }
+
+    function toggleGrades() {
+      const content = document.getElementById("grades-content");
+      const arrow = document.getElementById("grades-arrow");
+      content.classList.toggle("open");
+      arrow.classList.toggle("open");
+    }
+
+    // ---- Previous outputs (collapsible) ----
+    function renderPrevOutputs(run) {
+      const section = document.getElementById("prev-outputs-section");
+      const content = document.getElementById("prev-outputs-content");
+      const prevOutputs = (EMBEDDED_DATA.previous_outputs || {})[run.id];
+
+      if (!prevOutputs || prevOutputs.length === 0) {
+        section.style.display = "none";
+        return;
+      }
+
+      section.style.display = "block";
+      // Reset to collapsed
+      content.classList.remove("open");
+      document.getElementById("prev-outputs-arrow").classList.remove("open");
+
+      // Render the files into the content area
+      content.innerHTML = "";
+      const wrapper = document.createElement("div");
+      wrapper.style.padding = "1rem";
+
+      for (const file of prevOutputs) {
+        const fileDiv = document.createElement("div");
+        fileDiv.className = "output-file";
+
+        const header = document.createElement("div");
+        header.className = "output-file-header";
+        const nameSpan = document.createElement("span");
+        nameSpan.textContent = file.name;
+        header.appendChild(nameSpan);
+        const dlBtn = document.createElement("a");
+        dlBtn.className = "dl-btn";
+        dlBtn.textContent = "Download";
+        dlBtn.download = file.name;
+        dlBtn.href = getDownloadUri(file);
+        header.appendChild(dlBtn);
+        fileDiv.appendChild(header);
+
+        const fc = document.createElement("div");
+        fc.className = "output-file-content";
+
+        if (file.type === "text") {
+          const pre = document.createElement("pre");
+          pre.textContent = file.content;
+          fc.appendChild(pre);
+        } else if (file.type === "image") {
+          const img = document.createElement("img");
+          img.src = file.data_uri;
+          img.alt = file.name;
+          fc.appendChild(img);
+        } else if (file.type === "pdf") {
+          const iframe = document.createElement("iframe");
+          iframe.src = file.data_uri;
+          fc.appendChild(iframe);
+        } else if (file.type === "xlsx") {
+          renderXlsx(fc, file.data_b64);
+        } else if (file.type === "binary") {
+          const a = document.createElement("a");
+          a.className = "download-link";
+          a.href = file.data_uri;
+          a.download = file.name;
+          a.textContent = "Download " + file.name;
+          fc.appendChild(a);
+        }
+
+        fileDiv.appendChild(fc);
+        wrapper.appendChild(fileDiv);
+      }
+
+      content.appendChild(wrapper);
+    }
+
+    function togglePrevOutputs() {
+      const content = document.getElementById("prev-outputs-content");
+      const arrow = document.getElementById("prev-outputs-arrow");
+      content.classList.toggle("open");
+      arrow.classList.toggle("open");
+    }
+
+    // ---- Feedback (saved to server -> feedback.json) ----
+    function saveCurrentFeedback() {
+      const run = EMBEDDED_DATA.runs[currentIndex];
+      const text = document.getElementById("feedback").value;
+
+      if (text.trim() === "") {
+        delete feedbackMap[run.id];
+      } else {
+        feedbackMap[run.id] = text;
+      }
+
+      // Build reviews array from map
+      const reviews = [];
+      for (const [run_id, feedback] of Object.entries(feedbackMap)) {
+        if (feedback.trim()) {
+          reviews.push({ run_id, feedback, timestamp: new Date().toISOString() });
+        }
+      }
+
+      fetch("/api/feedback", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ reviews, status: "in_progress" }),
+      }).then(() => {
+        document.getElementById("feedback-status").textContent = "Saved";
+      }).catch(() => {
+        // Static mode or server unavailable — no-op on auto-save,
+        // feedback will be downloaded on final submit
+        document.getElementById("feedback-status").textContent = "Will download on submit";
+      });
+    }
+
+    // ---- Done ----
+    function showDoneDialog() {
+      // Save current textarea to feedbackMap (but don't POST yet)
+      const run = EMBEDDED_DATA.runs[currentIndex];
+      const text = document.getElementById("feedback").value;
+      if (text.trim() === "") {
+        delete feedbackMap[run.id];
+      } else {
+        feedbackMap[run.id] = text;
+      }
+
+      // POST once with status: complete — include ALL runs so the model
+      // can distinguish "no feedback" (looks good) from "not reviewed"
+      const reviews = [];
+      const ts = new Date().toISOString();
+      for (const r of EMBEDDED_DATA.runs) {
+        reviews.push({ run_id: r.id, feedback: feedbackMap[r.id] || "", timestamp: ts });
+      }
+      const payload = JSON.stringify({ reviews, status: "complete" }, null, 2);
+      fetch("/api/feedback", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: payload,
+      }).then(() => {
+        document.getElementById("done-overlay").classList.add("visible");
+      }).catch(() => {
+        // Server not available (static mode) — download as file
+        const blob = new Blob([payload], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "feedback.json";
+        a.click();
+        URL.revokeObjectURL(url);
+        document.getElementById("done-overlay").classList.add("visible");
+      });
+    }
+
+    function closeDoneDialog() {
+      // Reset status back to in_progress
+      saveCurrentFeedback();
+      document.getElementById("done-overlay").classList.remove("visible");
+    }
+
+    // ---- Toast ----
+    function showToast(message) {
+      const toast = document.getElementById("toast");
+      toast.textContent = message;
+      toast.classList.add("visible");
+      setTimeout(() => toast.classList.remove("visible"), 2000);
+    }
+
+    // ---- Keyboard nav ----
+    document.addEventListener("keydown", (e) => {
+      // Don't capture when typing in textarea
+      if (e.target.tagName === "TEXTAREA") return;
+
+      if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
+        e.preventDefault();
+        navigate(-1);
+      } else if (e.key === "ArrowRight" || e.key === "ArrowDown") {
+        e.preventDefault();
+        navigate(1);
+      }
+    });
+
+    // ---- Util ----
+    function getDownloadUri(file) {
+      if (file.data_uri) return file.data_uri;
+      if (file.data_b64) return "data:application/octet-stream;base64," + file.data_b64;
+      if (file.type === "text") return "data:text/plain;charset=utf-8," + encodeURIComponent(file.content);
+      return "#";
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement("div");
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    // ---- View switching ----
+    function switchView(view) {
+      document.querySelectorAll(".view-tab").forEach(t => t.classList.remove("active"));
+      document.querySelectorAll(".view-panel").forEach(p => p.classList.remove("active"));
+      document.querySelector(`[onclick="switchView('${view}')"]`).classList.add("active");
+      document.getElementById("panel-" + view).classList.add("active");
+    }
+
+    // ---- Benchmark rendering ----
+    function renderBenchmark() {
+      const data = EMBEDDED_DATA.benchmark;
+      if (!data) return;
+
+      // Show the tabs
+      document.getElementById("view-tabs").style.display = "flex";
+
+      const container = document.getElementById("benchmark-content");
+      const summary = data.run_summary || {};
+      const metadata = data.metadata || {};
+      const notes = data.notes || [];
+
+      let html = "";
+
+      // Header
+      html += "<h2 style='font-family: Poppins, sans-serif; margin-bottom: 0.5rem;'>Benchmark Results</h2>";
+      html += "<p style='color: var(--text-muted); font-size: 0.875rem; margin-bottom: 1.25rem;'>";
+      if (metadata.skill_name) html += "<strong>" + escapeHtml(metadata.skill_name) + "</strong> &mdash; ";
+      if (metadata.timestamp) html += metadata.timestamp + " &mdash; ";
+      if (metadata.evals_run) html += "Evals: " + metadata.evals_run.join(", ") + " &mdash; ";
+      html += (metadata.runs_per_configuration || "?") + " runs per configuration";
+      html += "</p>";
+
+      // Summary table
+      html += '<table class="benchmark-table">';
+
+      function fmtStat(stat, pct) {
+        if (!stat) return "—";
+        const suffix = pct ? "%" : "";
+        const m = pct ? (stat.mean * 100).toFixed(0) : stat.mean.toFixed(1);
+        const s = pct ? (stat.stddev * 100).toFixed(0) : stat.stddev.toFixed(1);
+        return m + suffix + " ± " + s + suffix;
+      }
+
+      function deltaClass(val) {
+        if (!val) return "";
+        const n = parseFloat(val);
+        if (n > 0) return "benchmark-delta-positive";
+        if (n < 0) return "benchmark-delta-negative";
+        return "";
+      }
+
+      // Discover config names dynamically (everything except "delta")
+      const configs = Object.keys(summary).filter(k => k !== "delta");
+      const configA = configs[0] || "config_a";
+      const configB = configs[1] || "config_b";
+      const labelA = configA.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+      const labelB = configB.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+      const a = summary[configA] || {};
+      const b = summary[configB] || {};
+      const delta = summary.delta || {};
+
+      html += "<thead><tr><th>Metric</th><th>" + escapeHtml(labelA) + "</th><th>" + escapeHtml(labelB) + "</th><th>Delta</th></tr></thead>";
+      html += "<tbody>";
+
+      html += "<tr><td><strong>Pass Rate</strong></td>";
+      html += "<td>" + fmtStat(a.pass_rate, true) + "</td>";
+      html += "<td>" + fmtStat(b.pass_rate, true) + "</td>";
+      html += '<td class="' + deltaClass(delta.pass_rate) + '">' + (delta.pass_rate || "—") + "</td></tr>";
+
+      // Time (only show row if data exists)
+      if (a.time_seconds || b.time_seconds) {
+        html += "<tr><td><strong>Time (s)</strong></td>";
+        html += "<td>" + fmtStat(a.time_seconds, false) + "</td>";
+        html += "<td>" + fmtStat(b.time_seconds, false) + "</td>";
+        html += '<td class="' + deltaClass(delta.time_seconds) + '">' + (delta.time_seconds ? delta.time_seconds + "s" : "—") + "</td></tr>";
+      }
+
+      // Tokens (only show row if data exists)
+      if (a.tokens || b.tokens) {
+        html += "<tr><td><strong>Tokens</strong></td>";
+        html += "<td>" + fmtStat(a.tokens, false) + "</td>";
+        html += "<td>" + fmtStat(b.tokens, false) + "</td>";
+        html += '<td class="' + deltaClass(delta.tokens) + '">' + (delta.tokens || "—") + "</td></tr>";
+      }
+
+      html += "</tbody></table>";
+
+      // Per-eval breakdown (if runs data available)
+      const runs = data.runs || [];
+      if (runs.length > 0) {
+        const evalIds = [...new Set(runs.map(r => r.eval_id))].sort((a, b) => a - b);
+
+        html += "<h3 style='font-family: Poppins, sans-serif; margin-bottom: 0.75rem;'>Per-Eval Breakdown</h3>";
+
+        const hasTime = runs.some(r => r.result && r.result.time_seconds != null);
+        const hasErrors = runs.some(r => r.result && r.result.errors > 0);
+
+        for (const evalId of evalIds) {
+          const evalRuns = runs.filter(r => r.eval_id === evalId);
+          const evalName = evalRuns[0] && evalRuns[0].eval_name ? evalRuns[0].eval_name : "Eval " + evalId;
+
+          html += "<h4 style='font-family: Poppins, sans-serif; margin: 1rem 0 0.5rem; color: var(--text);'>" + escapeHtml(evalName) + "</h4>";
+          html += '<table class="benchmark-table">';
+          html += "<thead><tr><th>Config</th><th>Run</th><th>Pass Rate</th>";
+          if (hasTime) html += "<th>Time (s)</th>";
+          if (hasErrors) html += "<th>Crashes During Execution</th>";
+          html += "</tr></thead>";
+          html += "<tbody>";
+
+          // Group by config and render with average rows
+          const configGroups = [...new Set(evalRuns.map(r => r.configuration))];
+          for (let ci = 0; ci < configGroups.length; ci++) {
+            const config = configGroups[ci];
+            const configRuns = evalRuns.filter(r => r.configuration === config);
+            if (configRuns.length === 0) continue;
+
+            const rowClass = ci === 0 ? "benchmark-row-with" : "benchmark-row-without";
+            const configLabel = config.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+
+            for (const run of configRuns) {
+              const r = run.result || {};
+              const prClass = r.pass_rate >= 0.8 ? "benchmark-delta-positive" : r.pass_rate < 0.5 ? "benchmark-delta-negative" : "";
+              html += '<tr class="' + rowClass + '">';
+              html += "<td>" + configLabel + "</td>";
+              html += "<td>" + run.run_number + "</td>";
+              html += '<td class="' + prClass + '">' + ((r.pass_rate || 0) * 100).toFixed(0) + "% (" + (r.passed || 0) + "/" + (r.total || 0) + ")</td>";
+              if (hasTime) html += "<td>" + (r.time_seconds != null ? r.time_seconds.toFixed(1) : "—") + "</td>";
+              if (hasErrors) html += "<td>" + (r.errors || 0) + "</td>";
+              html += "</tr>";
+            }
+
+            // Average row
+            const rates = configRuns.map(r => (r.result || {}).pass_rate || 0);
+            const avgRate = rates.reduce((a, b) => a + b, 0) / rates.length;
+            const avgPrClass = avgRate >= 0.8 ? "benchmark-delta-positive" : avgRate < 0.5 ? "benchmark-delta-negative" : "";
+            html += '<tr class="benchmark-row-avg ' + rowClass + '">';
+            html += "<td>" + configLabel + "</td>";
+            html += "<td>Avg</td>";
+            html += '<td class="' + avgPrClass + '">' + (avgRate * 100).toFixed(0) + "%</td>";
+            if (hasTime) {
+              const times = configRuns.map(r => (r.result || {}).time_seconds).filter(t => t != null);
+              html += "<td>" + (times.length ? (times.reduce((a, b) => a + b, 0) / times.length).toFixed(1) : "—") + "</td>";
+            }
+            if (hasErrors) html += "<td></td>";
+            html += "</tr>";
+          }
+          html += "</tbody></table>";
+
+          // Per-assertion detail for this eval
+          const runsWithExpectations = {};
+          for (const config of configGroups) {
+            runsWithExpectations[config] = evalRuns.filter(r => r.configuration === config && r.expectations && r.expectations.length > 0);
+          }
+          const hasAnyExpectations = Object.values(runsWithExpectations).some(runs => runs.length > 0);
+          if (hasAnyExpectations) {
+            // Collect all unique assertion texts across all configs
+            const allAssertions = [];
+            const seen = new Set();
+            for (const config of configGroups) {
+              for (const run of runsWithExpectations[config]) {
+                for (const exp of (run.expectations || [])) {
+                  if (!seen.has(exp.text)) {
+                    seen.add(exp.text);
+                    allAssertions.push(exp.text);
+                  }
+                }
+              }
+            }
+
+            html += '<table class="benchmark-table" style="margin-top: 0.5rem;">';
+            html += "<thead><tr><th>Assertion</th>";
+            for (const config of configGroups) {
+              const label = config.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+              html += "<th>" + escapeHtml(label) + "</th>";
+            }
+            html += "</tr></thead><tbody>";
+
+            for (const assertionText of allAssertions) {
+              html += "<tr><td>" + escapeHtml(assertionText) + "</td>";
+
+              for (const config of configGroups) {
+                html += "<td>";
+                for (const run of runsWithExpectations[config]) {
+                  const exp = (run.expectations || []).find(e => e.text === assertionText);
+                  if (exp) {
+                    const cls = exp.passed ? "benchmark-delta-positive" : "benchmark-delta-negative";
+                    const icon = exp.passed ? "\u2713" : "\u2717";
+                    html += '<span class="' + cls + '" title="Run ' + run.run_number + ': ' + escapeHtml(exp.evidence || "") + '">' + icon + "</span> ";
+                  } else {
+                    html += "— ";
+                  }
+                }
+                html += "</td>";
+              }
+              html += "</tr>";
+            }
+            html += "</tbody></table>";
+          }
+        }
+      }
+
+      // Notes
+      if (notes.length > 0) {
+        html += '<div class="benchmark-notes">';
+        html += "<h3>Analysis Notes</h3>";
+        html += "<ul>";
+        for (const note of notes) {
+          html += "<li>" + escapeHtml(note) + "</li>";
+        }
+        html += "</ul></div>";
+      }
+
+      container.innerHTML = html;
+    }
+
+    // ---- Start ----
+    init();
+    renderBenchmark();
+  </script>
+</body>
+</html>

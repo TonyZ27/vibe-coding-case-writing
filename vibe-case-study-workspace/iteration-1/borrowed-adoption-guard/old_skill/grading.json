@@ -1,0 +1,47 @@
+{
+  "expectations": [
+    {
+      "text": "Does not claim second-order adoption",
+      "passed": true,
+      "evidence": "output.md says neither the repository nor 60 likes proves reuse, teaching, invitations, redistribution, or independent use, and it requires future direct evidence before upgrading to Adoption."
+    },
+    {
+      "text": "Labels likes as interest",
+      "passed": true,
+      "evidence": "The output says \"60 likes demonstrate launch interest\" and labels the replacement block \"Launch interest.\""
+    },
+    {
+      "text": "Uses source only as future signal",
+      "passed": true,
+      "evidence": "output.md says Meng’s case may \"inform the narrative pattern\" but its adoption evidence cannot support this project; it then names project-specific evidence that would be needed in the future."
+    },
+    {
+      "text": "Creates no borrowed Adoption block",
+      "passed": true,
+      "evidence": "The output explicitly omits the Adoption block and substitutes a \"Launch interest\" block based only on this project's 60-like signal."
+    },
+    {
+      "text": "Any article is 400–500 words",
+      "passed": false,
+      "evidence": "No article is present to verify against the requested range. The entire output is a 142-word evidence note, below 400 words."
+    }
+  ],
+  "summary": {
+    "passed": 4,
+    "failed": 1,
+    "total": 5,
+    "pass_rate": 0.8
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "Any article is 400–500 words",
+        "reason": "This is conditional and does not require an article, so a diagnostic response makes the intended length check ambiguous. Replace it with \"Produces a 400–500-word article\" if drafting is required, or remove it if a pre-draft evidence decision is acceptable."
+      },
+      {
+        "reason": "The four evidence-safety assertions also pass for the with-skill output, so they do not distinguish the skill versions in this iteration."
+      }
+    ],
+    "overall": "The evidence-boundary checks are substantive but non-discriminating here; the article-length check is ambiguous because article production is not itself asserted."
+  }
+}

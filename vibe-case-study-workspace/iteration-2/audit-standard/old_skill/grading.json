@@ -1,0 +1,85 @@
+{
+  "expectations": [
+    {
+      "text": "Article is 500–600 words including the proof statement",
+      "passed": true,
+      "evidence": "The reader-facing article from '# Audit Studio: From Capture Utility to HMI Review Workspace' through its conclusion is 547 whitespace-delimited words, including the proof statement and excluding production notes."
+    },
+    {
+      "text": "Distinguishes trials, repeat use, and influence",
+      "passed": true,
+      "evidence": "The draft distinguishes facilitated trials, later-build returns as repeated trial behavior, and upload requests as a product-direction influence signal."
+    },
+    {
+      "text": "Does not claim invitation behavior",
+      "passed": true,
+      "evidence": "The output says not to claim returning designers invited others and treats invitation only as a future success signal."
+    },
+    {
+      "text": "Centers designer curation",
+      "passed": true,
+      "evidence": "The section 'Detection supports judgment; it does not replace it' states that Screenshot Flow detects candidates while the designer removes irrelevant states and selects defensible evidence."
+    },
+    {
+      "text": "Uses one unlabeled proof statement for the strongest supported signal",
+      "passed": true,
+      "evidence": "The article has one blockquote without a category label. It presents facilitated participation plus later-build return behavior and qualifies this as repeated trial behavior rather than self-serve adoption."
+    },
+    {
+      "text": "At a Glance remains neutral",
+      "passed": true,
+      "evidence": "The At a Glance fields describe what the workspace is, how it works, and its facilitated-trial context without making impact or adoption claims."
+    }
+  ],
+  "summary": {
+    "passed": 6,
+    "failed": 0,
+    "total": 6,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {},
+  "timing": {},
+  "claims": [
+    {
+      "claim": "The workflow spans Test APK, QtScrcpy, screenshot or video, Finder, and Figma or Excel.",
+      "type": "factual",
+      "verified": true,
+      "evidence": "This matches the eval prompt's confirmed five-tool flow and is consistently represented in the article."
+    },
+    {
+      "claim": "Designers returned with later builds and made scope-expanding requests.",
+      "type": "factual",
+      "verified": true,
+      "evidence": "Repeat use and scope-expanding requests are explicitly supplied by the eval prompt."
+    },
+    {
+      "claim": "More than ten designers joined the facilitated trials.",
+      "type": "factual",
+      "verified": false,
+      "evidence": "The output reports the count, but the eval metadata gives no number and no receipt or transcript exists."
+    },
+    {
+      "claim": "Invitation has not been observed.",
+      "type": "factual",
+      "verified": true,
+      "evidence": "The eval prompt says invitation behavior is hypothetical, and the output treats it only as a future signal."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": []
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "At a Glance remains neutral",
+        "reason": "This output demonstrates the behavior, but the revised output can omit the section and still pass. Make presence mandatory if neutral At a Glance writing is the intended capability."
+      },
+      {
+        "reason": "All six assertions pass both with_skill and old_skill, so this eval is wholly non-discriminating for the iteration. Add checks for whether the primary proof prioritizes product influence over participant count, whether scope expansion is described as a request rather than an implemented feature, and whether observed versus author-reported evidence is handled consistently."
+      }
+    ],
+    "overall": "The assertions are useful baseline safeguards, but every one passes both variants and therefore this eval cannot measure improvement in iteration 2."
+  }
+}

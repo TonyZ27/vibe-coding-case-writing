@@ -1,0 +1,43 @@
+{
+  "expectations": [
+    {
+      "text": "Retrieves second-order-use pattern",
+      "passed": true,
+      "evidence": "output.md explicitly lists the source-library pattern \"Second-order use is stronger than reach\" and uses it to frame team-led propagation as a later threshold."
+    },
+    {
+      "text": "Classifies invitation as Hypothesis",
+      "passed": true,
+      "evidence": "The output includes invitation among \"possible next signals\" and directs that the possible ownership path be framed as \"the next hypothesis to test,\" not as a result."
+    },
+    {
+      "text": "Uses Next signal, not Adoption",
+      "passed": true,
+      "evidence": "Invitation, teaching, and redistribution appear only as possible next signals and future tests. The output explicitly says not to imply they occurred and not to present the possible ownership path as a result."
+    },
+    {
+      "text": "Does not claim team ownership",
+      "passed": true,
+      "evidence": "output.md says there is no evidence of second-order adoption and instructs: \"Do not claim the checklist is team-owned.\""
+    },
+    {
+      "text": "Shows all length modes",
+      "passed": true,
+      "evidence": "The Length options section presents Compact (450–650 words), Standard (800–1,100 words), and Extended (1,300–1,800 words)."
+    }
+  ],
+  "summary": {
+    "passed": 5,
+    "failed": 0,
+    "total": 5,
+    "pass_rate": 1.0
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "reason": "Every assertion also passes for the with-skill output. Consider tightening the invitation criterion to require a formal Next signal block with an explicit Hypothesis evidence status if that structural behavior is the intended improvement."
+      }
+    ],
+    "overall": "The current assertions verify safe framing, but they do not discriminate between the two skill versions in this iteration."
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "expectations": [
+    {
+      "text": "Article is 400–500 words including the proof statement",
+      "passed": true,
+      "evidence": "The reader-facing article from '# A simpler path from family photo to printable passport sheet' through its conclusion is 481 whitespace-delimited words, including both blockquotes and excluding production notes."
+    },
+    {
+      "text": "Uses exactly one unlabeled proof statement with one inline emphasis",
+      "passed": false,
+      "evidence": "The article uses two proof blockquotes, not one, and gives them visible category labels: 'Adoption' and 'Influence'. Each block also bolds a full statement rather than using one inline emphasis in a single unlabeled statement."
+    },
+    {
+      "text": "At a Glance remains neutral if present",
+      "passed": true,
+      "evidence": "No At a Glance section is present, so the conditional requirement is not violated. This is a vacuous pass and does not demonstrate neutral summary writing."
+    },
+    {
+      "text": "Five users are not market adoption",
+      "passed": true,
+      "evidence": "The output explicitly warns not to describe five uses as broad adoption or imply independent/self-serve use without confirmation."
+    },
+    {
+      "text": "Feedback causes the v2 change",
+      "passed": true,
+      "evidence": "The draft states that two parents asked for positioning help and that the author added the child-photo positioning guide in v2."
+    },
+    {
+      "text": "Vague AI-craft evidence is flagged rather than polished into a detailed lesson",
+      "passed": false,
+      "evidence": "The draft turns the vague crop correction into a polished lesson—'implementation can establish the flow, but product judgment still has to set—and verify—the behavior users encounter'—without a concrete crop failure or debugging receipt."
+    }
+  ],
+  "summary": {
+    "passed": 4,
+    "failed": 2,
+    "total": 6,
+    "pass_rate": 0.67
+  },
+  "execution_metrics": {},
+  "timing": {},
+  "claims": [
+    {
+      "claim": "Five parents used the product, and feedback led to a v2 positioning guide.",
+      "type": "factual",
+      "verified": true,
+      "evidence": "This matches the eval prompt's supplied five parent users and feedback-led v2 guide."
+    },
+    {
+      "claim": "Two parents requested the guide.",
+      "type": "factual",
+      "verified": false,
+      "evidence": "The output reports this number, but the eval metadata does not state it and no receipt or transcript exists."
+    },
+    {
+      "claim": "Real-photo testing established a general AI-building lesson about implementation and product judgment.",
+      "type": "quality",
+      "verified": false,
+      "evidence": "The prompt supplies only a vague crop correction, so the generalized craft lesson is not supported by the available evidence."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": []
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "At a Glance remains neutral if present",
+        "reason": "It passes automatically when the section is omitted. Require either a neutral orientation block or explicitly allow omission without counting that as evidence of quality."
+      },
+      {
+        "reason": "The length, adoption-boundary, and feedback-to-v2 assertions pass both variants, while the AI-craft assertion fails both. In this pair they are non-discriminating; retain them as guardrails but add a check that the article does not narrate any crop mechanism or lesson beyond the supplied evidence."
+      }
+    ],
+    "overall": "Only the proof-statement assertion separates this output from the revised one; the rest either pass both versions or fail both."
+  }
+}

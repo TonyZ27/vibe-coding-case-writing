@@ -1,0 +1,79 @@
+{
+  "expectations": [
+    {
+      "text": "Article is 400–500 words including the proof statement",
+      "passed": true,
+      "evidence": "The reader-facing article from '# A simpler path from family photo to passport print' through 'What I learned' is 472 whitespace-delimited words, including its blockquoted proof statement and excluding production notes."
+    },
+    {
+      "text": "Uses exactly one unlabeled proof statement with one inline emphasis",
+      "passed": true,
+      "evidence": "The article contains one blockquote: 'The strongest signal was not that five parents tried the utility...' It has no visible category label and contains one bold span: 'their use changed v2'."
+    },
+    {
+      "text": "At a Glance remains neutral if present",
+      "passed": true,
+      "evidence": "No At a Glance section is present, so the conditional requirement is not violated. This is a vacuous pass and does not demonstrate neutral summary writing."
+    },
+    {
+      "text": "Five users are not market adoption",
+      "passed": true,
+      "evidence": "The proof statement explicitly says the strongest signal was not that five parents tried the utility, and the direction notes say not to call five uses broad adoption or imply self-serve use."
+    },
+    {
+      "text": "Feedback causes the v2 change",
+      "passed": true,
+      "evidence": "The draft states that two parents asked for positioning guidance and immediately follows with: 'I added a child-photo positioning guide in v2.'"
+    },
+    {
+      "text": "Vague AI-craft evidence is flagged rather than polished into a detailed lesson",
+      "passed": false,
+      "evidence": "Although the direction flags the crop-failure example as missing, the public article still turns the vague correction into a detailed causal lesson: it asserts the crop diverged from the selected frame and concludes that repeatable processing logic could be delegated while the author retained interaction judgment. The available metadata/output does not substantiate that level of detail."
+    }
+  ],
+  "summary": {
+    "passed": 5,
+    "failed": 1,
+    "total": 6,
+    "pass_rate": 0.83
+  },
+  "execution_metrics": {},
+  "timing": {},
+  "claims": [
+    {
+      "claim": "Five parents used the product, and feedback led to a v2 positioning guide.",
+      "type": "factual",
+      "verified": true,
+      "evidence": "This matches the eval prompt's supplied five parent users and feedback-led v2 guide."
+    },
+    {
+      "claim": "Two parents requested the guide.",
+      "type": "factual",
+      "verified": false,
+      "evidence": "The output reports this number, but the eval metadata does not state it and no receipt or transcript exists."
+    },
+    {
+      "claim": "The crop result diverged from the selected frame in a way that established a reusable human-AI handoff lesson.",
+      "type": "quality",
+      "verified": false,
+      "evidence": "The prompt characterizes the crop correction as vague, and the output itself lists the crop-failure example as missing."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": []
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "At a Glance remains neutral if present",
+        "reason": "It passes automatically when the section is omitted. Require either a neutral orientation block or explicitly allow omission without counting that as evidence of quality."
+      },
+      {
+        "reason": "The length, adoption-boundary, and feedback-to-v2 assertions pass both variants, while the AI-craft assertion fails both. In this pair they are non-discriminating; retain them as guardrails but add a check that the article does not narrate any crop mechanism or lesson beyond the supplied evidence."
+      }
+    ],
+    "overall": "The proof-statement assertion distinguishes the revised output, but four assertions pass both variants and the AI-evidence assertion fails both. The conditional At a Glance assertion is especially weak."
+  }
+}

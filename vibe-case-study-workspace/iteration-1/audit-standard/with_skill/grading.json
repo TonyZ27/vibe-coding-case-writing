@@ -1,0 +1,47 @@
+{
+  "expectations": [
+    {
+      "text": "Article is 500–600 words including proof blocks",
+      "passed": true,
+      "evidence": "The reader-facing article from '# From a Screenshot Shortcut to a Shared HMI Review Workspace' through its closing reflection is 560 whitespace-delimited words, including proof blocks."
+    },
+    {
+      "text": "Distinguishes trials, repeat use, and influence",
+      "passed": true,
+      "evidence": "The article separately identifies '10+ designers' in facilitated trials, says some returned with later builds as 'repeated trial behavior—not proof of self-serve adoption,' and describes upload requests as the signal that expanded product scope."
+    },
+    {
+      "text": "Does not claim invitation behavior",
+      "passed": true,
+      "evidence": "No invitation behavior is presented as an outcome. The production notes explicitly state: 'Do not claim that returning designers invited others. That is a hypothesis.'"
+    },
+    {
+      "text": "Centers designer curation",
+      "passed": true,
+      "evidence": "Screenshot Flow is framed around system-detected candidates followed by designer review and selection: 'Detect changes automatically; curate evidence deliberately.' The text explains that relevance depends on the review question and designer judgment."
+    },
+    {
+      "text": "Markdown blocks work without color",
+      "passed": true,
+      "evidence": "All three proof blocks are plain Markdown blockquotes with textual type labels ('Impact', 'Insight', and 'Adoption'), bold statements, and explanatory qualifiers; their meaning does not depend on color."
+    }
+  ],
+  "summary": {
+    "passed": 5,
+    "failed": 0,
+    "total": 5,
+    "pass_rate": 1.0
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "Markdown blocks work without color",
+        "reason": "This is only indirectly verifiable from Markdown source. Define the structural proxy explicitly, such as requiring a textual type label, statement, and qualifier inside each blockquote, or provide a rendered artifact for visual grading."
+      },
+      {
+        "reason": "In this pair, the four non-length guardrails pass both configurations, so only the word-count assertion distinguishes them. Keep the safety checks, but consider adding a focused assertion for repetition or narrative economy beyond raw length."
+      }
+    ],
+    "overall": "The assertions cover important evidence boundaries, but most are non-discriminating between the two configurations in this iteration."
+  }
+}

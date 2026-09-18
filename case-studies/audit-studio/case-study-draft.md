@@ -1,51 +1,61 @@
-# From Five Tools to One HMI Review Workspace
+# Audit Studio: From a Screenshot Shortcut to a Shared Review Workspace
 
-I built Audit Studio to make Android HMI reviews easier for myself. Sharing that first tool showed me the problem was broader—and changed what I decided to build next.
+I built Audit Studio to bring Android HMI review tasks into one local web workspace. What began as a screenshot utility grew through trials with other designers—and a decision to automate capture while keeping evidence selection in their hands.
+
+[media]
+placement: hero-end
+suggestion: Connected Audit Studio dashboard showing the live HMI device as the primary surface, with review tools visible around it.
+
+[resource]
+title: View the GitHub Repository
+description: Source code and setup instructions for Audit Studio.
+url: https://github.com/TonyZ27/audit-tool
 
 ## At a Glance
 
-Audit Studio is a web workspace for installing builds, mirroring a device, and capturing evidence during HMI reviews.
+- **What:** A local web workspace for designers reviewing Android human–machine interfaces (HMI).
+- **How:** Brings build installation, live-device viewing, and screenshot capture into one review flow; designers select which captured screens become evidence.
+- **Why it matters:** Gives designers a common workspace for tasks previously spread across several tools, while keeping control of the review record in their hands.
 
-*Personal shortcut → Shared problem → Productized workflow → Team validation → Broader review workspace*
+## Context: One review, several handoffs
 
-## Personal Shortcut
+My review workflow moved from installing a test APK to opening QtScrcpy, capturing screenshots or video, organizing files in Finder, and transferring evidence into Figma or Excel.
 
-Before Audit Studio, reviewing a test build meant installing an APK, opening QtScrcpy, recording screenshots or video, organizing the files in Finder, then moving the evidence into Figma or Excel.
+Each tool covered part of the job. I still had to coordinate the sequence, switch between windows, and remember commands. I started with a small screenshot utility to make my own reviews easier, then put it on a web page and shared it with the design team.
 
-I knew the tools worked. I just did not want to keep switching between them, memorizing terminal commands, or installing another program for each task. So I built a small utility for myself, starting with screenshot capture.
+[highlight]
+content: Other designers tried it in sessions I facilitated. When some returned with another build to review, I had a reason to develop the utility around a recurring team task.
 
-*Test APK → QtScrcpy → screenshot/video → Finder → Figma or Excel*
+## Organizing the workspace around a review
 
-> The first shift was **five tools to one review workspace**: installing, mirroring, capturing, organizing, and recording evidence became part of the same task flow.
+I structured the interface around what a designer needs to do with a connected device: install a build, observe the interface, and capture states for review.
 
-## Shared Problem
+The live-device view became the main surface. APK installation and Screenshot Flow had dedicated task cards, with activity information available alongside the work. This gave the growing set of capabilities a common starting point: the device under review.
 
-I later put the utility on a web page and shared it with the design team. More than ten designers tried it in sessions I facilitated. Some came back when they had another build to review.
+[highlight]
+content: My contribution was defining that flow and the relationships between its actions. Codex supported implementation and debugging; I directed the product structure, interactions, and implementation review.
 
-> More than ten designers joined facilitated trials. The stronger signal was **returning with later builds**, which brought the workflow back into real review work.
+## Designing a reviewable flow that could expand
 
-That repeat use showed I was not solving only my own setup annoyance. Other designers also needed a clearer path from a test build to evidence they could use in their design work.
+Screenshot Flow made the boundary between automation and design judgment explicit. As a designer moves through an interface, the system detects visual changes and collects candidate screenshots. Stopping the flow opens a review step, where the designer can remove unwanted screens and save the chosen set.
 
-## Productized Workflow
+**Software can identify a changed screen; the designer decides whether it is useful evidence.** I kept selection as a separate step so the system could handle capture without deciding what belonged in the review record.
 
-I reorganized the page around review tasks rather than Android utilities. The connected device became the main surface. Installing a build, taking a screenshot, recording a flow, and checking activity became parts of the same sequence instead of separate destinations.
+[media]
+placement: inline
+suggestion: Screenshot Flow sequence showing capture, candidate review, deselection, and the final saved evidence set.
 
-The most important decision was how Screenshot Flow handled automation. While a designer moves through the interface, the tool detects visual changes and collects candidate screens. It does not save everything automatically. At the end, the designer reviews the candidates, removes noise, and chooses what enters the audit record.
+Sharing that workflow also brought requests beyond checking an implemented interface. Designers wanted to upload design files to the in-car system and review concepts before implementation. That request broadened the direction from build review toward earlier design validation, and influenced the larger device view and dedicated workflow cards.
 
-*Move through the interface → detect change → collect candidates → review → save evidence*
+In-car design-file review remains an extension prompted by those requests. The meaningful signal was that other designers saw more work they wanted to bring into the workspace beyond my original screenshot task.
 
-A visual change is easy for software to detect. Whether that change matters is a design judgment. I automated the repetitive capture work, then deliberately returned control to the designer.
+## Outcome
 
-I defined the product flow, information architecture, and interaction model. Codex helped implement and debug the Python, HTML, ADB, and scrcpy pieces.
+Audit Studio progressed from a personal capture utility to a workspace tried by more than ten designers. Some returned with later builds, and their requests helped shape its direction.
 
-## Broader Review Workspace
+Those sessions were facilitated by me. They establish trial and repeat use; they do not yet establish independent adoption or measured time savings.
 
-Once people used the web version, their requests changed again. They were not only comparing a build with the intended design. Some wanted to upload design files to the in-car system and review concepts in context before implementation.
+The clearest product lesson was where to put the handoff: let the system collect possible evidence, then let the designer decide what is worth keeping.
 
-> Designers asking to test design files in the car changed the scope: **reviewing before implementation** became part of Audit Studio's next direction.
-
-That request changed how I understood Audit Studio. It could be more than a fidelity-checking tool; it could become a workspace for different kinds of design validation. I rebuilt the page around a larger live-device view and moved APK installation and Screenshot Flow into dedicated task cards.
-
-Because I facilitated the sessions, I treated them as product validation rather than self-serve adoption. The useful signal was that designers returned with real review work and asked the tool to cover more of it.
-
-Audit Studio started as a shortcut. It became a product when other designers used it and changed what I thought it should do.
+[highlight]
+content: The project taught me to make that boundary explicit when working with Codex too: automate deterministic capture and state handling, but keep contextual judgment in the designer’s review step.

@@ -119,6 +119,8 @@ Then identify the smallest set of ideas needed to prove the thesis. Prefer causa
 
 `trigger -> decision -> changed product or behavior -> result or bounded lesson`
 
+Look for a supported building takeaway using the guidance below: what would this decision change about how the author approaches a similar build? Do not force one when only the product behavior is known.
+
 Do not add Research, Personas, Journey Map, Ideation, or Usability Testing sections unless those activities genuinely happened and are important to the argument.
 
 ### Step 3 — Choose depth
@@ -143,7 +145,7 @@ Use by default when the project contains several meaningful product or build dec
 
 #### Deep
 
-Use only when the project contains multiple meaningful stages, pivots, or an earned reusable insight.
+Use only when multiple meaningful stages, pivots, or an earned reusable insight require extended explanation. A concise building takeaway can belong in Short or Standard; its presence alone does not justify Deep.
 
 - Expand the middle around those stages.
 - Add a turning point, build method, or reusable principle only when evidence supports it.
@@ -155,8 +157,8 @@ Depth changes the flexible middle, not the overall case-study skeleton. Do not e
 
 Use this shared outer structure:
 
-1. **Hero** — name the product, what it enables, and the clearest reason to care. Keep it concise.
-2. **At a Glance** — orient the reader with a few useful facts such as role, audience, status, timeframe, or contribution.
+1. **Hero** — name the product, what it enables, and the clearest reason to care. Keep it concise. In a full article draft, follow the Hero with its primary media marker and any useful resource cards.
+2. **At a Glance** — always use exactly three entries in this order: **What**, **How**, **Why it matters**. What names the product and who it serves; How explains its core workflow or mechanism in plain language; Why it matters connects that behavior to the user's problem or a supported outcome. Keep each entry concise and evidence-grounded. Do not substitute or append role, stack, timeframe, or status fields; include those elsewhere only when they advance the story.
 3. **Context** — explain the trigger, prior friction, opportunity, and relevant constraints.
 4. **Flexible Middle** — use project-specific sections that prove the Story Thesis.
 5. **Outcome** — state what happened, what remains unproven, and any lesson the events actually earned.
@@ -177,6 +179,50 @@ Possible middle modules include:
 
 These are options, not a checklist. Rename them to describe the actual claim. Select only modules that materially advance the story.
 
+## Content display markers
+
+Use these Markdown markers only in full article drafts and full-draft revisions. Do not emit them in a pre-draft package or outline.
+
+### Media
+
+Add one primary media recommendation immediately after the Hero by default:
+
+```text
+[media]
+placement: hero-end
+suggestion: [what the asset should show]
+```
+
+Suggest inline media only when it materially explains a nearby interaction, comparison, iteration, workflow, technical constraint, or product output. State what the asset should show. Do not add media merely to break up text.
+
+### Resource
+
+When a useful, publishable project URL is supplied or established by the repository, place a resource card immediately after Hero Media:
+
+```text
+[resource]
+title: [action-oriented link title]
+description: [what the reader will find]
+url: https://example.com
+```
+
+Use exactly one URL per card. Use separate adjacent cards for multiple related resources. If a useful resource clearly exists but its URL is unavailable, complete the article without a resource marker and ask for the URL afterward. Do not insert a URL placeholder. Do not ask about resources when none are clearly relevant.
+
+### Highlight
+
+Do not generate a highlight in a first draft. Highlighting is deliberate editorial emphasis, controlled by the user.
+
+On an explicit request to add, replace, or remove a highlight, use or edit only this marker:
+
+```text
+[highlight]
+content: [the existing approved sentence or paragraph]
+```
+
+Preserve the original factual meaning. Avoid adjacent or excessive highlights. Removing a highlight returns its unchanged content to normal Markdown prose.
+
+These markers are semantic content for later portfolio rendering. Do not specify their web styling, typography, spacing, responsive behavior, or component implementation.
+
 ## AI collaboration is optional
 
 Include AI-building process only when AI materially affected a product decision, constraint, iteration, or working method.
@@ -187,9 +233,25 @@ A strong AI-related episode often follows:
 
 `initial approach -> limitation or mismatch -> author's intervention -> changed result -> transferable lesson`
 
-Include only the links the project supports. If the intervention is known but the mechanism or changed result is not, ask for it or keep the wording narrow. Add a transferable lesson only when the episode earns one.
+This is one possible pattern, not a required failure story. Specification choices, task boundaries, evaluation criteria, and workflow design can also earn a building lesson without a failed AI output.
+
+Include only the links the project supports. If the intervention is known but the mechanism or changed result is not, ask for it or keep the wording narrow.
 
 Make ownership legible: distinguish what AI generated from what the author framed, evaluated, corrected, rejected, or decided.
+
+## Derive a reusable building takeaway
+
+When supported, go one level beyond the outcome (what happened) or product lesson (what the experience needed). Extract a building principle: what should someone do differently when specifying, building, evaluating, or collaborating with AI on a similar project, and why?
+
+Use this as an internal reasoning aid, not a published formula:
+
+`concrete decision -> underlying constraint -> repeatable working practice -> limit of applicability`
+
+Ground the takeaway in a consequential constraint, boundary, or intervention already established in the story. Connect it to an actionable working practice, not a feature summary, AI-role disclosure, or generic advice such as "be clear with AI." Derive the practice from this project's evidence; do not reuse the same automation-versus-human-judgment lesson across unrelated projects.
+
+Product behavior alone does not establish how the author prompted AI, what was hardest, or what changed their working method. Use author context or documented process for those claims. If that bridge is missing, retain the narrower product lesson, offer a clearly provisional interpretation, or ask one targeted question. Do not invent a failed attempt, a before/after comparison, or demonstrated reuse to make a lesson feel earned. A transferable principle is not evidence that a framework, skill, or playbook was built or adopted.
+
+Prefer one concise takeaway integrated near the decision that earns it or in the closing reflection. Replace a redundant summary where possible. Do not require a separate AI-lessons section, named framework, new artifact, or extra depth. Preserve concrete outcomes rather than replacing them with reflection.
 
 ## Concise pre-draft output
 
@@ -217,6 +279,7 @@ If the user directly requests a draft and the evidence is sufficient, the pre-dr
 - Keep `At a Glance` factual and compact.
 - Place a visual near the claim it helps the reader understand.
 - Prefer real product states, before/after comparisons, decision artifacts, outputs, or credible usage receipts over decorative imagery.
+- In full drafts, use the display-marker rules above; keep pre-drafts and outlines as ordinary Markdown.
 - Do not generate replacement product UI and present it as evidence. Label reconstructions clearly.
 - State outcomes at the level the evidence supports: built, tested, used, reused, requested, adopted, or measured are different claims.
 - Separate facilitated use from self-serve adoption and interest from behavior.
@@ -228,9 +291,15 @@ Before returning an outline or draft, check:
 
 - Does every section contribute a meaningful fact, decision, result, or lesson?
 - Does the article follow the actual project rather than a generic UX process?
+- Does At a Glance contain exactly What, How, and Why it matters, in that order, with no unsupported impact claims?
 - Are product judgment and author ownership clear?
 - Are unsupported claims removed, narrowed, qualified, or marked for confirmation?
 - Is AI-building content included only when it materially affects the story?
+- If a building takeaway is included, does it tell a reader what to do differently in a similar build and why, beyond summarizing the product or AI's role?
+- Can the takeaway be traced to this project's evidence and author context, without inventing a working method, personal learning, or demonstrated reuse? If not, narrow it or ask for the missing context.
+- In a full draft, does Hero Media follow the Hero, and does each resource card contain one useful URL?
+- Are inline media markers attached to claims they materially explain, rather than decorative breaks?
+- Are highlights present only because the user explicitly requested them, with their factual meaning unchanged?
 - Could any section be removed without damaging the story? If yes, remove or merge it.
 - Is the selected depth the shortest one that still works?
 

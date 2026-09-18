@@ -1,0 +1,166 @@
+{
+  "skill_name": "vibe-case-study",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Inspect this unfinished command-line script that renames exported screenshots and help me turn it into a portfolio case study. I used it twice myself. The repository shows the rename flow, but there are no external users, feedback, packaged release, documented alternatives, or explanation of why I chose this interaction. Start with a pre-draft recommendation.",
+      "expected_output": "A concise pre-draft package that recommends a Short case or a provisional outline, identifies the few consequential human-context gaps, and avoids turning a tiny script into a generic UX process.",
+      "files": [],
+      "expectations": [
+        "The response does not assign or request a project archetype.",
+        "The response recommends Short rather than expanding the project into a large case.",
+        "The proposed outer structure uses Hero, At a Glance, Context, a minimal project-specific middle, Outcome, and Resources only if relevant.",
+        "The response does not add Research, Personas, Journey Map, Ideation, or Usability Testing as invented sections.",
+        "The author's two uses are not described as external adoption or product impact.",
+        "Missing motivation or decision context is asked about or marked for confirmation rather than inferred from the code.",
+        "The context interview is limited to the smallest number of questions needed to unlock the story.",
+        "The pre-draft output does not emit media, resource, or highlight markers."
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Write a full case study for a vibe-coded passport-photo utility. I built it after paying for an overcomplicated service while preparing my child's application. Parents can upload, crop, validate dimensions, and download a printable sheet. Five parents used it; two asked for a child-photo positioning guide, which I added in v2. I framed the product and interaction. An AI coding agent implemented the image-processing flow, and real-photo testing showed that its first crop behavior cut too close to faces, so I changed the crop constraints and acceptance checks. The live tool is https://example.com/passport-photo and the source repository is https://github.com/example/passport-photo. Use the shortest depth that works.",
+      "expected_output": "A Short full case with one compact, causal middle, restrained use claims, a Hero Media marker, two one-link resource cards after it, and an AI episode centered on the author's intervention rather than tools or generation speed.",
+      "files": [],
+      "expectations": [
+        "The response selects Short and keeps the flexible middle to one compact module.",
+        "The shared outer structure remains recognizable without adding unnecessary process sections.",
+        "The five-parent use signal is described literally and not inflated into market adoption or broad impact.",
+        "The v2 positioning guide is causally connected to the two parent requests.",
+        "The AI-related narrative follows initial output, crop mismatch, author intervention, and changed result.",
+        "The article does not become a prompt diary, tool list, or speed-of-generation story.",
+        "A hero-end media marker follows the Hero and states what the primary asset should show.",
+        "Two separate resource markers follow Hero Media, each with exactly one supplied URL.",
+        "The first draft contains no highlight marker."
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Create a case-study outline for Audit Studio. The confirmed before flow was Test APK to QtScrcpy to screenshot or video to Finder to Figma or Excel. I turned a personal screenshot utility into a local web workspace. More than ten designers joined facilitated trials, some returned with later builds, and requests to upload design files to the in-car system expanded the scope beyond fidelity checks. Screenshot Flow detects candidate visual changes, but the designer reviews and selects what enters the audit record. There is no evidence that returning designers invited others. Choose the depth and middle sections.",
+      "expected_output": "A Standard outline whose middle follows workflow consolidation, designer-curated automation, and scope expansion while preserving careful trial, reuse, and adoption boundaries.",
+      "files": [],
+      "expectations": [
+        "The response selects Standard and proposes roughly two to four project-specific middle modules.",
+        "The proposed outer structure uses Hero, At a Glance, Context, Flexible Middle, Outcome, and optional Resources.",
+        "The middle centers the actual story rather than a generic UX process.",
+        "The strongest product decision is automated detection followed by designer curation.",
+        "The response distinguishes facilitated trials, repeat use, and scope-expanding requests.",
+        "The response does not claim invitation behavior, self-serve adoption, or unsupported impact.",
+        "The outline does not emit media, resource, or highlight markers."
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Develop a case-study structure for a cross-platform subscriber scheduling flow. I built iOS and Android prototypes inside production-like environments because static Figma screens could not reveal permission, keyboard, and background-state behavior. I tested three scheduling models, rejected a calendar-first direction after device testing, and selected a conversational composer with explicit send-state confirmation. The coded prototypes also exposed a review bottleneck, so I created a small requirements-check assistant. I have device-test artifacts and review decisions, but no launch or adoption data. Decide whether this earns a deeper case.",
+      "expected_output": "A Deep case recommendation only because the evidence supports multiple consequential stages, with a flexible middle about real-state constraints, the rejected direction, the selected interaction, and the resulting build method or bounded insight.",
+      "files": [],
+      "expectations": [
+        "The response selects Deep because of multiple supported decisions or turning points, not because of an exact word target.",
+        "The shared outer structure is preserved while the flexible middle expands around project-specific stages.",
+        "The response explains how production-like behavior changed the product decision.",
+        "The requirements-check assistant is included only if it advances the main story rather than becoming an unrelated feature list.",
+        "The response does not invent launch, adoption, user feedback, or business impact.",
+        "Any reusable principle is bounded by the evidence from this project.",
+        "The structure does not emit media, resource, or highlight markers."
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Give me concise pre-draft plans for two vibe-coded projects. Project A is an internal onboarding checklist: eight colleagues completed facilitated walkthroughs and three returned, but nobody taught it, invited others, or redistributed it. Project B is a personal meal-planning tool: the repository shows recipe import and weekly planning, but it does not explain why I built it, who it was for, what tradeoff I made, or whether anyone used it. Keep the same overall case-study reading model, but make each middle fit its actual story. Do not write full articles.",
+      "expected_output": "Two concise plans that share the fixed outer spine but use different flexible middles, preserve adoption boundaries for Project A, and ask only the missing consequential questions for Project B.",
+      "files": [],
+      "expectations": [
+        "Both plans use the same Hero, At a Glance, Context, Flexible Middle, Outcome, and optional Resources model.",
+        "The two projects receive materially different middle modules based on their evidence rather than a shared template.",
+        "Project A's walkthroughs and returns are not described as team ownership, self-serve adoption, or second-order adoption.",
+        "Project B's motivation, audience, decision, and use are treated as missing human context rather than inferred from repository features.",
+        "The response asks only questions that materially affect Project B's story and does not ask Project A for facts already supplied.",
+        "Neither plan uses an archetype, a scoring rubric, proof-block styling, or a tool diary.",
+        "Neither pre-draft plan emits media, resource, or highlight markers."
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "Write a full case study for my vibe-coded appointment reminder tool. The repository establishes that it sends scheduled reminders and shows delivery status. I built it to stop forgetting follow-ups, but I have not supplied a live link or repository URL. The product clearly has a useful resource, but I do not know its public URL yet. Keep the article short.",
+      "expected_output": "A complete Short draft with a Hero Media marker, no resource marker with a fake or placeholder URL, and a concise question for the missing public URL after the article.",
+      "files": [],
+      "expectations": [
+        "The full draft contains one hero-end media marker that recommends a useful primary asset.",
+        "The draft completes without a resource marker because no publishable URL was supplied or established.",
+        "The response asks for the useful resource URL after the article rather than interrupting the draft.",
+        "The response does not invent a URL or include a highlight marker."
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "In this existing case-study paragraph, highlight only the second sentence: 'The tool captured candidate screens while the designer moved through the flow. The designer then removed noise and chose the final evidence set. This kept capture quick without delegating relevance decisions to the system.' Do not revise the article otherwise.",
+      "expected_output": "The requested second sentence becomes one highlight marker, while the first and third sentences remain unchanged normal Markdown prose.",
+      "files": [],
+      "expectations": [
+        "The response uses exactly one highlight marker containing only the requested existing sentence.",
+        "The highlighted sentence preserves its original factual meaning and wording.",
+        "The surrounding prose is unchanged.",
+        "The response does not add media or resource markers."
+      ]
+    },
+    {
+      "id": 8,
+      "prompt": "Revise the AI-collaboration passage in my Volvo Design Helper case study. Existing passage: 'I defined the workflow and rules; AI implemented the scanner, fixes, exports, and handoff states. The result was reusable infrastructure for design-system contributions.' Confirmed context: multiple designers contribute. I defined blocking, excluded, and advisory findings; predictable naming corrections can be automated, but token classification needs designer judgment and publishing continues through a Terminal-based Gerrit handoff. My reflection: making these rules and boundaries explicit was the hard part; once I could specify the consequences and exceptions, AI implementation became useful. I did not build a separate playbook or measure coding speed. Keep the revision concise within the existing section.",
+      "expected_output": "A concise passage connecting explicit contribution rules and boundaries to a reusable specification practice, beyond listing AI's implementation role.",
+      "files": [],
+      "expectations": [
+        "The takeaway explains how specifying consequences, exceptions, and boundaries makes design-system judgment actionable for implementation.",
+        "The reflection is grounded in the supplied author context and concrete rule distinctions, not generic prompting advice.",
+        "The response does not invent a failed AI attempt, measured coding acceleration, or a separate framework or playbook.",
+        "The revision stays in the existing section without requiring Deep treatment or an additional AI-lessons section."
+      ]
+    },
+    {
+      "id": 9,
+      "prompt": "Revise this Audit Studio closing reflection: 'The clearest product lesson was where to put the handoff: let the system collect possible evidence, then let the designer decide what is worth keeping.' Screenshot Flow detects visual changes and presents candidate screenshots for designer selection. I used the same boundary when working with Codex: I specified capture and state handling as implementation tasks, and kept relevance decisions in an explicit designer review step. That distinction is the working practice I would carry into another review tool. We had more than ten facilitated designer trials and some repeat use, but no independent adoption or measured time savings. Keep the reflection to one short paragraph; do not rewrite the article.",
+      "expected_output": "A closing reflection that connects the observation-versus-interpretation product boundary to the author's confirmed way of specifying Codex work.",
+      "files": [],
+      "expectations": [
+        "The reflection identifies a repeatable building practice, not just a restatement of designer-controlled evidence selection.",
+        "The connection to Codex work is grounded in the supplied task-boundary context.",
+        "The response does not claim the practice was already reused elsewhere or inflate facilitated trials into independent adoption.",
+        "The output remains one short paragraph without a new section, named framework, or highlight marker."
+      ]
+    },
+    {
+      "id": 10,
+      "prompt": "Improve the takeaway in my AI-built review-tool case study. The repository establishes that the app captures changed screens and lets a designer choose what to save. Current takeaway: 'Capture can be automatic while evidence selection remains with the designer.' I have not supplied any account of how I worked with AI, what I found difficult, or what I learned. Can you connect this to my building method without inventing that history?",
+      "expected_output": "A narrower product lesson, a clearly provisional building interpretation, or one targeted question about the missing connection to the author's method.",
+      "files": [],
+      "expectations": [
+        "The response does not assert that the author split prompts, delegated deterministic work, or learned a particular lesson from the repository behavior alone.",
+        "Any proposed building-method connection is explicitly provisional unless the response instead retains the product lesson.",
+        "If clarification is needed, the response asks only a targeted question about the missing working-method connection.",
+        "The response does not require a broader takeaway to complete the case."
+      ]
+    },
+    {
+      "id": 11,
+      "prompt": "Write a concise closing reflection for my vibe-coded CSV import utility. AI's initial implementation worked on the clean sample I supplied but failed on a real export with a byte-order mark and quoted line breaks. I collected representative exports, specified expected results for each, and used those fixtures to evaluate subsequent changes. Those cases now pass; I have no adoption data. My next import project will start with representative data before implementation. Keep the case Short and derive the lesson from this experience.",
+      "expected_output": "A brief building takeaway about representative fixtures and observable acceptance criteria before implementation, grounded in the actual import failures.",
+      "files": [],
+      "expectations": [
+        "The takeaway connects unrepresentative input samples to a repeatable practice of supplying real data cases and expected results before implementation.",
+        "The response does not substitute an unrelated automation-versus-designer-judgment lesson or generic advice to plan better.",
+        "The response distinguishes passing the supplied fixtures from universal robustness or product adoption.",
+        "The concise takeaway does not trigger a Deep case, named framework, or standalone AI-lessons section."
+      ]
+    },
+    {
+      "id": 12,
+      "prompt": "Write the Outcome paragraph for my small vibe-coded timer case study. The only confirmed result is that I built a working start, pause, and reset flow and used it twice myself. I do not recall a meaningful build decision or learning, and I do not want follow-up questions. Keep it factual and short.",
+      "expected_output": "A bounded outcome about the working timer and two personal uses, with no manufactured reusable building lesson.",
+      "files": [],
+      "expectations": [
+        "The response states only the supported implementation and personal-use result.",
+        "The response does not invent a build lesson, AI intervention, workflow change, external adoption, or impact.",
+        "The response respects the request for no follow-up questions and does not force a takeaway section."
+      ]
+    }
+  ]
+}

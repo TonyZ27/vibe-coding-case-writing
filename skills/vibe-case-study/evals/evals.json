@@ -4,15 +4,16 @@
     {
       "id": 1,
       "prompt": "Inspect this unfinished command-line script that renames exported screenshots and help me turn it into a portfolio case study. I used it twice myself. The repository shows the rename flow, but there are no external users, feedback, packaged release, documented alternatives, or explanation of why I chose this interaction. Start with a pre-draft recommendation.",
-      "expected_output": "A concise pre-draft package that recommends a Short case or a provisional outline, identifies the few consequential human-context gaps, and avoids turning a tiny script into a generic UX process.",
+      "expected_output": "A concise evidence brief that identifies the few consequential human-context gaps, offers supported story directions, and avoids turning a tiny script into a generic UX process before the author chooses the story.",
       "files": [],
       "expectations": [
         "The response does not assign or request a project archetype.",
-        "The response recommends Short rather than expanding the project into a large case.",
-        "The proposed outer structure uses Hero, At a Glance, Context, a minimal project-specific middle, Outcome, and Resources only if relevant.",
+        "The response does not choose a depth or structure before the author chooses the story direction.",
         "The response does not add Research, Personas, Journey Map, Ideation, or Usability Testing as invented sections.",
         "The author's two uses are not described as external adoption or product impact.",
         "Missing motivation or decision context is asked about or marked for confirmation rather than inferred from the code.",
+        "Because the intended story is unknown, the response first separates repository evidence from missing human context and offers two or three evidence-compatible story directions for the author to choose or refine.",
+        "The response does not present a Story Thesis, depth recommendation, or proposed structure before the author chooses a direction.",
         "The context interview is limited to the smallest number of questions needed to unlock the story.",
         "The pre-draft output does not emit media, resource, or highlight markers."
       ]
@@ -67,13 +68,14 @@
     {
       "id": 5,
       "prompt": "Give me concise pre-draft plans for two vibe-coded projects. Project A is an internal onboarding checklist: eight colleagues completed facilitated walkthroughs and three returned, but nobody taught it, invited others, or redistributed it. Project B is a personal meal-planning tool: the repository shows recipe import and weekly planning, but it does not explain why I built it, who it was for, what tradeoff I made, or whether anyone used it. Keep the same overall case-study reading model, but make each middle fit its actual story. Do not write full articles.",
-      "expected_output": "Two concise plans that share the fixed outer spine but use different flexible middles, preserve adoption boundaries for Project A, and ask only the missing consequential questions for Project B.",
+      "expected_output": "Two concise evidence briefs that preserve adoption boundaries, offer project-specific story directions, and defer each Story Thesis and structure until the author chooses what each case should communicate.",
       "files": [],
       "expectations": [
-        "Both plans use the same Hero, At a Glance, Context, Flexible Middle, Outcome, and optional Resources model.",
-        "The two projects receive materially different middle modules based on their evidence rather than a shared template.",
+        "Neither project receives a Story Thesis, depth recommendation, or middle structure before the author chooses a story direction.",
+        "The two projects receive materially different story directions based on their evidence rather than a shared template.",
         "Project A's walkthroughs and returns are not described as team ownership, self-serve adoption, or second-order adoption.",
         "Project B's motivation, audience, decision, and use are treated as missing human context rather than inferred from repository features.",
+        "Project B receives two or three evidence-compatible story directions for the author to choose or refine before a Story Thesis or structure is proposed.",
         "The response asks only questions that materially affect Project B's story and does not ask Project A for facts already supplied.",
         "Neither plan uses an archetype, a scoring rubric, proof-block styling, or a tool diary.",
         "Neither pre-draft plan emits media, resource, or highlight markers."
@@ -160,6 +162,20 @@
         "The response states only the supported implementation and personal-use result.",
         "The response does not invent a build lesson, AI intervention, workflow change, external adoption, or impact.",
         "The response respects the request for no follow-up questions and does not force a takeaway section."
+      ]
+    },
+    {
+      "id": 13,
+      "prompt": "Write a portfolio case study for https://github.com/example/context-notes. Inspect the repository first. I have not told you why I built it, what I personally decided, who used it, or what I want the case study to emphasize.",
+      "expected_output": "A concise evidence brief that treats the repository as evidence rather than a ready-made narrative, offers two or three supported story directions, and asks the author to choose or refine one before proposing a Story Thesis or drafting.",
+      "files": [],
+      "expectations": [
+        "The response distinguishes implemented or documented repository evidence from motivation, ownership, usage, and impact that the repository cannot establish.",
+        "The response offers two or three materially different, evidence-compatible story directions rather than silently choosing one.",
+        "Each direction identifies its central idea, supporting evidence, missing human context, and current claim limit.",
+        "The response asks the author to choose, combine, reject, or replace the proposed directions.",
+        "Questions about historical facts may include options only when they are labeled as possibilities to confirm or correct and allow a free-form answer.",
+        "The response does not yet provide a Story Thesis, depth recommendation, proposed structure, or full draft."
       ]
     }
   ]

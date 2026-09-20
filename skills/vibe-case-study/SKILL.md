@@ -71,9 +71,9 @@ Evidence can remain flexible while drafting:
 
 Never present provisional material as fact. Never cite a source that does not materially support the adjacent claim.
 
-## Four-step workflow
+## Five-step workflow
 
-### Step 1 — Understand the project
+### Step 1 — Establish the evidence boundary
 
 Inspect the repository and supplied context before outlining or drafting.
 
@@ -91,7 +91,30 @@ Inspect working product states or supplied artifacts when available. Distinguish
 
 Do not treat lines of code, file count, repository complexity, tests, or generated UI as evidence of product value. Tests may verify behavior; they do not prove usefulness, adoption, or impact.
 
-After inspection, identify only the missing human context that materially affects the story. Useful questions include:
+End the inspection by separating:
+
+- what the repository establishes about the product, behavior, and implementation;
+- what it only specifies, plans, or suggests;
+- what it cannot establish about motivation, judgment, ownership, use, or impact.
+
+The repository supplies evidence for a story; it does not choose the story. Do not turn its file structure, feature list, architecture, or commit sequence into the narrative by default.
+
+### Step 2 — Offer story directions
+
+If the author has not already stated the story they want to tell, offer two or three distinct directions that are compatible with the evidence. Each direction should state:
+
+- the central idea the case could communicate;
+- the repository evidence that could support it;
+- the human context still needed;
+- the claims that direction cannot support yet.
+
+Treat these as possibilities for the author to choose, combine, reject, or replace. They are not Story Theses and should not silently assign motivation or product value. If the repository supports only one credible direction, present that direction and explain the limitation rather than manufacturing alternatives.
+
+Ask which direction best matches what the author wants a reader to understand. The author may supply a different direction in their own words.
+
+### Step 3 — Interview for the chosen story
+
+After the author chooses or defines a direction, ask only for human context that materially affects that story. Useful questions include:
 
 - What triggered the project?
 - Who was it initially for?
@@ -104,18 +127,20 @@ After inspection, identify only the missing human context that materially affect
 
 Do not ask all of these by default. Ask the smallest number needed, combine related questions, and do not ask for facts the repository already establishes.
 
-### Step 2 — Find the story
+Offer two or three response options when that makes the question easier to answer. Use options freely for editorial preferences such as the intended reader takeaway, emphasis, or direction. For historical facts such as motivation, ownership, decisions, usage, and impact, offer only evidence-compatible possibilities, label them as possibilities to confirm or correct, and allow the author to answer in their own words. A selected option becomes author-reported context; it was not previously established by the repository.
 
-Write a one-sentence **Story Thesis** before drafting. It should explain:
+When enough context is available, propose a one-sentence **Story Thesis**. It should explain:
 
 - what was built;
 - the meaningful problem or opportunity;
 - the most significant decision, approach, or insight;
 - why the project is worth reading.
 
-Do not force a sentence formula. The thesis is an editorial tool and does not need to appear in the published case.
+Do not force a sentence formula. The thesis is an editorial tool and does not need to appear in the published case. Ask the author to confirm or refine it before outlining or drafting.
 
-Then identify the smallest set of ideas needed to prove the thesis. Prefer causal relationships over process inventory:
+This checkpoint can be implicit only when the author has already supplied the consequential human context and explicitly delegated the narrative choice. A request to “write a case study” by itself does not give the repository authority to choose the story.
+
+After alignment, identify the smallest set of ideas needed to prove the thesis. Prefer causal relationships over process inventory:
 
 `trigger -> decision -> changed product or behavior -> result or bounded lesson`
 
@@ -123,7 +148,7 @@ Look for a supported building takeaway using the guidance below: what would this
 
 Do not add Research, Personas, Journey Map, Ideation, or Usability Testing sections unless those activities genuinely happened and are important to the argument.
 
-### Step 3 — Choose depth
+### Step 4 — Choose depth
 
 Use the shortest depth that communicates all consequential ideas without removing important causality.
 
@@ -153,7 +178,7 @@ Use only when multiple meaningful stages, pivots, or an earned reusable insight 
 
 Depth changes the flexible middle, not the overall case-study skeleton. Do not enforce word-count ranges.
 
-### Step 4 — Outline or draft
+### Step 5 — Outline or draft
 
 Use this shared outer structure:
 
@@ -253,23 +278,33 @@ Product behavior alone does not establish how the author prompted AI, what was h
 
 Prefer one concise takeaway integrated near the decision that earns it or in the closing reflection. Replace a redundant summary where possible. Do not require a separate AI-lessons section, named framework, new artifact, or extra depth. Preserve concrete outcomes rather than replacing them with reflection.
 
-## Concise pre-draft output
+## Two-stage pre-draft output
 
-Before writing the article, return:
+When the story has not been chosen, stop after a concise evidence brief:
+
+```text
+What the repository establishes:
+What it does not establish:
+Possible story directions:
+Choose or refine a direction:
+```
+
+Each possible direction should include its central idea, supporting evidence, missing human context, and current claim limit. Do not include a Story Thesis, recommended depth, or proposed structure yet; those decisions depend on the author's intended story.
+
+After the interview, return a concise story contract:
 
 ```text
 Story Thesis:
+Author context and claim boundaries:
 Recommended depth:
-What the repository establishes:
-Missing context:
 Proposed structure:
 Evidence or visuals worth showing:
 Claims to avoid or qualify:
 ```
 
-Keep this package concise. Omit empty categories. Do not include an archetype, confidence score, candidate-statement taxonomy, proof specification, or source-pattern ID.
+Keep both stages concise. Omit empty categories. Do not include an archetype, confidence score, candidate-statement taxonomy, proof specification, or source-pattern ID.
 
-If the user directly requests a draft and the evidence is sufficient, the pre-draft package can be brief and followed by the draft in the same response. If a consequential fact is missing, ask for it before presenting a factual final draft; offer provisional wording or placeholders when that would still help.
+If the author has already supplied enough human context and explicitly delegated the narrative choice, the story contract can be brief and followed by the draft in the same response. If the repository is the main source and the intended story is unknown, do not skip from inspection to drafting. If a consequential fact remains missing after direction selection, ask for it before presenting a factual final draft; offer provisional wording or placeholders when that would still help.
 
 ## Drafting guidance
 
@@ -290,6 +325,10 @@ If the user directly requests a draft and the evidence is sufficient, the pre-dr
 Before returning an outline or draft, check:
 
 - Does every section contribute a meaningful fact, decision, result, or lesson?
+- Did repository inspection establish evidence boundaries without choosing the story?
+- If the author's intended story was unknown, did the response offer evidence-compatible directions and let the author choose or refine one?
+- Were factual interview options presented as possibilities to confirm rather than facts inferred from the repository?
+- Was the Story Thesis aligned with the author before structure or drafting, unless the author had already supplied enough context and delegated that choice?
 - Does the article follow the actual project rather than a generic UX process?
 - Does At a Glance contain exactly What, How, and Why it matters, in that order, with no unsupported impact claims?
 - Are product judgment and author ownership clear?
